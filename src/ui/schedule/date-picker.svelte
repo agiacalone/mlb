@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { formatDate, getToday, slash } from '$lib/temporal'
+	import { maintainSearchParams } from '$lib/url.svelte'
 	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 
 	let {
@@ -42,10 +43,16 @@
 			/>
 		</label>
 
-		<a class="order-first button border-b-0 border-l" href="/schedule/day/{addDay(-1)}">
+		<a
+			class="order-first button border-b-0 border-l"
+			href={maintainSearchParams(`/schedule/day/${addDay(-1)}`)}
+		>
 			<ChevronLeftIcon />
 		</a>
-		<a class="order-last button border-r border-b-0" href="/schedule/day/{addDay()}">
+		<a
+			class="order-last button border-r border-b-0"
+			href={maintainSearchParams(`/schedule/day/${addDay()}`)}
+		>
 			<ChevronRightIcon />
 		</a>
 	</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/state'
 	import { formatDate, formatWeekRange, getToday, slash } from '$lib/temporal'
+	import { maintainSearchParams } from '$lib/url.svelte'
 	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 
 	let {
@@ -15,14 +15,11 @@
 		class?: string
 	} = $props()
 
-	function processHref(weeks: number = 1) {
-		const newDate = formatDate(
+	function addWeek(weeks: number = 1) {
+		return formatDate(
 			new Date(new Date(slash(date)).setDate(new Date(slash(date)).getDate() + weeks * 7)),
 			{ locale: 'en-CA' },
 		)
-
-		const search = page.url.searchParams.toString()
-		return `${href}/${newDate}${search ? `?${search}` : ''}`
 	}
 </script>
 
@@ -42,10 +39,16 @@
 		/>
 	</label>
 
-	<a class="order-first button border-b-0 border-l" href={processHref(-1)}>
+	<a
+		class="order-first button border-b-0 border-l"
+		href={maintainSearchParams(`${href}/${addWeek(-1)}`)}
+	>
 		<ChevronLeftIcon />
 	</a>
-	<a class="order-last button border-r border-b-0" href={processHref()}>
+	<a
+		class="order-last button border-r border-b-0"
+		href={maintainSearchParams(`${href}/${addWeek()}`)}
+	>
 		<ChevronRightIcon />
 	</a>
 </fieldset>

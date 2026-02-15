@@ -11,8 +11,7 @@ export function isDarkOnLightTeam(team?: MLB.Team) {
 			'Sugar Land Space Cowboys',
 			'Sultanes de Monterrey',
 			'Tampa Bay Rays',
-			'Northeastern Huskies',
-		].includes(team.name) || [51].includes((team as MLB.TeamDetailed).sport?.id ?? 1)
+		].includes(team.name) || [22, 51].includes((team as MLB.TeamDetailed).sport?.id ?? 1)
 	)
 }
 

@@ -3,6 +3,7 @@
 	import { page } from '$app/state'
 	import { fetchDaySchedule, fetchSeason } from '$lib/fetch'
 	import { formatDate, slash } from '$lib/temporal'
+	import { maintainSearchParams } from '$lib/url.svelte'
 	import { count } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
 	import { sortGames } from '$ui/favorites/store.svelte'
@@ -60,7 +61,7 @@
 	title="Daily Schedule"
 	crumbs={[
 		{ href: `/schedule/week/${currentDate}`, name: 'Weekly Schedule' },
-		{ href: `/schedule/day/${currentDate}`, name: formattedDate },
+		{ href: maintainSearchParams(`/schedule/week/${currentDate}`), name: formattedDate },
 	]}
 >
 	{#snippet after()}

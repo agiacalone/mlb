@@ -3,6 +3,7 @@
 	import { page } from '$app/state'
 	import { fetchSeason, fetchWeekSchedule } from '$lib/fetch'
 	import { formatDate, slash } from '$lib/temporal'
+	import { maintainSearchParams } from '$lib/url.svelte'
 	import { count } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
 	import { sortGames } from '$ui/favorites/store.svelte'
@@ -57,7 +58,7 @@
 					day: 'numeric',
 				})}
 
-				<a class="ml-auto link" href="/schedule/day/{date.date}">
+				<a class="ml-auto link" href={maintainSearchParams(`/schedule/day/${date.date}`)}>
 					{count(date.games.length, 'game')}
 				</a>
 			</summary>
