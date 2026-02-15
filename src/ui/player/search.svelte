@@ -3,6 +3,7 @@
 	import { page } from '$app/state'
 	import { fetchMLB } from '$lib/fetch'
 	import { count, debounce } from '$lib/utils'
+	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
 	import Empty from '$ui/empty.svelte'
 	import { SearchIcon } from '$ui/icons'
 	import Loading from '$ui/loading.svelte'
@@ -24,7 +25,7 @@
 
 		promise = fetchMLB('/api/v1/people/search', {
 			names: query,
-			fields: 'people,id,fullName,primaryNumber,primaryPosition,abbreviation',
+			fields: 'people,id,fullName,primaryNumber,primaryPosition,abbreviation,active',
 		}).then((results) => {
 			if (!dev) posthog.capture('player_search_query', { query })
 			return results
@@ -73,33 +74,47 @@
 	</form>
 
 	{#if promise}
-		<output for="query" class="block px-ch">
+		<output for="query" class="block">
 			{#await promise}
 				<Loading class="p-ch">Searching players...</Loading>
 			{:then results}
 				{#if results.people.length}
-					<div class="text-sm text-current/50 max-md:text-center">
+					<div class="px-ch text-sm text-current/50 max-md:text-center">
 						{count(results.people.length, 'player')} found
 					</div>
 
 					<ul>
 						{#each results.people as person (person.id)}
-							<li>
-								<a class="group/player flex items-center gap-ch py-1" href="/player/{person.id}">
+							<li class="flex items-stretch gap-ch px-ch hover:bg-current/10">
+								<a
+									class="group/player flex grow items-center gap-ch py-1"
+									href="/player/{person.id}"
+								>
 									<Headshot {person} size={48} class="size-[1lh] shrink-0" />
 
-									<small class="inline-block w-[3ch] text-center">
+									<small class="inline-block w-[3ch] shrink-0 text-center">
 										{person.primaryPosition.abbreviation}
 									</small>
 
-									<span class="decoration-dashed group-hover/player:underline">
+									<span
+										class="line-clamp-1 break-all decoration-dashed group-hover/player:underline"
+									>
 										{person.fullName}
 									</span>
 
 									{#if person.primaryNumber}
 										<span class="text-current/50">#{person.primaryNumber}</span>
 									{/if}
+
+									{#if person.active}
+										<small class="text-accent">Active</small>
+									{/if}
 								</a>
+
+								<ToggleCompare
+									class="text-sm not-has-checked:not-hover:text-current/50"
+									personId={person.id}
+								/>
 							</li>
 						{/each}
 					</ul>

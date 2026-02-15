@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
 	import Empty from '$ui/empty.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
@@ -50,7 +51,8 @@
 	</div>
 
 	{#snippet after()}
-		<div class="ml-auto">
+		<div class="ml-auto flex items-center gap-ch">
+			<ToggleCompare class="text-current/50 [&>span]:hidden" personId={person.id} />
 			<ToggleFavorite target={{ href: `/player/${person.id}`, label: person.lastName! }} />
 		</div>
 	{/snippet}

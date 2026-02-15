@@ -15,6 +15,7 @@
 		RobotIcon,
 	} from '$ui/icons'
 	import type { Component } from 'svelte'
+	import CompareList from './compare-list.svelte'
 	import Drawer from './drawer.svelte'
 	import FavoritesList from './favorites-list.svelte'
 	import SpoilerPreventionList from './spoiler-prevention-list.svelte'
@@ -112,6 +113,7 @@
 		</ul>
 
 		<ul class="mt-auto text-sm sidebar-not-open:landscape:max-lg:overflow-clip">
+			<li><CompareList /></li>
 			<li><FavoritesList /></li>
 			<li><SpoilerPreventionList /></li>
 			<li><ToggleColorScheme /></li>

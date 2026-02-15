@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { formatDate, slash } from '$lib/temporal'
+	import { compareStore } from '$ui/compare/store.svelte'
+	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
 
 	let { person }: { person: MLB.Person } = $props()
 </script>

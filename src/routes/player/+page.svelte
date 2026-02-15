@@ -6,8 +6,6 @@
 	import type { PageProps } from './$types'
 
 	let { data }: PageProps = $props()
-
-	$inspect(data.players.people)
 </script>
 
 <Metadata title="Player Directory | MLB.TheOhtani.com" description="Search for a player by name" />
