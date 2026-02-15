@@ -63,7 +63,9 @@
 				</a>
 			</summary>
 
-			<div class="anim-fade columns-[450px] gap-lh space-y-ch *:break-inside-avoid">
+			<div
+				class="grid anim-fade gap-lh md:grid-cols-[repeat(auto-fill,minmax(var(--column-width,var(--container-xs)),1fr))] lg:[--column-width:var(--container-md)]"
+			>
 				{#each date.games.sort(sortFavorite) as game (game.gamePk)}
 					{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}
 					<Game {game} {linescore} showDescription />
