@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { fetchBoxscore, fetchLinescore } from '$lib/fetch/presets'
 	import { formatDate } from '$lib/temporal'
 	import { cn } from '$lib/utils'
@@ -29,6 +30,15 @@
 	const isFinal = $derived(game.status.abstractGameState === 'Final')
 	const isLive = $derived(game.status.abstractGameState === 'Live')
 
+	const { data: liveGame } = $derived(
+		isLive
+			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
+					fields: ['liveData,linescore', 'fullName', 'offense,first,second,third'],
+					hydrate: 'flags,linescore',
+				})
+			: { data: undefined },
+	)
+
 	const isGamePage = $derived(page.url.pathname === `/game/${game.gamePk}`)
 
 	const isSpoilerPrevented = $derived(
@@ -49,14 +59,27 @@
 		)}
 		style:grid-area="status"
 	>
-		<BaseRunners
-			className={cn(
-				'm-auto absolute left-1/2 top-1/2 -translate-1/2 w-max max-md:group-has-[[style*=linescore]]/game:mt-[.5lh]',
-				isGamePage && isFinal ? 'mt-[.75ch]' : 'mt-[.5rlh]',
-				isSpoilerPrevented && 'mt-[.5rlh]',
-				isFinal && !isSpoilerPrevented && (isGamePage ? 'mt-[.5lh]' : 'mt-[.5rlh]'),
+		<div
+			class={cn(
+				'absolute top-1/2 left-1/2 m-auto -translate-1/2',
+				isGamePage
+					? [
+							isLive ? 'max-md:mt-[.25lh]' : 'max-md:mt-[.5rlh]',
+							isFinal && 'max-md:mt-[.25lh] md:mt-[.5lh]',
+							isSpoilerPrevented && 'max-md:mt-[.5rlh]',
+						]
+					: [
+							'mt-[.25lh] md:mt-[.5rlh]',
+							game.status.abstractGameState === 'Preview' && 'max-md:mt-[.5rlh]',
+							isSpoilerPrevented && 'max-md:mt-[.5rlh]',
+						],
 			)}
-		/>
+		>
+			<BaseRunners
+				className="w-max max-md:group-has-[[style*=linescore]]/game:mt-[.5lh]"
+				linescore={!isSpoilerPrevented ? liveGame?.liveData.linescore : undefined}
+			/>
+		</div>
 
 		{#if isFinal && !isSpoilerPrevented}
 			{@const value =
@@ -64,7 +87,7 @@
 			<span class="m-auto text-xs font-bold">
 				{value}{#if value === 'Final' && linescore?.currentInning! > linescore?.scheduledInnings!}/{linescore?.currentInning}{/if}
 			</span>
-		{:else}
+		{:else if !isLive || isSpoilerPrevented}
 			<time class="m-auto text-xs font-bold" datetime={game.gameDate}>
 				{formatDate(game.gameDate, { hour: 'numeric', minute: '2-digit' })}
 			</time>
@@ -154,13 +177,13 @@
 			grid-template:
 				'status description linescore' auto
 				'status boxscore linescore' auto
-				'. link .' auto / var(--status-size) 1fr minmax(18ch, 50%);
+				'. link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
 
 			@media (width < 32rem) {
 				grid-template:
 					'. description description' auto
 					'status boxscore linescore' auto
-					'. link .' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
+					'. link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
 			}
 		}
 	}

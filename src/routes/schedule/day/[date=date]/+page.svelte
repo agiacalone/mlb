@@ -105,7 +105,7 @@
 		</h2>
 
 		<div
-			class="grid gap-lh md:grid-cols-[repeat(auto-fill,minmax(var(--column-width,var(--container-xs)),1fr))] lg:[--column-width:var(--container-md)]"
+			class="grid items-start gap-lh md:grid-cols-[repeat(auto-fill,minmax(var(--column-width,var(--container-xs)),1fr))] lg:[--column-width:var(--container-md)]"
 		>
 			{#each processedGames as game (game.gamePk)}
 				{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}

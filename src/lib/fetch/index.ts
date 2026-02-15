@@ -1,9 +1,6 @@
 import { HOST } from '$ui/playground/constants'
 
-export async function fetchMLB<T>(
-	endpoint: string,
-	params?: Partial<Record<Fetch.QueryParamKeys, string | string[]>>,
-) {
+export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params) {
 	const url = new URL(endpoint, HOST)
 
 	for (const [key, value] of Object.entries(params ?? {})) {
