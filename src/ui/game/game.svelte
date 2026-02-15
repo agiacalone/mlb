@@ -10,6 +10,7 @@
 	import Loading from '$ui/loading.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
+	import Inning from './inning.svelte'
 
 	let {
 		game,
@@ -33,7 +34,12 @@
 	const { data: liveGame } = $derived(
 		isLive
 			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
-					fields: ['liveData,linescore', 'fullName', 'offense,first,second,third'],
+					fields: [
+						'liveData,linescore',
+						'fullName',
+						'currentInning,currentInningOrdinal,inningState',
+						'offense,first,second,third',
+					],
 					hydrate: 'flags,linescore',
 				})
 			: { data: undefined },
@@ -54,14 +60,14 @@
 >
 	<div
 		class={cn(
-			'relative z-1 m-auto grid h-6 pt-[0.75rlh] text-center *:leading-none group-has-[[style*=linescore]]/game:h-12',
+			'relative z-1 m-auto grid pt-rlh text-center *:leading-none group-has-[[style*=linescore]]/game:h-12',
 			isSpoilerPrevented && 'h-12',
 		)}
 		style:grid-area="status"
 	>
 		<div
 			class={cn(
-				'absolute top-1/2 left-1/2 m-auto -translate-1/2',
+				'absolute top-1/2 left-1/2 -z-1 m-auto -translate-1/2',
 				isGamePage
 					? [
 							isLive ? 'max-md:mt-[.25lh]' : 'max-md:mt-[.5rlh]',
@@ -87,7 +93,9 @@
 			<span class="m-auto text-xs font-bold">
 				{value}{#if value === 'Final' && linescore?.currentInning! > linescore?.scheduledInnings!}/{linescore?.currentInning}{/if}
 			</span>
-		{:else if !isLive || isSpoilerPrevented}
+		{:else if isLive && !isSpoilerPrevented}
+			<Inning linescore={liveGame?.liveData.linescore} />
+		{:else}
 			<time class="m-auto text-xs font-bold" datetime={game.gameDate}>
 				{formatDate(game.gameDate, { hour: 'numeric', minute: '2-digit' })}
 			</time>

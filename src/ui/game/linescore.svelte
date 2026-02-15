@@ -1,15 +1,29 @@
 <script lang="ts">
+	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { cn } from '$lib/utils'
 
-	let { linescore, game }: { linescore: MLB.Linescore; game: MLB.Game } = $props()
+	let { linescore, game }: { linescore?: MLB.Linescore; game: MLB.Game } = $props()
 
-	let innings = $derived(linescore.innings ?? [])
-	let scheduledInnings = $derived(linescore.scheduledInnings ?? 0)
-	let currentInning = $derived(linescore.currentInning)
-	let teams = $derived(linescore.teams)
+	let { data } = $derived(
+		game.status.abstractGameState === 'Live'
+			? fetchLiveMLB<MLB.Linescore>(`/api/v1/game/${game.gamePk}/linescore`, {
+					fields: [
+						'currentInning,scheduledInnings',
+						'innings,num,runs,hits,errors,leftOnBase',
+						'teams,away,home',
+					],
+				})
+			: { data: linescore },
+	)
+
+	let innings = $derived(data?.innings ?? [])
+	let currentInning = $derived(data?.currentInning)
 
 	const remainingInnings = $derived.by(() =>
-		Array.from({ length: scheduledInnings - innings.length }, (_, i) => i + innings.length + 1),
+		Array.from(
+			{ length: (data?.scheduledInnings ?? 0) - innings.length },
+			(_, i) => i + innings.length + 1,
+		),
 	)
 </script>
 
@@ -34,7 +48,8 @@
 
 		<tbody class="tabular-nums">
 			{#each ['away', 'home'] as const as teamKey}
-				{@const { runs, hits, errors, leftOnBase } = teams?.[teamKey] as MLB.LinescoreTeam}
+				{@const { runs, hits, errors, leftOnBase } =
+					(data?.teams?.[teamKey] as MLB.LinescoreTeam) ?? {}}
 
 				<tr>
 					{#each innings as inning (inning.num)}

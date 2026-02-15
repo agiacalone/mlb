@@ -87,7 +87,7 @@ export async function fetchLinescore(gamePk: string | number) {
 		fields: [
 			'currentInning,scheduledInnings',
 			'innings,num,runs,hits,errors,leftOnBase',
-			'teams,home,away',
+			'teams,away,home',
 		],
 	})
 }

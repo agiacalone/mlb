@@ -15,7 +15,7 @@
 </script>
 
 <div class="grid rotate-45 grid-cols-2 gap-[.5ch] {className}">
-	{#each Array.from({ length: 3 }) as _, base (base)}
+	{#each Array.from({ length: 3 }) as _, base (runners[base] ?? base)}
 		{@const runner = runners[base]}
 
 		<div
