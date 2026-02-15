@@ -6,7 +6,7 @@
 	import { maintainSearchParams } from '$lib/url.svelte'
 	import { count } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
-	import { sortGames } from '$ui/favorites/store.svelte'
+	import { sortFavorite } from '$ui/favorites/store.svelte'
 	import Game from '$ui/game/game.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
@@ -64,7 +64,7 @@
 			</summary>
 
 			<div class="anim-fade columns-[450px] gap-lh space-y-ch *:break-inside-avoid">
-				{#each date.games.sort(sortGames) as game (game.gamePk)}
+				{#each date.games.sort(sortFavorite) as game (game.gamePk)}
 					{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}
 					<Game {game} {linescore} showDescription />
 				{/each}

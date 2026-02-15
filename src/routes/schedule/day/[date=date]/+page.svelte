@@ -4,9 +4,8 @@
 	import { fetchDaySchedule, fetchSeason } from '$lib/fetch'
 	import { formatDate, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
-	import { count } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
-	import { sortGames } from '$ui/favorites/store.svelte'
+	import { sortFavorite } from '$ui/favorites/store.svelte'
 	import Game from '$ui/game/game.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
@@ -74,20 +73,15 @@
 
 <section class="py-lh sm:px-ch">
 	{#if schedule.dates[0]?.games.some((game) => game.gameType === 'R')}
-		<SeasonProgress class="pt-lh max-sm:px-ch" {currentDate} {seasonProgress} />
-		<hr class="my-lh border-dashed border-stroke" />
+		<SeasonProgress class="mb-lh pt-lh max-sm:px-ch" {currentDate} {seasonProgress} />
 	{/if}
 
 	{#each schedule.dates as { games }}
-		{#if schedule.totalGames}
-			<p class="text-center text-current/50">{count(schedule.totalGames, 'game')}</p>
-		{/if}
-		<div class="columns-[450px] gap-lh space-y-ch *:break-inside-avoid">
-			{#each games.sort(sortGames) as game (game.gamePk)}
-				{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}
-				<Game {game} {linescore} showDescription />
-			{/each}
-		</div>
+		{$inspect(games.map((game) => game.status.abstractGameState))}
+
+		{@render groupedGames(games, 'Live')}
+		{@render groupedGames(games, 'Preview')}
+		{@render groupedGames(games, 'Final')}
 	{:else}
 		<Empty>No games</Empty>
 	{/each}
@@ -97,3 +91,26 @@
 		<SeasonInfo {season} />
 	{/if}
 </section>
+
+{#snippet groupedGames(games: MLB.Game[], state: string)}
+	{@const processedGames = games
+		.filter((game) => game.status.abstractGameState === state)
+		.sort(sortFavorite)}
+
+	{#if processedGames.length}
+		<h2
+			class="relative my-lh text-center text-sm before:absolute before:inset-x-0 before:top-1/2 before:my-auto before:-translate-y-1/2 before:border-b before:border-dashed before:border-stroke only-of-type:hidden"
+		>
+			<span class="relative bg-background px-ch text-current/50">
+				{state} ({processedGames.length})
+			</span>
+		</h2>
+
+		<div class="columns-[450px] gap-lh space-y-ch *:break-inside-avoid">
+			{#each processedGames as game (game.gamePk)}
+				{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}
+				<Game {game} {linescore} showDescription />
+			{/each}
+		</div>
+	{/if}
+{/snippet}

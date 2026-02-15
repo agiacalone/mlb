@@ -43,7 +43,7 @@ export const favoritesStore = $state({
 	},
 })
 
-export function sortGames(a: MLB.Game, b: MLB.Game) {
+export function sortFavorite(a: MLB.Game, b: MLB.Game) {
 	const aFavorite =
 		favoritesStore.has(`/teams/${a.teams.home.team.id}`) ||
 		favoritesStore.has(`/teams/${a.teams.away.team.id}`)

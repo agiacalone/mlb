@@ -27,6 +27,8 @@
 	const { flags } = $derived(game as unknown as { flags: MLB.GameFlags })
 
 	const isFinal = $derived(game.status.abstractGameState === 'Final')
+	const isLive = $derived(game.status.abstractGameState === 'Live')
+
 	const isGamePage = $derived(page.url.pathname === `/game/${game.gamePk}`)
 
 	const isSpoilerPrevented = $derived(
@@ -111,12 +113,12 @@
 		{/if}
 	</div>
 
-	{#if isFinal && !isSpoilerPrevented}
+	{#if (isFinal || isLive) && !isSpoilerPrevented}
 		{#if linescore}
-			<Linescore {linescore} />
+			<Linescore {linescore} {game} />
 		{:else}
 			{#await fetchLinescore(game.gamePk) then data}
-				<Linescore linescore={data} />
+				<Linescore linescore={data} {game} />
 			{/await}
 		{/if}
 	{:else if game.status.abstractGameState === 'Preview'}

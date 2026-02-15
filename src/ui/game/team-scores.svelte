@@ -12,7 +12,7 @@
 	} = $props()
 </script>
 
-{#if game.status.abstractGameState === 'Final' && !isSpoilerPrevented}
+{#if ['Final', 'Live'].includes(game.status.abstractGameState) && !isSpoilerPrevented}
 	<div class="grid text-left *:pl-[.25ch]">
 		<StyledTeam team={boxscore.teams.away.team} record={game.teams.away.leagueRecord} linked>
 			{@render score(game.teams.away.score)}

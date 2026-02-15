@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
 
-	let { linescore }: { linescore: MLB.Linescore } = $props()
+	let { linescore, game }: { linescore: MLB.Linescore; game: MLB.Game } = $props()
 
 	let innings = $derived(linescore.innings ?? [])
 	let scheduledInnings = $derived(linescore.scheduledInnings ?? 0)
@@ -50,7 +50,7 @@
 							)}
 							class:opacity-40={inning[teamKey]?.runs === 0 || bye}
 						>
-							{#if inning.num === currentInning && teamKey === 'home' && inning[teamKey]?.runs === undefined}
+							{#if game.status.abstractGameState === 'Final' && inning.num === currentInning && teamKey === 'home' && inning[teamKey]?.runs === undefined}
 								X
 							{:else}
 								{inning[teamKey]?.runs}
