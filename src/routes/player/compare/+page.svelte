@@ -9,15 +9,15 @@
 	import Headshot from '$ui/player/headshot.svelte'
 	import type { PageProps } from './$types'
 
-	let { data, form }: PageProps = $props()
+	let { form }: PageProps = $props()
 
 	let people = $derived(
-		data.stats?.people as unknown as (MLB.Person & {
+		form?.results?.people as unknown as (MLB.Person & {
 			stats: MLB.PlayerStats[]
 		})[],
 	)
 
-	$inspect(form?.entries.stats)
+	let selectedStats = $derived(form?.entries.stats.split(','))
 
 	$effect(() => {
 		if (!browser) return
@@ -48,10 +48,10 @@
 <CompareForm />
 
 <section class="py-lh pb-[max(1lh,env(safe-area-inset-bottom))] text-center sm:px-ch">
-	{#if data.stats?.people?.length}
+	{#if people?.length}
 		<div class="grid snap-x snap-mandatory auto-cols-fr grid-flow-col overflow-x-auto">
 			<ul class="mt-[2.5lh] snap-center">
-				{#each form?.entries.stats.split(',') as stat (stat)}
+				{#each selectedStats as stat}
 					<li>{stat}</li>
 				{/each}
 			</ul>
@@ -68,7 +68,9 @@
 						</a>
 					</dt>
 
-					<dd></dd>
+					{#each selectedStats as stat}
+						<dd class="min-h-lh tabular-nums">{stats?.[0]?.splits?.[0]?.stat?.[stat]}</dd>
+					{/each}
 				</dl>
 			{/each}
 		</div>
