@@ -1,4 +1,5 @@
-import { fetchBoxscore, fetchfeedLive, fetchMLB } from '$lib/fetch'
+import { fetchMLB } from '$lib/fetch'
+import { fetchBoxscore, fetchfeedLive } from '$lib/fetch/presets'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ params }) => {

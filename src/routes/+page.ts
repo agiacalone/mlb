@@ -1,4 +1,5 @@
-import { fetchMLB, fetchSeason } from '$lib/fetch'
+import { fetchMLB } from '$lib/fetch'
+import { fetchSeason } from '$lib/fetch/presets'
 import { formatDate, getToday } from '$lib/temporal'
 import type { PageLoad } from './$types'
 

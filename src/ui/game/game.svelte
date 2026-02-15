@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { fetchBoxscore, fetchLinescore } from '$lib/fetch'
+	import { fetchBoxscore, fetchLinescore } from '$lib/fetch/presets'
 	import { formatDate } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import Linescore from '$ui/game/linescore.svelte'

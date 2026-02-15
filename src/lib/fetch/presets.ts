@@ -1,34 +1,6 @@
-import { HOST, PRESETS } from '$ui/playground/constants'
+import { formatDate } from '$lib/temporal'
 import { getWeekDates } from '$ui/schedule/store.svelte'
-import { formatDate } from './temporal'
-
-type QueryParamKeys =
-	| keyof typeof PRESETS
-	| 'startDate'
-	| 'endDate'
-	| 'fields'
-	| 'hydrate'
-	| 'names'
-	| (string & {})
-
-type Params = Partial<Record<QueryParamKeys, string | string[]>>
-
-export async function fetchMLB<T>(
-	endpoint: string,
-	params?: Partial<Record<QueryParamKeys, string | string[]>>,
-) {
-	const url = new URL(endpoint, HOST)
-
-	for (const [key, value] of Object.entries(params ?? {})) {
-		url.searchParams.set(key, typeof value !== 'string' ? value!?.flat().join(',') : value)
-	}
-
-	const response = await fetch(url.toString())
-
-	return (await response.json()) as T
-}
-
-// presets
+import { fetchMLB } from '.'
 
 export async function fetchSeason(year: string, sportId = '1') {
 	const seasons = await fetchMLB<MLB.SeasonResponse>(`/api/v1/seasons`, {
@@ -100,7 +72,7 @@ export async function fetchfeedLive(gamePk: string | number) {
 	})
 }
 
-export async function fetchBoxscore(gamePk: string | number, params: Params = {}) {
+export async function fetchBoxscore(gamePk: string | number, params: Fetch.Params = {}) {
 	return await fetchMLB<MLB.Boxscore>(`/api/v1/game/${gamePk}/boxscore`, {
 		...params,
 		fields: [
@@ -129,7 +101,7 @@ export async function fetchWeekTransactions({
 	date?: string
 	startDate?: string
 	endDate?: string
-} & Params) {
+} & Fetch.Params) {
 	const weekStartDate = date ? getWeekDates(date).startDate : startDate
 	const weekEndDate = date ? getWeekDates(date).endDate : endDate
 

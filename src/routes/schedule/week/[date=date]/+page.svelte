@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation'
 	import { page } from '$app/state'
-	import { fetchSeason, fetchWeekSchedule } from '$lib/fetch'
+	import { fetchSeason, fetchWeekSchedule } from '$lib/fetch/presets'
 	import { formatDate, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
 	import { count } from '$lib/utils'

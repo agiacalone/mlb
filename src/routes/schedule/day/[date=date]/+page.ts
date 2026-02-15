@@ -1,4 +1,4 @@
-import { fetchDaySchedule, fetchSeason } from '$lib/fetch'
+import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
 import { getToday, slash } from '$lib/temporal'
 import { fetchSeasonProgress } from './fetch-season-progress'
 

@@ -24,6 +24,19 @@ declare global {
 		}
 	}
 
+	namespace Fetch {
+		type QueryParamKeys =
+			| keyof typeof PRESETS
+			| 'startDate'
+			| 'endDate'
+			| 'fields'
+			| 'hydrate'
+			| 'names'
+			| (string & {})
+
+		type Params = Partial<Record<QueryParamKeys, string | string[]>>
+	}
+
 	namespace Docs {
 		interface EndpointSchema {
 			[endpoint: string]: {

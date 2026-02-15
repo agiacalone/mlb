@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { fetchWeekTransactions } from '$lib/fetch'
+	import { fetchWeekTransactions } from '$lib/fetch/presets'
 	import { formatDate, slash } from '$lib/temporal'
 	import Empty from '$ui/empty.svelte'
 	import Header from '$ui/header.svelte'

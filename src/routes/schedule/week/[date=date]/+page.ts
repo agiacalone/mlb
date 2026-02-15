@@ -1,4 +1,4 @@
-import { fetchSeason, fetchWeekSchedule } from '$lib/fetch'
+import { fetchSeason, fetchWeekSchedule } from '$lib/fetch/presets'
 import { slash } from '$lib/temporal.js'
 
 export const load = async ({ params, url }) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { pushState } from '$app/navigation'
 	import { page } from '$app/state'
-	import { fetchDaySchedule, fetchSeason } from '$lib/fetch'
+	import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
 	import { formatDate, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
 	import Empty from '$ui/empty.svelte'
@@ -77,8 +77,6 @@
 	{/if}
 
 	{#each schedule.dates as { games }}
-		{$inspect(games.map((game) => game.status.abstractGameState))}
-
 		{@render groupedGames(games, 'Live')}
 		{@render groupedGames(games, 'Preview')}
 		{@render groupedGames(games, 'Final')}
@@ -99,7 +97,7 @@
 
 	{#if processedGames.length}
 		<h2
-			class="relative my-lh text-center text-sm before:absolute before:inset-x-0 before:top-1/2 before:my-auto before:-translate-y-1/2 before:border-b before:border-dashed before:border-stroke only-of-type:hidden"
+			class="relative my-lh text-center text-sm before:absolute before:inset-x-0 before:top-1/2 before:my-auto before:-translate-y-1/2 before:border-b before:border-dashed before:border-stroke"
 		>
 			<span class="relative bg-background px-ch text-current/50">
 				{state} ({processedGames.length})
