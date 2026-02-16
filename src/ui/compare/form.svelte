@@ -2,38 +2,53 @@
 	import { enhance } from '$app/forms'
 	import { fetchMLB } from '$lib/fetch'
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
+	import { formatDate, getToday } from '$lib/temporal'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let form = $state<HTMLFormElement | null>(null)
+
+	const PARAMETERS = {
+		season: {
+			displayName: 'season',
+			type: 'number',
+			value: getToday().getFullYear().toString(),
+			min: 1876,
+			max: getToday().getFullYear() + 1,
+		},
+		date: {
+			displayName: 'date',
+			type: 'date',
+			value: formatDate(getToday(), { locale: 'en-CA' }),
+			min: '1901-01-01',
+			max: `${getToday().getFullYear() + 1}-12-31`,
+		},
+	} as Record<string, HTMLAttributes<HTMLInputElement> & { displayName?: string }>
 
 	const TYPES: {
 		displayName: string
 		label?: string
-		parameters?: {
-			displayName: string
-			type: string
-		}[]
+		parameters?: (typeof PARAMETERS)[keyof typeof PARAMETERS][]
 	}[] = [
 		{
 			displayName: 'season,seasonAdvanced',
 			label: 'Season',
-			parameters: [{ displayName: 'season', type: 'number' }],
+			parameters: [PARAMETERS.season],
 		},
 		{ displayName: 'careerRegularSeason,careerAdvanced', label: 'Career' },
 		{
 			displayName: 'projected',
 			label: 'Projected',
-			parameters: [{ displayName: 'season', type: 'number' }],
+			parameters: [PARAMETERS.season],
 		},
 		{
 			displayName: 'byDateRange',
 			label: 'By date range',
 			parameters: [
-				{ displayName: 'startDate', type: 'date' },
-				{ displayName: 'endDate', type: 'date' },
+				{ ...PARAMETERS.date, displayName: 'startDate' },
+				{ ...PARAMETERS.date, displayName: 'endDate' },
 			],
 		},
 		{ displayName: 'byMonth', label: 'By month' },
-		{ displayName: 'byDayOfWeek', label: 'By day of week' },
 		{ displayName: 'vsTeam', label: 'vs Team' },
 	]
 
@@ -46,6 +61,7 @@
 </script>
 
 <form
+	class="px-ch"
 	method="POST"
 	use:enhance={() => {
 		return async ({ update }) => {
@@ -79,16 +95,36 @@
 				)}
 
 				<div class="flex flex-wrap gap-x-ch">
-					{#each stats as { lookupParam, name, isCounting } (name)}
-						<label class="shrink-0 has-checked:text-accent">
-							<input
-								name="stats"
-								type="checkbox"
-								value={isCounting ? name || lookupParam : lookupParam || name}
-							/>
-							{name}
-						</label>
-					{/each}
+					{#if stats.length}
+						{#each stats as { lookupParam, name, isCounting } (name)}
+							<label class="shrink-0 has-checked:text-accent">
+								<input
+									name="stats"
+									type="checkbox"
+									value={isCounting ? name || lookupParam : lookupParam || name}
+								/>
+								{name}
+							</label>
+						{/each}
+
+						<button
+							class="ml-auto link"
+							type="button"
+							onclick={(e) => {
+								const radios =
+									(e.target as HTMLElement)
+										.closest('fieldset')
+										?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]') ?? []
+								const hasChecked = Array.from(radios).some((radio) => radio.checked)
+
+								radios.forEach((radio) => {
+									radio.checked = hasChecked ? false : true
+								})
+
+								form?.requestSubmit()
+							}}>Toggle all</button
+						>
+					{/if}
 				</div>
 			{/await}
 		</div>
@@ -107,13 +143,12 @@
 
 	{#if TYPES.find((t) => t.displayName === selectedType)?.parameters}
 		{@const { parameters } = TYPES.find((t) => t.displayName === selectedType) ?? {}}
-		{#each parameters as param (param.displayName)}
+		{#each parameters as { displayName, ...props } (displayName)}
 			<fieldset>
 				<div class="flex items-center gap-x-ch">
-					<legend>{param.displayName}</legend>
+					<legend>{displayName}</legend>
 					<label>
-						{param.displayName}
-						<input name={param.displayName} type={param.type} />
+						<input name={displayName} {...props} />
 					</label>
 				</div>
 			</fieldset>

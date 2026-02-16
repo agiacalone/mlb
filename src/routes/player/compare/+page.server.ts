@@ -7,19 +7,25 @@ export const actions = {
 		const personIds = url.searchParams.get('ids')!
 
 		const allStats = formData.getAll('stats').join(',')
-
-		console.log(formData.get('type'))
+		const type = formData.get('type') as string
 
 		const statsHydration = [
 			`group=[${formData.get('group')}]`,
-			`type=[${formData.get('type')}]`,
-		].join(',')
+			`type=[${type}]`,
+			['season,seasonAdvanced', 'projected'].includes(type) && `season=${formData.get('season')}`,
+			['byDateRange'].includes(type) &&
+				`startDate=${formData.get('startDate')},endDate=${formData.get('endDate')}`,
+		]
+			.filter(Boolean)
+			.join(',')
 
 		const results = await fetchMLB<MLB.PersonResponse>('/api/v1/people', {
 			personIds,
 			fields: ['people,id,fullName', 'stats,group,displayName,splits,season,stat', allStats],
 			hydrate: `stats(${statsHydration})`,
 		})
+
+		console.log(statsHydration)
 
 		return {
 			entries: {

@@ -1,14 +1,15 @@
 export const LOWER_IS_BETTER = new Set([
-	'era',
-	'whip',
-	'losses',
-	'hitBatsmen',
 	'balks',
-	'wildPitches',
-	'errors',
 	'caughtStealing',
+	'era',
+	'errors',
 	'groundIntoDoublePlay',
+	'hitBatsmen',
+	'leftOnBase',
+	'losses',
 	'passedBall',
+	'whip',
+	'wildPitches',
 ])
 
 export const ENABLED_BASEBALL_STATS = new Set([
