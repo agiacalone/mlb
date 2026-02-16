@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { LOWER_IS_BETTER } from '$lib/stats'
+
 	let {
 		group,
 		key,
@@ -112,7 +114,7 @@
 		return d
 	})
 
-	const lowerIsBetter = $derived(['era', 'whip', 'losses'].includes(key))
+	const lowerIsBetter = $derived(LOWER_IS_BETTER.has(key))
 
 	const maxPoint = $derived(
 		scaledPoints.reduce(

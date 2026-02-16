@@ -8,6 +8,8 @@ export const actions = {
 
 		const allStats = formData.getAll('stats').join(',')
 
+		console.log(formData.get('type'))
+
 		const statsHydration = [
 			`group=[${formData.get('group')}]`,
 			`type=[${formData.get('type')}]`,

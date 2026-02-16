@@ -2,6 +2,8 @@
 	import { browser } from '$app/environment'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
+	import { LOWER_IS_BETTER } from '$lib/stats'
+	import { cn } from '$lib/utils'
 	import CompareForm from '$ui/compare/form.svelte'
 	import { compareStore } from '$ui/compare/store.svelte'
 	import Empty from '$ui/empty.svelte'
@@ -18,6 +20,16 @@
 	)
 
 	let selectedStats = $derived(form?.entries.stats.split(','))
+
+	function combineStats(stats: MLB.PlayerStats[]) {
+		return Object.assign({}, ...(stats?.flatMap((s) => s.splits.map((s) => s.stat)) ?? []))
+	}
+
+	function bestValue(stat: string, values: (string | number)[]) {
+		const nums = values.map(Number).filter((n) => !isNaN(n))
+		if (!nums.length) return undefined
+		return LOWER_IS_BETTER.has(stat) ? Math.min(...nums) : Math.max(...nums)
+	}
 
 	$effect(() => {
 		if (!browser) return
@@ -69,7 +81,20 @@
 					</dt>
 
 					{#each selectedStats as stat}
-						<dd class="min-h-lh tabular-nums">{stats?.[0]?.splits?.[0]?.stat?.[stat]}</dd>
+						{@const bestStat = bestValue(
+							stat,
+							people?.map((p) => combineStats(p.stats)[stat]) ?? [],
+						)}
+						{@const value = combineStats(stats)[stat]}
+
+						<dd
+							class={cn(
+								'min-h-lh tabular-nums',
+								bestStat === Number(value) && 'bg-accent/10 text-accent',
+							)}
+						>
+							{value}
+						</dd>
 					{/each}
 				</dl>
 			{/each}

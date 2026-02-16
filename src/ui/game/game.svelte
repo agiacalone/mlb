@@ -9,6 +9,7 @@
 	import Loading from '$ui/loading.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
+	import BSO from './bso.svelte'
 	import Status from './status.svelte'
 
 	let {
@@ -60,7 +61,7 @@
 	<div
 		class={cn(
 			'relative z-1 m-auto grid w-full text-center *:leading-none group-has-[[style*=linescore]]/game:h-12',
-			(isLive || isFinal) && 'max-md:mt-rlh',
+			(isLive || isFinal) && !isSpoilerPrevented && 'max-md:mt-rlh',
 		)}
 		style:grid-area="status"
 	>
@@ -145,6 +146,10 @@
 		<ProbablePitchers {game} />
 	{/if}
 
+	{#if isLive}
+		<BSO />
+	{/if}
+
 	{#if !isGamePage}
 		<div
 			class="text-center text-xs font-light group-not-hover/game:transition-[translate,opacity] md:group-not-hover/game:-translate-y-full md:group-not-hover/game:opacity-0"
@@ -174,27 +179,26 @@
 			grid-template:
 				'. description linescore' auto
 				'status boxscore linescore' auto
-				'. link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
+				'bso link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
 
 			@media (width < 32rem) {
 				grid-template:
 					'. description description' auto
 					'status boxscore linescore' auto
-					'. link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
+					'bso link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
 			}
 		}
 	}
 
 	[style*='boxscore'] {
-		--inset: 0.6ch;
 		clip-path: polygon(
 			-1ch 0,
 			100% 0,
 			100% 100%,
 			-1ch 100%,
-			-1ch calc(72.5% + var(--inset)),
-			var(--inset) 50%,
-			-1ch calc(27.5% - var(--inset))
+			-1ch calc(50% + 1.5ch),
+			0.4ch 50%,
+			-1ch calc(50% - 1.5ch)
 		);
 	}
 </style>
