@@ -4,11 +4,13 @@
 
 	let { linescore, game }: { linescore?: MLB.Linescore; game: MLB.Game } = $props()
 
+	const isLive = $derived(game?.status.abstractGameState === 'Live')
+
 	let { data } = $derived(
-		game.status.abstractGameState === 'Live'
+		isLive
 			? fetchLiveMLB<MLB.Linescore>(`/api/v1/game/${game.gamePk}/linescore`, {
 					fields: [
-						'currentInning,scheduledInnings',
+						'currentInning,scheduledInnings,inningState',
 						'innings,num,runs,hits,errors,leftOnBase',
 						'teams,away,home',
 					],
@@ -60,12 +62,16 @@
 
 						<td
 							class={cn(
-								'nth-[3n]:border-r',
-								inning.num == currentInning ? 'border-current/25' : 'border-current/10',
+								'border-foreground/10 nth-[3n+4]:border-l',
+								(inning[teamKey]?.runs === 0 || bye) && 'text-current/40',
+								isLive &&
+									inning.num === currentInning &&
+									((teamKey === 'away' && data?.inningState === 'Top') ||
+										(teamKey === 'home' && data?.inningState === 'Bottom')) &&
+									'bg-foreground/10',
 							)}
-							class:opacity-40={inning[teamKey]?.runs === 0 || bye}
 						>
-							{#if game.status.abstractGameState === 'Final' && inning.num === currentInning && teamKey === 'home' && inning[teamKey]?.runs === undefined}
+							{#if game?.status.abstractGameState === 'Final' && inning.num === currentInning && teamKey === 'home' && inning[teamKey]?.runs === undefined}
 								X
 							{:else}
 								{inning[teamKey]?.runs}
@@ -74,15 +80,10 @@
 					{/each}
 
 					{#each remainingInnings as num (num)}
-						<td
-							class={cn(
-								'nth-[3n]:border-r',
-								num == currentInning ? 'border-current/25' : 'border-current/10',
-							)}
-						></td>
+						<td class={cn('border-foreground/10 nth-[3n+4]:border-l')}></td>
 					{/each}
 
-					<td class="border-l! border-current/50 font-bold">{runs}</td>
+					<td class="border-l border-foreground/25 font-bold">{runs}</td>
 					<td>{hits}</td>
 					<td>{errors}</td>
 					<td>{leftOnBase}</td>

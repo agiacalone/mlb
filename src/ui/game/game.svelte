@@ -2,7 +2,6 @@
 	import { page } from '$app/state'
 	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { fetchBoxscore, fetchLinescore } from '$lib/fetch/presets'
-	import { formatDate } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import Linescore from '$ui/game/linescore.svelte'
 	import ProbablePitchers from '$ui/game/probable-pitchers.svelte'
@@ -10,7 +9,7 @@
 	import Loading from '$ui/loading.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
-	import Inning from './inning.svelte'
+	import Status from './status.svelte'
 
 	let {
 		game,
@@ -60,51 +59,31 @@
 >
 	<div
 		class={cn(
-			'relative z-1 m-auto grid pt-rlh text-center *:leading-none group-has-[[style*=linescore]]/game:h-12',
-			isSpoilerPrevented && 'h-12',
+			'relative z-1 m-auto grid w-full text-center *:leading-none group-has-[[style*=linescore]]/game:h-12',
+			(isLive || isFinal) && 'max-md:mt-rlh',
 		)}
 		style:grid-area="status"
 	>
 		<div
 			class={cn(
-				'absolute top-1/2 left-1/2 -z-1 m-auto -translate-1/2',
-				isGamePage
-					? [
-							isLive ? 'max-md:mt-[.25lh]' : 'max-md:mt-[.5rlh]',
-							isFinal && 'max-md:mt-[.25lh] md:mt-[.5lh]',
-							isSpoilerPrevented && 'max-md:mt-[.5rlh]',
-						]
-					: [
-							'mt-[.25lh] md:mt-[.5rlh]',
-							game.status.abstractGameState === 'Preview' && 'max-md:mt-[.5rlh]',
-							isSpoilerPrevented && 'max-md:mt-[.5rlh]',
-						],
+				'absolute top-1/2 left-1/2 -z-1 -translate-1/2',
+				isGamePage && game.status.abstractGameState !== 'Preview' && 'md:mt-1',
 			)}
 		>
 			<BaseRunners
-				className="w-max max-md:group-has-[[style*=linescore]]/game:mt-[.5lh]"
-				linescore={!isSpoilerPrevented ? liveGame?.liveData.linescore : undefined}
+				className="w-max"
+				linescore={!isSpoilerPrevented ? liveGame?.liveData?.linescore : undefined}
 			/>
 		</div>
 
-		{#if isFinal && !isSpoilerPrevented}
-			{@const value =
-				game.status.reason || game.status.detailedState || game.status.abstractGameState}
-			<span class="m-auto text-xs font-bold">
-				{value}{#if value === 'Final' && linescore?.currentInning! > linescore?.scheduledInnings!}/{linescore?.currentInning}{/if}
-			</span>
-		{:else if isLive && !isSpoilerPrevented}
-			<Inning linescore={liveGame?.liveData.linescore} />
-		{:else}
-			<time class="m-auto text-xs font-bold" datetime={game.gameDate}>
-				{formatDate(game.gameDate, { hour: 'numeric', minute: '2-digit' })}
-			</time>
-		{/if}
+		<Status {game} {liveGame} {linescore} {isSpoilerPrevented} />
 	</div>
 
 	<span
-		class="group/description grid items-end text-center text-xs font-light *:col-span-full *:row-span-full *:line-clamp-1"
-		class:min-h-rlh={!isGamePage || (isGamePage && !isFinal)}
+		class={cn(
+			'group/description grid items-end text-center text-xs font-light *:col-span-full *:row-span-full *:line-clamp-1',
+			(!isGamePage || (isGamePage && game.status.abstractGameState === 'Preview')) && 'min-h-rlh',
+		)}
 		style:grid-area="description"
 	>
 		{#if !isGamePage}
@@ -132,14 +111,24 @@
 		{/if}
 	</span>
 
-	<div class="relative z-1 bg-background" style:grid-area="boxscore">
+	<div class="relative z-1 bg-background has-data-loading:h-full" style:grid-area="boxscore">
 		{#if boxscore}
-			<TeamScores {game} {boxscore} {isSpoilerPrevented} />
+			<TeamScores
+				{game}
+				{boxscore}
+				linescore={liveGame?.liveData?.linescore}
+				{isSpoilerPrevented}
+			/>
 		{:else}
 			{#await fetchBoxscore(game.gamePk)}
-				<Loading>Loading...</Loading>
+				<Loading class="h-full justify-center" data-loading>Loading...</Loading>
 			{:then data}
-				<TeamScores {game} boxscore={data} {isSpoilerPrevented} />
+				<TeamScores
+					{game}
+					boxscore={data}
+					linescore={liveGame?.liveData?.linescore}
+					{isSpoilerPrevented}
+				/>
 			{/await}
 		{/if}
 	</div>
@@ -176,14 +165,14 @@
 		--status-size: 6ch;
 
 		grid-template:
-			'status description' auto
+			'. description' auto
 			'status boxscore' auto
 			'. pregame' auto
 			'. link' auto / var(--status-size) 1fr;
 
 		&:global(:has([style*='linescore'])) {
 			grid-template:
-				'status description linescore' auto
+				'. description linescore' auto
 				'status boxscore linescore' auto
 				'. link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
 
@@ -197,15 +186,15 @@
 	}
 
 	[style*='boxscore'] {
-		--inset: 0.5ch;
+		--inset: 0.6ch;
 		clip-path: polygon(
-			0 0,
+			-1ch 0,
 			100% 0,
 			100% 100%,
-			0 100%,
-			0 calc(50% + var(--inset)),
+			-1ch 100%,
+			-1ch calc(72.5% + var(--inset)),
 			var(--inset) 50%,
-			0 calc(50% - var(--inset))
+			-1ch calc(27.5% - var(--inset))
 		);
 	}
 </style>

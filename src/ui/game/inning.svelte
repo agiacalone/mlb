@@ -4,18 +4,17 @@
 	let { linescore }: { linescore?: MLB.Linescore } = $props()
 
 	const isMiddleOrEnd = $derived(['Middle', 'End'].includes(linescore?.inningState ?? ''))
-	const title = $derived(`${linescore?.inningState} ${linescore?.currentInningOrdinal}`)
 </script>
 
-{#key title}
-	<b
-		class={cn('flex anim-fade-to-r items-center gap-[.5ch]', !isMiddleOrEnd && 'mt-auto pt-lh')}
-		{title}
-	>
-		{#if isMiddleOrEnd}
-			<small class="text-xs">{linescore?.inningState?.slice(0, 3)}</small>
-		{/if}
+<b
+	class={cn(
+		'pointer-events-none flex items-center justify-center gap-[.5ch]',
+		!isMiddleOrEnd && 'mt-auto translate-y-[.25lh]',
+	)}
+>
+	{#if isMiddleOrEnd}
+		<small class="text-xs">{linescore?.inningState?.slice(0, 3)}</small>
+	{/if}
 
-		{linescore?.currentInning}
-	</b>
-{/key}
+	<span class="text-lg">{linescore?.currentInning}</span>
+</b>
