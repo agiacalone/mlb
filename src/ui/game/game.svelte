@@ -37,6 +37,7 @@
 					fields: [
 						'liveData,linescore',
 						'fullName',
+						'balls,strikes,outs',
 						'currentInning,currentInningOrdinal,inningState',
 						'offense,first,second,third',
 					],
@@ -147,7 +148,8 @@
 	{/if}
 
 	{#if isLive}
-		<BSO />
+		{$inspect(liveGame)}
+		<BSO linescore={liveGame?.liveData?.linescore} className="mx-auto text-xs mt-ch" />
 	{/if}
 
 	{#if !isGamePage}
