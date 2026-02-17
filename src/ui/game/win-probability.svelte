@@ -73,7 +73,7 @@
 		}
 		const indexInInning = index - firstInThisInning
 		const count = pointsPerInning[inning]
-		const t = count > 1 ? indexInInning / (count - 1) : 0.5
+		const t = (indexInInning + 0.5) / Math.max(count, 1)
 
 		return startXs[inning] + t * inningWidths[inning]
 	}
