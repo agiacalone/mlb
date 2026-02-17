@@ -27,14 +27,14 @@
 		icon: Component
 	}[] = [
 		{
-			href: '/schedule/week',
-			label: 'Weekly Schedule',
-			icon: CalendarIcon,
-		},
-		{
 			href: '/schedule/day',
 			label: 'Daily Schedule',
 			icon: CalendarTodayIcon,
+		},
+		{
+			href: '/schedule/week',
+			label: 'Weekly Schedule',
+			icon: CalendarIcon,
 		},
 		{
 			href: '/standings',
