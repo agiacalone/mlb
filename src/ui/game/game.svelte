@@ -10,6 +10,7 @@
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
 	import BSO from './bso.svelte'
+	import Plays from './plays.svelte'
 	import Status from './status.svelte'
 
 	let {
@@ -37,9 +38,11 @@
 					fields: [
 						'liveData,linescore',
 						'fullName',
+						'teams,away,home,runs',
 						'balls,strikes,outs',
 						'currentInning,currentInningOrdinal,inningState',
 						'offense,first,second,third',
+						'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
 					],
 					hydrate: 'flags,linescore',
 				})
@@ -149,6 +152,7 @@
 
 	{#if isLive && linescore && !isSpoilerPrevented}
 		<BSO linescore={liveGame?.liveData?.linescore} className="mx-auto text-xs mt-ch" />
+		<Plays {liveGame} />
 	{/if}
 
 	{#if !isGamePage}
@@ -180,13 +184,16 @@
 			grid-template:
 				'. description linescore' auto
 				'status boxscore linescore' auto
-				'bso link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
+				'bso . plays' auto
+				'. link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
 
 			@media (width < 32rem) {
 				grid-template:
 					'. description description' auto
 					'status boxscore linescore' auto
-					'bso link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
+					'bso . .' auto
+					'bso plays plays' auto
+					'. link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
 			}
 		}
 	}

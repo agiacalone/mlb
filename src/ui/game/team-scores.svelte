@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 
 	let {
@@ -15,14 +14,6 @@
 	} = $props()
 
 	const isLive = $derived(game.status.abstractGameState === 'Live')
-
-	const { data: liveFeed } = $derived(
-		isLive
-			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
-					fields: ['liveData,linescore,teams,away,home,runs'],
-				})
-			: { data: undefined },
-	)
 </script>
 
 {#if ['Final', 'Live'].includes(game.status.abstractGameState) && !isSpoilerPrevented}
@@ -38,7 +29,7 @@
 			>
 				<strong class="ml-auto shrink-0 pr-[.5ch] text-right tabular-nums">
 					{#if isLive}
-						{liveFeed?.liveData?.linescore?.teams?.[teamKey]?.runs}
+						{linescore?.teams?.[teamKey]?.runs}
 					{:else}
 						{game.teams[teamKey].score}
 					{/if}

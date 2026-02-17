@@ -4,6 +4,7 @@
 @theme {
 	--font-sans: 'Geist', monospace;
 	--font-mono: 'Geist Mono', monospace;
+	--font-pixel: 'Doto', monospace;
 
 	--color-dark: #000;
 	--color-light: #fff;
