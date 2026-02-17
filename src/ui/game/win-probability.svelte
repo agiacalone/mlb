@@ -13,11 +13,74 @@
 	let height = $state(100)
 	const padding = 2
 
-	const innings = $derived(linescore?.innings?.length ?? linescore?.scheduledInnings ?? 9)
+	const maxInningInData = $derived(
+		winProbability.reduce((max, d) => Math.max(max, d.about?.inning ?? 0), 0),
+	)
+	const scheduledInnings = $derived(linescore?.scheduledInnings ?? 9)
+	const innings = $derived(Math.max(maxInningInData, scheduledInnings))
+
+	// Compute inning layout with minimum widths
+	const inningLayout = $derived(() => {
+		// Count data points per inning
+		const pointsPerInning = new Array(innings).fill(0) as number[]
+		winProbability.forEach((d) => {
+			const inning = (d.about?.inning ?? 1) - 1
+			if (inning < innings) pointsPerInning[inning]++
+		})
+
+		// Assign widths: proportional to data points, but at least 6 plays worth
+		const rawWidths = pointsPerInning.map((count) => Math.max(count, 6))
+		const totalRaw = rawWidths.reduce((a, b) => a + b, 0)
+		const inningWidths = rawWidths.map((w) => (w / totalRaw) * width)
+
+		// Cumulative start positions
+		const startXs = [0]
+		for (let i = 0; i < innings; i++) {
+			startXs.push(startXs[i] + inningWidths[i])
+		}
+
+		// Find half-inning start indices
+		const halfInningStarts = new Map<string, number>()
+		winProbability.forEach((d, i) => {
+			const inning = d.about?.inning ?? 1
+			const half = d.about?.isTopInning ? 'top' : 'bot'
+			const key = `${inning}-${half}`
+			if (!halfInningStarts.has(key)) {
+				halfInningStarts.set(key, i)
+			}
+		})
+
+		return { inningWidths, startXs, pointsPerInning, halfInningStarts }
+	})
+
+	// Map data point index to x position within its inning's allocated space
+	function dataIndexToX(index: number) {
+		const { startXs, pointsPerInning, inningWidths } = inningLayout()
+		const d = winProbability[index]
+		const inning = (d.about?.inning ?? 1) - 1
+
+		// Find index within this inning
+		let inningStartIndex = 0
+		for (let i = 0; i < index; i++) {
+			if (((winProbability[i].about?.inning ?? 1) - 1) === inning) continue
+			if (((winProbability[i].about?.inning ?? 1) - 1) < inning) inningStartIndex = i + 1
+		}
+		// Count from the first point of this inning
+		let firstInThisInning = index
+		for (let i = index; i >= 0; i--) {
+			if (((winProbability[i].about?.inning ?? 1) - 1) === inning) firstInThisInning = i
+			else break
+		}
+		const indexInInning = index - firstInThisInning
+		const count = pointsPerInning[inning]
+		const t = count > 1 ? indexInInning / (count - 1) : 0.5
+
+		return startXs[inning] + t * inningWidths[inning]
+	}
 
 	const pathData = $derived(() => {
 		const points = winProbability.map((d, i) => ({
-			x: (i / (winProbability.length - 1)) * width,
+			x: dataIndexToX(i),
 			y: (d.homeTeamWinProbability / 100) * height,
 		}))
 
@@ -45,30 +108,17 @@
 	})
 
 	const inningDividers = $derived(() => {
+		const { startXs, halfInningStarts } = inningLayout()
 		const result = []
-		const totalPoints = winProbability.length - 1
-
-		// Find the first index of each half-inning (top and bottom)
-		const halfInningStarts = new Map<string, number>()
-		winProbability.forEach((d, i) => {
-			const inning = d.about?.inning ?? 1
-			const half = d.about?.isTopInning ? 'top' : 'bot'
-			const key = `${inning}-${half}`
-			if (!halfInningStarts.has(key)) {
-				halfInningStarts.set(key, i)
-			}
-		})
 
 		for (let i = 0; i < innings; i++) {
 			const inningNum = i + 1
-			const topStartIndex = halfInningStarts.get(`${inningNum}-top`) ?? 0
-			const botStartIndex = halfInningStarts.get(`${inningNum}-bot`)
-			const nextInningTopIndex = halfInningStarts.get(`${inningNum + 1}-top`)
+			const startX = startXs[i]
+			const endX = startXs[i + 1]
 
-			const startX = totalPoints > 0 ? (topStartIndex / totalPoints) * width : 0
-			const midX = botStartIndex !== undefined ? (botStartIndex / totalPoints) * width : undefined
-			const endX =
-				nextInningTopIndex !== undefined ? (nextInningTopIndex / totalPoints) * width : width
+			const botStartIndex = halfInningStarts.get(`${inningNum}-bot`)
+			const midX = botStartIndex !== undefined ? dataIndexToX(botStartIndex) : undefined
+
 			const centerX = (startX + endX) / 2
 
 			result.push({ num: inningNum, startX, midX, endX, centerX })

@@ -1,6 +1,6 @@
 import { formatDate } from '$lib/temporal'
 import { getWeekDates } from '$ui/schedule/store.svelte'
-import { fetchMLB } from '.'
+import { createPreset as createFetcher, fetchMLB } from '.'
 
 export async function fetchSeason(year: string, sportId = '1') {
 	const seasons = await fetchMLB<MLB.SeasonResponse>(`/api/v1/seasons`, {
@@ -57,23 +57,30 @@ export async function fetchDaySchedule(date: string, sportId = '1') {
 	})
 }
 
-export async function fetchfeedLive(gamePk: string | number) {
-	return await fetchMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${gamePk}/feed/live`, {
-		fields: [
-			'gamePk,gameData,liveData',
-			'players,fullName,lastName',
-			'gameInfo,attendance,gameDurationMinutes',
-			'weather,condition,temp,wind',
-			'teams,home,away',
-			'linescore,currentInning,scheduledInnings,innings,num,runs,hits,errors,leftOnBase',
-			'boxscore,position,abbreviation,topPerformers,type,player,boxscoreName,stats,batting,pitching,summary',
-			'decisions,winner,loser,save,id',
-		],
-	})
-}
+export const fetchfeedLive = createFetcher<[gamePk: string | number], MLB.LiveGameFeed>(
+	(gamePk) => ({
+		endpoint: `/api/v1.1/game/${gamePk}/feed/live`,
+		params: {
+			fields: [
+				'gamePk,gameData,liveData',
+				'players,fullName,lastName',
+				'gameInfo,attendance,gameDurationMinutes',
+				'weather,condition,temp,wind',
+				'teams,home,away',
+				'linescore,currentInning,scheduledInnings,innings,num,runs,hits,errors,leftOnBase',
+				'boxscore,position,abbreviation,topPerformers,type,player,boxscoreName,stats,batting,pitching,summary',
+				'decisions,winner,loser,save,id',
+			],
+		},
+	}),
+)
 
-export async function fetchBoxscore(gamePk: string | number, params: Fetch.Params = {}) {
-	return await fetchMLB<MLB.Boxscore>(`/api/v1/game/${gamePk}/boxscore`, {
+export const fetchBoxscore = createFetcher<
+	[gamePk: string | number, params?: Fetch.Params],
+	MLB.Boxscore
+>((gamePk, params = {}) => ({
+	endpoint: `/api/v1/game/${gamePk}/boxscore`,
+	params: {
 		fields: [
 			'teams,away,team,id,name,teamName,clubName,abbreviation,sport',
 			'boxscoreName',
@@ -81,18 +88,29 @@ export async function fetchBoxscore(gamePk: string | number, params: Fetch.Param
 			'pitching,inningsPitched,numberOfPitches,earnedRuns',
 		],
 		...params,
-	})
-}
+	},
+}))
 
-export async function fetchLinescore(gamePk: string | number) {
-	return await fetchMLB<MLB.Linescore>(`/api/v1/game/${gamePk}/linescore`, {
+export const fetchLinescore = createFetcher<[gamePk: string | number], MLB.Linescore>((gamePk) => ({
+	endpoint: `/api/v1/game/${gamePk}/linescore`,
+	params: {
 		fields: [
 			'currentInning,scheduledInnings',
 			'innings,num,runs,hits,errors,leftOnBase',
 			'teams,away,home',
 		],
-	})
-}
+	},
+}))
+
+export const fetchWinProbability = createFetcher<
+	[gamePk: string | number],
+	MLB.PlayWinProbability[]
+>((gamePk) => ({
+	endpoint: `/api/v1/game/${gamePk}/winProbability`,
+	params: {
+		fields: 'result,about,inning,isTopInning,homeTeamWinProbability,awayTeamWinProbability',
+	},
+}))
 
 export async function fetchWeekTransactions({
 	date,

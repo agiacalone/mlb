@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
+	import {
+		fetchBoxscore,
+		fetchfeedLive,
+		fetchLinescore,
+		fetchWinProbability,
+	} from '$lib/fetch/presets'
 	import { formatDate } from '$lib/temporal'
 	import Boxscore from '$ui/game/boxscore.svelte'
 	import Decision from '$ui/game/decision.svelte'
@@ -12,37 +17,43 @@
 	import Metadata from '$ui/metadata.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import type { PageProps } from './$types'
+	import { fetchSchedule, getGame } from './fetch'
 
-	let { data }: PageProps = $props()
+	let { data, params }: PageProps = $props()
 
-	const game = $derived(data.game)
-	const isLive = $derived(game.status.abstractGameState === 'Live')
-
-	const feedLive = $derived(data.feedLive)
-	const linescore = $derived(feedLive.liveData.linescore)
-
-	const { data: boxscore } = $derived(
-		isLive
-			? fetchLiveMLB<MLB.Boxscore>(`/api/v1/game/${game.gamePk}/boxscore`, {
-					fields: [
-						'teams,away,team,id,name,teamName,clubName,abbreviation,sport',
-						'boxscoreName',
-						'stats,batting,atBats,hits,runs,rbi,homeRuns,baseOnBalls,strikeOuts',
-						'pitching,inningsPitched,numberOfPitches,earnedRuns',
-					],
-				})
-			: {
-					data: data.boxscore,
-				},
+	const { data: schedule } = $derived(
+		data.game?.status?.abstractGameState === 'Live'
+			? fetchSchedule.live(params.gamePk)
+			: { data: data.schedule },
 	)
+
+	const game = $derived(getGame(schedule, params.gamePk) ?? data.game)
+	const isLive = $derived(data.game?.status?.abstractGameState === 'Live')
+
+	const [{ data: feedLive }, { data: linescore }, { data: boxscore }, { data: winProbability }] =
+		$derived(
+			isLive
+				? [
+						fetchfeedLive.live(params.gamePk),
+						fetchLinescore.live(params.gamePk),
+						fetchBoxscore.live(params.gamePk),
+						fetchWinProbability.live(params.gamePk),
+					]
+				: [
+						{ data: data.feedLive },
+						{ data: data.feedLive.liveData.linescore },
+						{ data: data.boxscore },
+						{ data: data.winProbability },
+					],
+		)
 
 	const [away, home] = $derived([boxscore?.teams.away.team, boxscore?.teams.home.team])
 	const date = $derived(
-		formatDate(game.gameDate, { year: 'numeric', month: 'short', day: 'numeric' }),
+		formatDate(game?.gameDate, { year: 'numeric', month: 'short', day: 'numeric' }),
 	)
 
-	const hasTopPerformers = $derived(feedLive.liveData.boxscore.topPerformers?.length)
-	const hasDecisions = $derived(feedLive.liveData.decisions)
+	const hasTopPerformers = $derived(feedLive?.liveData.boxscore.topPerformers?.length)
+	const hasDecisions = $derived(feedLive?.liveData.decisions)
 	const hasBattingOrder = $derived(
 		boxscore?.teams.away.battingOrder?.length || boxscore?.teams.home.battingOrder?.length,
 	)
@@ -65,35 +76,37 @@
 	class="max-sm:px-0 max-sm:[&_nav]:pl-ch"
 	crumbs={[
 		{
-			href: `/schedule/week/${formatDate(game.gameDate, { locale: 'en-CA' })}`,
+			href: `/schedule/week/${formatDate(game?.gameDate, { locale: 'en-CA' })}`,
 			name: 'Weekly Schedule',
 		},
 		{
-			href: `/schedule/day/${formatDate(game.gameDate, { locale: 'en-CA' })}`,
-			name: formatDate(game.gameDate, { weekday: 'short', month: 'short', day: 'numeric' }),
+			href: `/schedule/day/${formatDate(game?.gameDate, { locale: 'en-CA' })}`,
+			name: formatDate(game?.gameDate, { weekday: 'short', month: 'short', day: 'numeric' }),
 		},
 		{ name: `${away?.abbreviation} @ ${home?.abbreviation}` },
 	]}
 >
-	<Game class="w-full" {game} {boxscore} {linescore} />
+	{#if game}
+		<Game class="w-full" {game} {boxscore} {linescore} />
+	{/if}
 </Header>
 
 <section class="space-y-lh py-lh">
 	{#if !isSpoilerPrevented}
 		{#if hasTopPerformers || hasDecisions}
 			<div class="flex flex-wrap items-start gap-ch px-ch *:grow">
-				{#if hasTopPerformers}
+				{#if hasTopPerformers && feedLive}
 					<TopPerformers {feedLive} />
 				{/if}
 
-				{#if hasDecisions}
+				{#if hasDecisions && feedLive}
 					<Decision {feedLive} />
 				{/if}
 			</div>
 		{/if}
 
-		{#if Array.isArray(data.winProbability)}
-			<WinProbability winProbability={data.winProbability} {boxscore} {linescore} />
+		{#if Array.isArray(winProbability)}
+			<WinProbability {winProbability} {boxscore} {linescore} />
 		{/if}
 	{/if}
 
@@ -108,7 +121,9 @@
 			<Boxscore {boxscore} {isSpoilerPrevented} />
 		{/if}
 
-		<GameData {game} {feedLive} />
+		{#if game && feedLive}
+			<GameData {game} {feedLive} />
+		{/if}
 	</article>
 </section>
 
