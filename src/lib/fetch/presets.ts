@@ -74,11 +74,13 @@ export async function fetchfeedLive(gamePk: string | number) {
 
 export async function fetchBoxscore(gamePk: string | number, params: Fetch.Params = {}) {
 	return await fetchMLB<MLB.Boxscore>(`/api/v1/game/${gamePk}/boxscore`, {
-		...params,
 		fields: [
 			'teams,away,team,id,name,teamName,clubName,abbreviation,sport',
-			...(params?.fields ?? []),
+			'boxscoreName',
+			'stats,batting,atBats,hits,runs,rbi,homeRuns,baseOnBalls,strikeOuts',
+			'pitching,inningsPitched,numberOfPitches,earnedRuns',
 		],
+		...params,
 	})
 }
 

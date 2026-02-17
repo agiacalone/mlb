@@ -8,11 +8,16 @@
 		boxscore,
 		isSpoilerPrevented,
 	}: {
-		boxscore: MLB.Boxscore
+		boxscore?: MLB.Boxscore
 		isSpoilerPrevented?: boolean
 	} = $props()
 
-	let { away, home } = $derived(boxscore.teams)
+	let { away, home } = $derived(
+		boxscore?.teams ?? {
+			away: undefined,
+			home: undefined,
+		},
+	)
 </script>
 
 <article
@@ -22,86 +27,91 @@
 	{@render team(home)}
 </article>
 
-{#snippet team(team: MLB.TeamBoxscore)}
-	<article class="snap-center bg-background">
-		<StyledTeam team={team.team} class="z-1" />
+{#snippet team(team?: MLB.TeamBoxscore)}
+	{#if team}
+		<article class="snap-center bg-background">
+			<StyledTeam team={team.team} class="z-1" />
 
-		<div class="overflow-x-auto">
-			<table class="table-fixed text-center">
-				<thead class="text-xs text-current/40">
-					<tr>
-						<th class="w-full"></th>
-						<th>AB</th>
-						<th>H</th>
-						<th>R</th>
-						<th>RBI</th>
-						<th>HR</th>
-						<th>BB</th>
-						<th>K</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each team.batters as playerId (playerId)}
-						{@const { stats, ...player } = team.players[`ID${playerId}`]}
-						{@const substituted = !isSpoilerPrevented && !team.battingOrder.includes(playerId)}
+			<div class="overflow-x-auto">
+				<table class="table-fixed text-center">
+					<thead class="text-xs text-current/40">
+						<tr>
+							<th class="w-full"></th>
+							<th>AB</th>
+							<th>H</th>
+							<th>R</th>
+							<th>RBI</th>
+							<th>HR</th>
+							<th>BB</th>
+							<th>K</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each team.batters as playerId (playerId)}
+							{@const { stats, ...player } = team.players[`ID${playerId}`]}
+							{@const substituted = !isSpoilerPrevented && !team.battingOrder.includes(playerId)}
 
-						{#if player.position.abbreviation !== 'P'}
-							<tr class="hover:*:bg-foreground/10" data-substituted={substituted ? '' : undefined}>
-								{@render p(player, substituted)}
+							{#if player.position.abbreviation !== 'P'}
+								<tr
+									class="hover:*:bg-foreground/10"
+									data-substituted={substituted ? '' : undefined}
+								>
+									{@render p(player, substituted)}
 
-								{#each ['atBats', 'hits', 'runs', 'rbi', 'homeRuns', 'baseOnBalls', 'strikeOuts'] as stat}
-									{@const value = stats?.batting?.[stat as keyof MLB.BattingStats]}
-									<td class={cn(!isSpoilerPrevented && Number(value) === 0 && 'text-current/40')}>
-										{#if !isSpoilerPrevented}
-											{value}
-										{/if}
-									</td>
-								{/each}
-							</tr>
-						{/if}
-					{/each}
-				</tbody>
-			</table>
-		</div>
+									{#each ['atBats', 'hits', 'runs', 'rbi', 'homeRuns', 'baseOnBalls', 'strikeOuts'] as stat}
+										{@const value = stats?.batting?.[stat as keyof MLB.BattingStats]}
+										<td class={cn(!isSpoilerPrevented && Number(value) === 0 && 'text-current/40')}>
+											{#if !isSpoilerPrevented}
+												{value}
+											{/if}
+										</td>
+									{/each}
+								</tr>
+							{/if}
+						{/each}
+					</tbody>
+				</table>
+			</div>
 
-		<hr class="my-[.5ch] border-dashed border-current/25" />
+			<hr class="my-[.5ch] border-dashed border-current/25" />
 
-		<div class="overflow-x-auto">
-			<table class="table-fixed text-center">
-				<thead class="text-xs text-current/40">
-					<tr>
-						<th class="w-full"></th>
-						<th>IP</th>
-						<th>P</th>
-						<th>H</th>
-						<th>R</th>
-						<th>ER</th>
-						<th>K</th>
-						<th>HR</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each team.pitchers.slice(0, isSpoilerPrevented ? 1 : team.pitchers.length) as playerId (playerId)}
-						{@const { stats, ...player } = team.players[`ID${playerId}`]}
-						{#if player.position.abbreviation === 'P'}
-							<tr class="hover:*:bg-foreground/10">
-								{@render p(player)}
+			<div class="overflow-x-auto">
+				<table class="table-fixed text-center">
+					<thead class="text-xs text-current/40">
+						<tr>
+							<th class="w-full"></th>
+							<th>IP</th>
+							<th>P</th>
+							<th>H</th>
+							<th>R</th>
+							<th>ER</th>
+							<th>K</th>
+							<th>HR</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each team.pitchers.slice(0, isSpoilerPrevented ? 1 : team.pitchers.length) as playerId (playerId)}
+							{@const { stats, ...player } = team.players[`ID${playerId}`]}
+							{#if player.position.abbreviation === 'P'}
+								<tr class="hover:*:bg-foreground/10">
+									{@render p(player)}
 
-								{#each ['inningsPitched', 'numberOfPitches', 'hits', 'runs', 'earnedRuns', 'strikeOuts', 'homeRuns'] as stat}
-									{@const value = stats?.pitching?.[stat as keyof MLB.PitchingStats]}
-									<td class={cn(!isSpoilerPrevented && Number(value) === 0 && 'text-current/40')}>
-										{#if !isSpoilerPrevented}
-											{value}
-										{/if}
-									</td>
-								{/each}
-							</tr>
-						{/if}
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	</article>
+									{#each ['inningsPitched', 'numberOfPitches', 'hits', 'runs', 'earnedRuns', 'strikeOuts', 'homeRuns'] as stat}
+										{@const value = stats?.pitching?.[stat as keyof MLB.PitchingStats]}
+										<td class={cn(!isSpoilerPrevented && Number(value) === 0 && 'text-current/40')}>
+											{#if !isSpoilerPrevented}
+												{value}
+											{/if}
+										</td>
+									{/each}
+								</tr>
+							{/if}
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</article>
+	{/if}
 {/snippet}
 
 {#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean)}

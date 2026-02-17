@@ -19,13 +19,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const [feedLive, boxscore, winProbability, content] = await Promise.all([
 		fetchfeedLive(params.gamePk),
-		fetchBoxscore(params.gamePk, {
-			fields: [
-				'boxscoreName',
-				'stats,batting,atBats,hits,runs,rbi,homeRuns,baseOnBalls,strikeOuts',
-				'pitching,inningsPitched,numberOfPitches,earnedRuns',
-			],
-		}),
+		fetchBoxscore(params.gamePk),
 		fetchMLB<MLB.PlayWinProbability[]>(`/api/v1/game/${params.gamePk}/winProbability`, {
 			fields: 'result,about,inning,isTopInning,homeTeamWinProbability,awayTeamWinProbability',
 		}),

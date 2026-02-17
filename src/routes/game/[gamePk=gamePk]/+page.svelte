@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { formatDate } from '$lib/temporal'
 	import Boxscore from '$ui/game/boxscore.svelte'
 	import Decision from '$ui/game/decision.svelte'
@@ -15,11 +16,27 @@
 	let { data }: PageProps = $props()
 
 	const game = $derived(data.game)
+	const isLive = $derived(game.status.abstractGameState === 'Live')
+
 	const feedLive = $derived(data.feedLive)
 	const linescore = $derived(feedLive.liveData.linescore)
-	const boxscore = $derived(data.boxscore)
 
-	const [away, home] = $derived([boxscore.teams.away.team, boxscore.teams.home.team])
+	const { data: boxscore } = $derived(
+		isLive
+			? fetchLiveMLB<MLB.Boxscore>(`/api/v1/game/${game.gamePk}/boxscore`, {
+					fields: [
+						'teams,away,team,id,name,teamName,clubName,abbreviation,sport',
+						'boxscoreName',
+						'stats,batting,atBats,hits,runs,rbi,homeRuns,baseOnBalls,strikeOuts',
+						'pitching,inningsPitched,numberOfPitches,earnedRuns',
+					],
+				})
+			: {
+					data: data.boxscore,
+				},
+	)
+
+	const [away, home] = $derived([boxscore?.teams.away.team, boxscore?.teams.home.team])
 	const date = $derived(
 		formatDate(game.gameDate, { year: 'numeric', month: 'short', day: 'numeric' }),
 	)
@@ -27,11 +44,11 @@
 	const hasTopPerformers = $derived(feedLive.liveData.boxscore.topPerformers?.length)
 	const hasDecisions = $derived(feedLive.liveData.decisions)
 	const hasBattingOrder = $derived(
-		boxscore.teams.away.battingOrder?.length || boxscore.teams.home.battingOrder?.length,
+		boxscore?.teams.away.battingOrder?.length || boxscore?.teams.home.battingOrder?.length,
 	)
 
 	const isSpoilerPrevented = $derived(
-		spoilerPreventionStore.has(away.id) || spoilerPreventionStore.has(home.id),
+		spoilerPreventionStore.has(away?.id!) || spoilerPreventionStore.has(home?.id!),
 	)
 </script>
 
@@ -40,8 +57,8 @@
 </svelte:head>
 
 <Metadata
-	title="{[away.clubName, home.clubName].join(' @ ')} ({date}) | MLB.TheOhtani.com"
-	description="Game details for {[away.name, home.name].join(' at ')} on {date}"
+	title="{[away?.clubName, home?.clubName].join(' @ ')} ({date}) | MLB.TheOhtani.com"
+	description="Game details for {[away?.name, home?.name].join(' at ')} on {date}"
 />
 
 <Header
@@ -55,7 +72,7 @@
 			href: `/schedule/day/${formatDate(game.gameDate, { locale: 'en-CA' })}`,
 			name: formatDate(game.gameDate, { weekday: 'short', month: 'short', day: 'numeric' }),
 		},
-		{ name: `${away.abbreviation} @ ${home.abbreviation}` },
+		{ name: `${away?.abbreviation} @ ${home?.abbreviation}` },
 	]}
 >
 	<Game class="w-full" {game} {boxscore} {linescore} />
