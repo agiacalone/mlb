@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { pushState } from '$app/navigation'
+	import { invalidate, pushState } from '$app/navigation'
 	import { page } from '$app/state'
 	import { fetchSeason, fetchWeekSchedule } from '$lib/fetch/presets'
-	import { formatDate, slash } from '$lib/temporal'
+	import { formatDate, getToday, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
 	import { count } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
@@ -26,6 +26,16 @@
 		currentDate = page.params.date!
 		schedule = data.schedule
 		season = data.season
+	})
+
+	const includestoday = $derived(
+		schedule.dates.some((d) => d.date === getToday().toISOString().split('T')[0]),
+	)
+
+	$effect(() => {
+		if (!includestoday) return
+		const interval = setInterval(() => invalidate('schedule:week'), 1000 * 60 * 3) // 3 min
+		return () => clearInterval(interval)
 	})
 
 	async function onDateChange(date: string) {

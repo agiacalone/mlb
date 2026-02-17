@@ -1,7 +1,9 @@
 import { fetchSeason, fetchWeekSchedule } from '$lib/fetch/presets'
 import { slash } from '$lib/temporal.js'
 
-export const load = async ({ params, url }) => {
+export const load = async ({ params, url, depends }) => {
+	depends('schedule:week')
+
 	const sportId = url.searchParams.get('sportId') || '1'
 	const year = new Date(slash(params.date)).getFullYear().toString()
 

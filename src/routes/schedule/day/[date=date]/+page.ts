@@ -2,7 +2,9 @@ import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
 import { getToday, slash } from '$lib/temporal'
 import { fetchSeasonProgress } from './fetch-season-progress'
 
-export const load = async ({ params, url }) => {
+export const load = async ({ params, url, depends }) => {
+	depends('schedule:day')
+
 	const sportId = url.searchParams.get('sportId') || '1'
 	const year = (new Date(slash(params.date)).getFullYear() ?? getToday().getFullYear()).toString()
 

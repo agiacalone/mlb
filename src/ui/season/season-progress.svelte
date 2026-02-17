@@ -27,7 +27,9 @@
 </script>
 
 {#if currentTimestamp >= regularSeasonStartTimestamp && currentTimestamp <= regularSeasonEndTimestamp}
-	<article class="grid grid-cols-[auto_1fr_auto] gap-ch text-center text-sm {className}">
+	<article
+		class="grid grid-cols-[auto_1fr_auto] gap-ch text-center text-sm tabular-nums {className}"
+	>
 		<span>{'1'.padStart(3, '0')}</span>
 
 		<output class="relative leading-none" style:--progress="calc({gamesPlayed / total} * 100%)">
