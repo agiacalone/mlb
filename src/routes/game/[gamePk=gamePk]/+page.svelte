@@ -17,17 +17,10 @@
 	import Metadata from '$ui/metadata.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import type { PageProps } from './$types'
-	import { fetchSchedule, getGame } from './fetch'
 
 	let { data, params }: PageProps = $props()
 
-	const { data: schedule } = $derived(
-		data.game?.status?.abstractGameState === 'Live'
-			? fetchSchedule.live(params.gamePk)
-			: { data: data.schedule },
-	)
-
-	const game = $derived(getGame(schedule, params.gamePk) ?? data.game)
+	const game = $derived(data.game)
 	const isLive = $derived(data.game?.status?.abstractGameState === 'Live')
 
 	const [{ data: feedLive }, { data: linescore }, { data: boxscore }, { data: winProbability }] =

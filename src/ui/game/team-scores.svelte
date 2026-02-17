@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 
 	let {
@@ -12,21 +13,38 @@
 		linescore?: MLB.Linescore
 		isSpoilerPrevented?: boolean
 	} = $props()
+
+	const isLive = $derived(game.status.abstractGameState === 'Live')
+
+	const { data: liveFeed } = $derived(
+		isLive
+			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
+					fields: ['liveData,linescore,teams,away,home,runs'],
+				})
+			: { data: undefined },
+	)
 </script>
 
 {#if ['Final', 'Live'].includes(game.status.abstractGameState) && !isSpoilerPrevented}
 	<div class="grid text-left *:pl-[.25ch]">
 		{#each ['away', 'home'] as const as teamKey (teamKey)}
+			{@const awayActive = teamKey === 'away' && linescore?.inningState === 'Top'}
+			{@const homeActive = teamKey === 'home' && linescore?.inningState === 'Bottom'}
+
 			<StyledTeam
 				team={boxscore.teams[teamKey].team}
 				record={game.teams[teamKey].leagueRecord}
 				linked
 			>
 				<strong class="ml-auto shrink-0 pr-[.5ch] text-right tabular-nums">
-					{game.teams[teamKey].score}
+					{#if isLive}
+						{liveFeed?.liveData?.linescore?.teams?.[teamKey]?.runs}
+					{:else}
+						{game.teams[teamKey].score}
+					{/if}
 				</strong>
 
-				{#if game.status.abstractGameState === 'Live' && ((teamKey === 'away' && linescore?.inningState === 'Top') || (teamKey === 'home' && linescore?.inningState === 'Bottom'))}
+				{#if game.status.abstractGameState === 'Live' && (awayActive || homeActive)}
 					<span class="absolute inset-y-0 right-full w-[.5ch] animate-pulse bg-accent"></span>
 				{/if}
 			</StyledTeam>

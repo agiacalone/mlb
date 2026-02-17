@@ -1,11 +1,20 @@
 import { fetchMLB } from '$lib/fetch'
 import { fetchBoxscore, fetchfeedLive, fetchWinProbability } from '$lib/fetch/presets'
 import type { PageServerLoad } from './$types'
-import { fetchSchedule, getGame } from './fetch'
 
 export const load: PageServerLoad = async ({ params }) => {
-	const schedule = await fetchSchedule(params.gamePk)
-	const game = getGame(schedule, params.gamePk)
+	const schedule = await fetchMLB<MLB.ScheduleResponse>(`/api/v1/schedule`, {
+		gamePk: params.gamePk,
+		fields: [
+			'dates,date,venue,description,seriesGameNumber,gamesInSeries',
+			'games,gamePk,gameType,gameDate,link',
+			'flags,noHitter,perfectGame',
+			'status,abstractGameState,detailedState,reason',
+			'teams,away,home,team,id,name,leagueRecord,wins,losses,score',
+		],
+		hydrate: 'flags',
+	})
+	const game = schedule?.dates?.[0].games.find((game) => game.gamePk === Number(params.gamePk))!
 
 	const [feedLive, boxscore, winProbability, content] = await Promise.all([
 		fetchfeedLive(params.gamePk),

@@ -147,7 +147,7 @@
 		<ProbablePitchers {game} />
 	{/if}
 
-	{#if isLive}
+	{#if isLive && linescore && !isSpoilerPrevented}
 		<BSO linescore={liveGame?.liveData?.linescore} className="mx-auto text-xs mt-ch" />
 	{/if}
 
