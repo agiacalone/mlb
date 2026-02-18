@@ -18,11 +18,12 @@
 		{@render pitcher({
 			pitcher: gameData.probablePitchers?.away,
 			team: gameData.teams.away,
-			className: 'flex-row-reverse',
+			className: 'flex-row-reverse pl-ch',
 		})}
 		{@render pitcher({
 			pitcher: gameData.probablePitchers?.home,
 			team: gameData.teams.home,
+			className: 'pr-ch',
 		})}
 	</div>
 {/await}
@@ -44,7 +45,7 @@
 		{#if pitcher}
 			<a
 				class={cn(
-					'group/pitcher relative flex items-center gap-ch before:opacity-50',
+					'group/pitcher relative flex items-center justify-between gap-ch before:opacity-50',
 					isDarkOnLightTeam(team) && 'dark:text-dark',
 					isLightOnDarkTeam(team) && 'dark:text-light',
 					className,

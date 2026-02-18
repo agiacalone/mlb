@@ -64,7 +64,9 @@
 		<div class="grid snap-x snap-mandatory auto-cols-fr grid-flow-col overflow-x-auto">
 			<ul class="mt-[2.5lh] snap-center">
 				{#each selectedStats as stat}
-					<li>{stat}</li>
+					<li class="line-clamp-1 break-all lowercase first-letter:capitalize">
+						{stat?.split(/(?=[A-Z])/g).join(' ')}
+					</li>
 				{/each}
 			</ul>
 

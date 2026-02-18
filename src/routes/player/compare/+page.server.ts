@@ -4,7 +4,7 @@ import type { Actions } from './$types'
 export const actions = {
 	default: async ({ request, url }) => {
 		const formData = await request.formData()
-		const personIds = url.searchParams.get('ids')!
+		const personIds = formData.get('ids') as string
 
 		const allStats = formData.getAll('stats').join(',')
 		const type = formData.get('type') as string

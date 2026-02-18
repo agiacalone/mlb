@@ -3,6 +3,7 @@
 	import { fetchMLB } from '$lib/fetch'
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
 	import { formatDate, getToday } from '$lib/temporal'
+	import { compareStore } from '$ui/compare/store.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
 
 	let form = $state<HTMLFormElement | null>(null)
@@ -61,7 +62,7 @@
 </script>
 
 <form
-	class="px-ch"
+	class="grid grid-cols-[auto_1fr] gap-x-ch gap-y-[.5ch] px-ch"
 	method="POST"
 	use:enhance={() => {
 		return async ({ update }) => {
@@ -71,20 +72,24 @@
 	bind:this={form}
 	onchange={() => form?.requestSubmit()}
 >
-	<fieldset>
-		<div class="flex items-center gap-x-ch">
+	<input type="hidden" name="ids" value={compareStore.ids.join(',')} />
+
+	<fieldset class="contents">
+		<div class="contents">
 			<legend>Group</legend>
 
-			<select name="group" bind:value={selectedGroup}>
-				{#each ['hitting', 'pitching', 'fielding'] as displayName (displayName)}
-					<option value={displayName}>{displayName}</option>
-				{/each}
-			</select>
+			<div>
+				<select class="button" name="group" bind:value={selectedGroup}>
+					{#each ['hitting', 'pitching', 'fielding'] as displayName (displayName)}
+						<option value={displayName}>{displayName}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 	</fieldset>
 
-	<fieldset>
-		<div class="flex items-center gap-x-ch">
+	<fieldset class="contents">
+		<div class="contents">
 			<legend>Stats</legend>
 
 			{#await fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats') then baseballStats}
@@ -94,21 +99,10 @@
 						ENABLED_BASEBALL_STATS.has(s.name),
 				)}
 
-				<div class="flex flex-wrap gap-x-ch">
-					{#if stats.length}
-						{#each stats as { lookupParam, name, isCounting } (name)}
-							<label class="shrink-0 has-checked:text-accent">
-								<input
-									name="stats"
-									type="checkbox"
-									value={isCounting ? name || lookupParam : lookupParam || name}
-								/>
-								{name}
-							</label>
-						{/each}
-
+				<div class="overflow-y-auto border border-stroke max-sm:max-h-[7.5lh]">
+					<div class="sticky top-0 w-full border-b border-stroke px-ch text-right backdrop-blur-xs">
 						<button
-							class="ml-auto link"
+							class="link"
 							type="button"
 							onclick={(e) => {
 								const radios =
@@ -116,39 +110,62 @@
 										.closest('fieldset')
 										?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]') ?? []
 								const hasChecked = Array.from(radios).some((radio) => radio.checked)
-
 								radios.forEach((radio) => {
 									radio.checked = hasChecked ? false : true
 								})
-
 								form?.requestSubmit()
 							}}>Toggle all</button
 						>
+					</div>
+
+					{#if stats.length}
+						<div class="columns-[12ch] px-ch py-[.5ch] *:break-inside-avoid">
+							{#each stats as { lookupParam, name, isCounting } (name)}
+								<label
+									class="flex items-baseline gap-ch px-[.5ch] py-[.25ch] leading-tight hover:bg-accent/15 has-checked:text-accent"
+								>
+									<input
+										class="shrink-0"
+										name="stats"
+										type="checkbox"
+										value={isCounting ? name || lookupParam : lookupParam || name}
+									/>
+
+									<span>
+										{#each name.split(/(?=[A-Z])/g) as word (word)}
+											<span class="inline-block lowercase first:capitalize">{word}&nbsp;</span>
+										{/each}
+									</span>
+								</label>
+							{/each}
+						</div>
 					{/if}
 				</div>
 			{/await}
 		</div>
 	</fieldset>
 
-	<fieldset>
-		<div class="flex items-center gap-x-ch">
+	<fieldset class="contents">
+		<div class="contents">
 			<legend>Types</legend>
-			<select name="type" bind:value={selectedType}>
-				{#each TYPES as { displayName, label } (displayName)}
-					<option value={displayName}>{label ?? displayName}</option>
-				{/each}
-			</select>
+			<div>
+				<select class="button" name="type" bind:value={selectedType}>
+					{#each TYPES as { displayName, label } (displayName)}
+						<option value={displayName}>{label ?? displayName}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 	</fieldset>
 
 	{#if TYPES.find((t) => t.displayName === selectedType)?.parameters}
 		{@const { parameters } = TYPES.find((t) => t.displayName === selectedType) ?? {}}
 		{#each parameters as { displayName, ...props } (displayName)}
-			<fieldset>
-				<div class="flex items-center gap-x-ch">
+			<fieldset class="contents">
+				<div class="contents">
 					<legend>{displayName}</legend>
 					<label>
-						<input name={displayName} {...props} />
+						<input class="button" name={displayName} {...props} />
 					</label>
 				</div>
 			</fieldset>
