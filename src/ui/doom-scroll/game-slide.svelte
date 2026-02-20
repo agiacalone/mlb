@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fetchMLB } from '$lib/fetch'
+	import { intersectionObserver } from '$lib/attachments/intersection-observer'
 	import { formatDate } from '$lib/temporal'
 	import Game from '$ui/game/game.svelte'
 	import Highlights from '$ui/game/highlights.svelte'
@@ -28,7 +29,14 @@
 	{fetchBackward}
 	{fetchForward}
 >
-	<div class="my-auto grid gap-ch">
+	<div
+		class="my-auto grid gap-ch"
+		{@attach intersectionObserver((e) => {
+			if (!e.isIntersecting) {
+				e.target.querySelectorAll('video').forEach((v) => v.pause())
+			}
+		})}
+	>
 		<Game game={entity} />
 
 		{#await fetchMLB<MLB.GameContent>( `/api/v1/game/${entity.gamePk}/content`, { highlightLimit: '0' }, ) then content}
