@@ -19,10 +19,15 @@
 	}
 </script>
 
-<div class="my-auto text-sm" style:grid-area="plays">
+<div class="flex h-full flex-col justify-center" style:grid-area="plays">
 	{#if description}
 		<!-- svelte-ignore a11y_distracting_elements -->
-		<marquee class={cn('play', !isScoringPlay && 'positive dark:text-accent')}>
+		<marquee
+			class={cn(
+				'play grid min-h-rlh items-center text-sm',
+				isScoringPlay && 'positive dark:text-accent',
+			)}
+		>
 			{description}
 		</marquee>
 

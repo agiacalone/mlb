@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { isDarkOnLightTeam, isLightOnDarkTeam } from '$lib/colors'
 	import { fetchMLB } from '$lib/fetch'
-	import { cn } from '$lib/utils'
 	import Headshot from '$ui/player/headshot.svelte'
 
 	let { game }: { game: MLB.Game } = $props()
@@ -44,12 +42,7 @@
 	<div>
 		{#if pitcher}
 			<a
-				class={cn(
-					'group/pitcher relative flex items-center justify-between gap-ch before:opacity-50',
-					isDarkOnLightTeam(team) && 'dark:text-dark',
-					isLightOnDarkTeam(team) && 'dark:text-light',
-					className,
-				)}
+				class="group/pitcher relative flex items-center justify-between gap-ch before:opacity-5 dark:before:opacity-50 {className}"
 				href="/player/{pitcher.id}"
 				style:--team-bg={bg}
 			>

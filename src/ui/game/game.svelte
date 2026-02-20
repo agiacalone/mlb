@@ -10,6 +10,7 @@
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
 	import BSO from './bso.svelte'
+	import Matchup from './matchup.svelte'
 	import Plays from './plays.svelte'
 	import Status from './status.svelte'
 
@@ -35,15 +36,16 @@
 	const { data: liveGame } = $derived(
 		isLive
 			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
-					fields: [
-						'liveData,linescore',
-						'fullName',
-						'teams,away,home,runs',
-						'balls,strikes,outs',
-						'currentInning,currentInningOrdinal,inningState',
-						'offense,first,second,third',
-						'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
-					],
+					// fields: [
+					// 	'liveData,linescore',
+					// 	'fullName',
+					// 	'teams,away,home,runs',
+					// 	'balls,strikes,outs',
+					// 	'currentInning,currentInningOrdinal,inningState',
+					// 	'offense,first,second,third',
+					// 	'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
+					// 'matchup,pitcher,batter,id,fullName'
+					// ],
 					hydrate: 'flags,linescore',
 				})
 			: { data: undefined },
@@ -152,6 +154,7 @@
 
 	{#if isLive && linescore && !isSpoilerPrevented}
 		<BSO linescore={liveGame?.liveData?.linescore} className="mx-auto text-xs mt-ch" />
+		<Matchup {liveGame} />
 		<Plays {liveGame} />
 	{/if}
 
@@ -184,14 +187,14 @@
 			grid-template:
 				'. description linescore' auto
 				'status boxscore linescore' auto
-				'bso . plays' auto
+				'bso matchup plays' auto
 				'. link link' auto / var(--status-size) 1fr minmax(18ch, 50%);
 
 			@media (width < 32rem) {
 				grid-template:
 					'. description description' auto
 					'status boxscore linescore' auto
-					'bso . .' auto
+					'bso matchup matchup' auto
 					'bso plays plays' auto
 					'. link link' auto / var(--status-size) minmax(5.5ch, 1fr) 50%;
 			}

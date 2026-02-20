@@ -166,6 +166,7 @@ export const DIRECTORY: Record<string, Docs.EndpointSchema> = {
 						label: 'Current play',
 					},
 				],
+				hydrate: [{ value: '', placeholder: 'hydrations' }],
 			},
 		},
 		// '/api/v1.1/game/{gamePk}/feed/live/timestamps': {
