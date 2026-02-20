@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { count } from '$lib/utils'
+	import { cn, count } from '$lib/utils'
 
 	let {
 		linescore,
@@ -13,7 +13,11 @@
 </script>
 
 <dl
-	class="mx-auto mb-auto grid grid-cols-[auto_1fr] gap-[.25ch] leading-none {className}"
+	class={cn(
+		'mx-auto mb-auto grid grid-cols-[auto_1fr] gap-[.25ch] leading-none',
+		isMiddleOrEnd && '[&_dt]:opacity-40',
+		className,
+	)}
 	class:opacity-25={isMiddleOrEnd}
 	style:grid-area="bso"
 >
@@ -28,7 +32,7 @@
 </dl>
 
 {#snippet indicators(key: string, max: number, color: string = 'var(--color-accent)')}
-	{@const value = (linescore?.[key as keyof MLB.Linescore] ?? 0) as number}
+	{@const value = isMiddleOrEnd ? 0 : ((linescore?.[key as keyof MLB.Linescore] ?? 0) as number)}
 	<dd class="flex items-center gap-[inherit]" title={count(value, key.slice(0, -1))}>
 		{#each Array.from({ length: max }) as _, i (`${value} ${i}`)}
 			<span

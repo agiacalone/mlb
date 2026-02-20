@@ -25,8 +25,6 @@
 		children?: Snippet
 	} = $props()
 
-	$inspect(entity)
-
 	const href = $derived(
 		entity.type === 'team'
 			? `/teams/${entity.id}`

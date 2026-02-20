@@ -36,16 +36,16 @@
 	const { data: liveGame } = $derived(
 		isLive
 			? fetchLiveMLB<MLB.LiveGameFeed>(`/api/v1.1/game/${game.gamePk}/feed/live`, {
-					// fields: [
-					// 	'liveData,linescore',
-					// 	'fullName',
-					// 	'teams,away,home,runs',
-					// 	'balls,strikes,outs',
-					// 	'currentInning,currentInningOrdinal,inningState',
-					// 	'offense,first,second,third',
-					// 	'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
-					// 'matchup,pitcher,batter,id,fullName'
-					// ],
+					fields: [
+						'gameData,liveData,linescore,boxscore',
+						'fullName,players,stats,pitching,batting,numberOfPitches,summary',
+						'teams,away,home,runs,offense,defense,first,second,third',
+						'balls,strikes,outs',
+						'currentInning,currentInningOrdinal,inningHalf,inningState',
+						'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
+						'playEvents,isPitch,index,details,type,isBall,isStrike,isInPlay,call,pitchData,endSpeed',
+						'matchup,pitcher,batter,id,lastInitName,pitchHand,batSide,code,onDeck,inHole',
+					],
 					hydrate: 'flags,linescore',
 				})
 			: { data: undefined },

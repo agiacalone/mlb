@@ -1,6 +1,8 @@
 export { default as ArrowDownRightIcon } from './arrow-down-right.svelte'
 export { default as ArrowsDiffIcon } from './arrows-diff.svelte'
 export { default as ArrowUpIcon } from './arrow-up.svelte'
+export { default as BatIcon } from './bat.svelte'
+export { default as BallIcon } from './ball.svelte'
 export { default as CalendarIcon } from './calendar.svelte'
 export { default as CalendarTodayIcon } from './calendar-today.svelte'
 export { default as ChevronLeftIcon } from './chevron-left.svelte'
