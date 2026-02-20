@@ -22,6 +22,11 @@ declare global {
 			id: number
 			abbreviation: string
 		}
+
+		type RandomEntity =
+			| ({ type: 'team' } & MLB.Team)
+			| ({ type: 'player' } & MLB.Person)
+			| ({ type: 'game' } & MLB.Game)
 	}
 
 	namespace Fetch {

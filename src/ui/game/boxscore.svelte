@@ -47,7 +47,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each team.batters as playerId (playerId)}
+						{#each team.batters as playerId}
 							{@const { stats, ...player } = team.players[`ID${playerId}`]}
 							{@const substituted = !isSpoilerPrevented && !team.battingOrder.includes(playerId)}
 

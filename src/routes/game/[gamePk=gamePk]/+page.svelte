@@ -107,7 +107,7 @@
 		class="group/details grid items-center gap-y-lh md:has-[#theater-mode:not(:checked)]:grid-cols-2"
 	>
 		{#if !isSpoilerPrevented}
-			<Highlights content={data.content} />
+			<Highlights {game} content={data.content} />
 		{/if}
 
 		{#if hasBattingOrder}

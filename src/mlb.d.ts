@@ -408,6 +408,7 @@ declare global {
 			fullLFMName?: string
 			strikeZoneTop?: number
 			strikeZoneBottom?: number
+			currentTeam?: Team
 		}
 
 		/**

@@ -3,7 +3,11 @@
 	import { CollapseHorizontalIcon, ExpandHorizontalIcon } from '$ui/icons'
 	import Video from '$ui/video.svelte'
 
-	let { content }: { content: MLB.GameContent } = $props()
+	let {
+		game,
+		content,
+		theater = true,
+	}: { game: MLB.Game; content: MLB.GameContent; theater?: boolean } = $props()
 
 	let highlights = $derived(content.media.epgAlternate)
 
@@ -22,9 +26,9 @@
 			<input
 				class="sr-only"
 				name="highlights"
-				id="highlights-{i}"
+				id="highlights-{game.gamePk}-{i}"
 				type="radio"
-				value={i}
+				value="{game.gamePk}-{i}"
 				checked={title === 'Daily Recap' || i === 0}
 				onchange={() => {
 					document.querySelectorAll('video')?.forEach((video) => {
@@ -34,7 +38,7 @@
 			/>
 
 			<label
-				for="highlights-{i}"
+				for="highlights-{game.gamePk}-{i}"
 				class="order-first grow px-ch decoration-dashed transition-colors hover:text-current! [:checked+&]:underline [:not(:checked)+&]:text-current/25"
 			>
 				{title}
@@ -61,13 +65,15 @@
 		<Empty class="grow">No highlights</Empty>
 	{/each}
 
-	<label
-		class="group/theater absolute right-0 bottom-0 grid h-lh place-content-center not-hover:text-current/50 not-hover:transition-colors max-md:hidden"
-		hidden={!content?.media?.epgAlternate}
-		title="Theater mode (t)"
-	>
-		<input class="sr-only" id="theater-mode" type="checkbox" bind:checked={theaterMode} />
-		<ExpandHorizontalIcon class="group-has-checked/theater:hidden" />
-		<CollapseHorizontalIcon class="group-not-has-checked/theater:hidden" />
-	</label>
+	{#if theater}
+		<label
+			class="group/theater absolute right-0 bottom-0 grid h-lh place-content-center not-hover:text-current/50 not-hover:transition-colors max-md:hidden"
+			hidden={!content?.media?.epgAlternate}
+			title="Theater mode (t)"
+		>
+			<input class="sr-only" id="theater-mode" type="checkbox" bind:checked={theaterMode} />
+			<ExpandHorizontalIcon class="group-has-checked/theater:hidden" />
+			<CollapseHorizontalIcon class="group-not-has-checked/theater:hidden" />
+		</label>
+	{/if}
 </article>

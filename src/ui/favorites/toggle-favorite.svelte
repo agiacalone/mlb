@@ -27,6 +27,6 @@
 >
 	<input class="sr-only" type="checkbox" value={target.href} {checked} onchange={toggle} />
 
-	<StarEmptyIcon class=" group-has-checked/fav:hidden" />
+	<StarEmptyIcon class="group-has-checked/fav:hidden" />
 	<StarIcon class=" group-not-has-checked/fav:hidden" />
 </label>

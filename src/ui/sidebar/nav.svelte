@@ -6,6 +6,7 @@
 		CalendarIcon,
 		CalendarTodayIcon,
 		CodeIcon,
+		DiceIcon,
 		FlagIcon,
 		GithubIcon,
 		HelmetIcon,
@@ -60,6 +61,11 @@
 			href: '/transactions',
 			label: 'Transactions',
 			icon: ArrowsDiffIcon,
+		},
+		{
+			href: '/random',
+			label: 'Random',
+			icon: DiceIcon,
 		},
 		// {
 		// 	href: '/chat',
