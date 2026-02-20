@@ -17,10 +17,14 @@
 		3: '3-Run Home Run',
 		4: 'Grand Slam',
 	}
+
+	const isMiddleOrEnd = $derived(
+		['Middle', 'End'].includes(liveGame?.liveData?.linescore?.inningState ?? ''),
+	)
 </script>
 
 <div class="flex h-full flex-col justify-center" style:grid-area="plays">
-	{#if description}
+	{#if description && !isMiddleOrEnd}
 		<!-- svelte-ignore a11y_distracting_elements -->
 		<marquee
 			class={cn(

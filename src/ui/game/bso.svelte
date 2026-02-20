@@ -13,7 +13,7 @@
 </script>
 
 <dl
-	class="mx-auto grid grid-cols-[auto_1fr] gap-[.25ch] leading-none {className}"
+	class="mx-auto mb-auto grid grid-cols-[auto_1fr] gap-[.25ch] leading-none {className}"
 	class:opacity-25={isMiddleOrEnd}
 	style:grid-area="bso"
 >

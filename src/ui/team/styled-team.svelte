@@ -30,7 +30,7 @@
 	)}
 	style:--team-bg="url('{src}/32')"
 >
-	<Logo srcset="{src}/72" class="size-lh shrink-0 object-contain" {team} />
+	<Logo srcset="{src}/96" class="size-lh shrink-0 object-contain" {team} />
 
 	<div
 		class="line-clamp-1 break-all *:decoration-dashed group-has-[a:hover]/team:*:underline"
