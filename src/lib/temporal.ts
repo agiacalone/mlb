@@ -1,5 +1,6 @@
-export function getToday() {
-	return new Date(Date.now() - new Date().getTimezoneOffset() * 60 * 1000)
+export function getToday(timeZone = 'America/New_York') {
+	const dateStr = new Intl.DateTimeFormat('en-CA', { timeZone }).format(new Date())
+	return new Date(dateStr.replace(/-/g, '/'))
 }
 
 /** Converts YYYY-MM-DD to YYYY/MM/DD to avoid UTC parsing issues */

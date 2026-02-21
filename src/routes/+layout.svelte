@@ -11,6 +11,9 @@
 	if (browser) {
 		beforeNavigate(() => posthog.capture('$pageleave'))
 		afterNavigate(() => posthog.capture('$pageview'))
+
+		const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+		document.cookie = `tz=${tz};path=/;max-age=31536000;SameSite=Lax`
 	}
 </script>
 
