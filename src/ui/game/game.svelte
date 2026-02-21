@@ -76,7 +76,10 @@
 		<div
 			class={cn(
 				'absolute top-1/2 left-1/2 -z-1 -translate-1/2',
-				isGamePage && game.status.abstractGameState !== 'Preview' && 'md:mt-1',
+				isGamePage &&
+					game.status.abstractGameState !== 'Preview' &&
+					!isSpoilerPrevented &&
+					'md:mt-1',
 			)}
 		>
 			<BaseRunners
