@@ -110,8 +110,6 @@
 			<Highlights {game} content={data.content} />
 		{/if}
 
-		{$inspect(boxscore)}
-
 		{#if hasBattingOrder}
 			<Boxscore {boxscore} {isSpoilerPrevented} />
 		{/if}

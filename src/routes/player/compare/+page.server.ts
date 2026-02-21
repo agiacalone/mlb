@@ -25,8 +25,6 @@ export const actions = {
 			hydrate: `stats(${statsHydration})`,
 		})
 
-		console.log(statsHydration)
-
 		return {
 			entries: {
 				...Object.fromEntries(formData.entries()),

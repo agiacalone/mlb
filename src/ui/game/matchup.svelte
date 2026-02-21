@@ -14,33 +14,41 @@
 	)
 
 	const { players } = $derived((liveGame?.gameData as MLB.GameData) ?? {})
+
+	const [{ pitching }, { batting }, ...lineups] = $derived([
+		(boxscore?.teams[linescore.inningHalf === 'Top' ? 'home' : 'away'].players[`ID${pitcher?.id}`]
+			.stats as unknown as MLB.TeamStats) ?? {},
+		(boxscore?.teams[linescore.inningHalf === 'Top' ? 'away' : 'home'].players[`ID${batter?.id}`]
+			.stats as unknown as MLB.TeamStats) ?? {},
+		linescore?.offense ?? {},
+		linescore?.defense ?? {},
+	])
 </script>
 
-<div class="mb-auto grid px-[.25ch]" style:grid-area="matchup">
-	{#if isMiddleOrEnd}
-		{@const { batter, onDeck, inHole } = linescore?.offense ?? {}}
-
-		{#if batter && onDeck && inHole}
-			{@render player({ type: 'batter', person: batter }, 'Next up')}
-			{@render player({ type: 'batter', person: onDeck }, 'On deck')}
-			{@render player({ type: 'batter', person: inHole }, 'In the hole')}
-		{/if}
-	{:else}
-		{@const { pitching } =
-			(boxscore?.teams[linescore.inningHalf === 'Top' ? 'home' : 'away'].players[`ID${pitcher?.id}`]
-				.stats as unknown as MLB.TeamStats) ?? {}}
-		{@render player(
-			{ type: 'pitcher', person: pitcher, side: pitchHand },
-			`P:${pitching?.numberOfPitches ?? 0}`,
-		)}
-
-		{@const { batting } =
-			(boxscore?.teams[linescore.inningHalf === 'Top' ? 'away' : 'home'].players[`ID${batter?.id}`]
-				.stats as unknown as MLB.TeamStats) ?? {}}
-		{@render player({ type: 'batter', person: batter, side: batSide }, batting?.summary)}
-
-		<CurrentPitch {liveGame} />
+<div
+	class="mb-auto flex snap-x snap-mandatory overflow-x-auto pb-[.25ch] *:min-w-full *:snap-start *:px-[.25ch]"
+	style:grid-area="matchup"
+>
+	{#if !isMiddleOrEnd}
+		<div>
+			{@render player(
+				{ type: 'pitcher', person: pitcher, side: pitchHand },
+				`P:${pitching?.numberOfPitches ?? 0}`,
+			)}
+			{@render player({ type: 'batter', person: batter, side: batSide }, batting?.summary)}
+			<CurrentPitch {liveGame} />
+		</div>
 	{/if}
+
+	{#each lineups as { batter: nextUp, onDeck, inHole }}
+		<div>
+			{#if nextUp && onDeck && inHole}
+				{@render player({ type: 'batter', person: nextUp }, 'Next up')}
+				{@render player({ type: 'batter', person: onDeck }, 'On deck')}
+				{@render player({ type: 'batter', person: inHole }, 'In the hole')}
+			{/if}
+		</div>
+	{/each}
 </div>
 
 {#snippet player(
