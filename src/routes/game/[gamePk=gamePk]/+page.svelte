@@ -106,7 +106,7 @@
 	<article
 		class="group/details grid items-center gap-y-lh md:has-[#theater-mode:not(:checked)]:grid-cols-2"
 	>
-		{#if !isSpoilerPrevented}
+		{#if data.game?.status?.abstractGameState === 'Final' && !isSpoilerPrevented}
 			<Highlights {game} content={data.content} />
 		{/if}
 

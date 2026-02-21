@@ -95,28 +95,26 @@
 		)}
 		style:grid-area="description"
 	>
-		{#if !isGamePage}
-			{#if showDescription}
-				{#if game.description}
-					<span>{game.description}</span>
-				{:else if game.seriesGameNumber && game.gamesInSeries && game.gamesInSeries > 1}
-					<span class="text-current/50">
-						Series {game.seriesGameNumber} of {game.gamesInSeries}
-					</span>
-				{/if}
+		{#if !isGamePage && showDescription}
+			{#if game.description}
+				<span>{game.description}</span>
+			{:else if game.seriesGameNumber && game.gamesInSeries && game.gamesInSeries > 1}
+				<span class="text-current/50">
+					Series {game.seriesGameNumber} of {game.gamesInSeries}
+				</span>
 			{/if}
+		{/if}
 
-			{#if !isSpoilerPrevented && (flags?.perfectGame || flags?.noHitter)}
-				<strong
-					class="border bg-background font-bold text-red-500 group-has-hover/description:hidden"
-				>
-					{#if flags.perfectGame}
-						Perfect game
-					{:else if flags.noHitter}
-						No-hitter
-					{/if}
-				</strong>
-			{/if}
+		{#if !isSpoilerPrevented && (flags?.perfectGame || flags?.noHitter)}
+			<strong
+				class="border bg-background font-bold text-red-500 group-has-hover/description:hidden"
+			>
+				{#if flags.perfectGame}
+					Perfect game
+				{:else if flags.noHitter}
+					No-hitter
+				{/if}
+			</strong>
 		{/if}
 	</span>
 
