@@ -11,7 +11,7 @@
 		<dl class="mx-auto description-list max-w-max tabular-nums">
 			{#if season.seasonId === getToday().getFullYear().toString()}
 				<dt>Today's games</dt>
-				<dd>{@render linkedDate(formatDate(getToday(), { locale: 'en-CA' }))}</dd>
+				<dd>{@render linkedDate(formatDate(getToday(), { locale: 'en-CA' }), 'day')}</dd>
 			{/if}
 
 			<dt>Spring Training</dt>
