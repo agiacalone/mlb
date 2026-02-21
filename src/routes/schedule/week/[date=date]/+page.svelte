@@ -68,6 +68,10 @@
 					day: 'numeric',
 				})}
 
+				{#if formatDate(slash(date.date)) === formatDate(getToday())}
+					<small class="text-accent">Today</small>
+				{/if}
+
 				<a class="ml-auto link" href={maintainSearchParams(`/schedule/day/${date.date}`)}>
 					{count(date.games.length, 'game')}
 				</a>
