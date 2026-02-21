@@ -117,7 +117,7 @@
 		>
 			{#each processedGames as game (game.gamePk)}
 				{@const { linescore } = game as MLB.Game & { linescore: MLB.Linescore }}
-				<Game {game} {linescore} showDescription />
+				<Game {game} {linescore} showDescription showLiveDetails />
 			{/each}
 		</div>
 	{/if}

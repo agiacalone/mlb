@@ -19,12 +19,14 @@
 		boxscore,
 		linescore,
 		showDescription,
+		showLiveDetails,
 		class: className = '',
 	}: {
 		game: MLB.Game
 		boxscore?: MLB.Boxscore
 		linescore?: MLB.Linescore
 		showDescription?: boolean
+		showLiveDetails?: boolean
 		class?: string
 	} = $props()
 
@@ -152,7 +154,7 @@
 		<ProbablePitchers {game} />
 	{/if}
 
-	{#if isLive && linescore && !isSpoilerPrevented}
+	{#if showLiveDetails && isLive && linescore && !isSpoilerPrevented}
 		<BSO linescore={liveGame?.liveData?.linescore} className="mx-auto text-xs mt-ch" />
 		<Matchup {liveGame} />
 		<Plays {liveGame} />

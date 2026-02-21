@@ -80,7 +80,7 @@
 	]}
 >
 	{#if game}
-		<Game class="w-full" {game} {boxscore} {linescore} />
+		<Game class="w-full" {game} {boxscore} {linescore} showLiveDetails />
 	{/if}
 </Header>
 
