@@ -34,7 +34,7 @@
 					]
 				: [
 						{ data: data.feedLive },
-						{ data: data.feedLive.liveData.linescore },
+						{ data: data.feedLive?.liveData.linescore },
 						{ data: data.boxscore },
 						{ data: data.winProbability },
 					],
@@ -109,6 +109,8 @@
 		{#if data.game?.status?.abstractGameState === 'Final' && !isSpoilerPrevented}
 			<Highlights {game} content={data.content} />
 		{/if}
+
+		{$inspect(boxscore)}
 
 		{#if hasBattingOrder}
 			<Boxscore {boxscore} {isSpoilerPrevented} />
