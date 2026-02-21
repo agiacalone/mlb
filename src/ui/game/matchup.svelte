@@ -26,7 +26,7 @@
 </script>
 
 <div
-	class="mb-auto flex snap-x snap-mandatory overflow-x-auto pb-[.25ch] *:min-w-full *:snap-start *:px-[.25ch]"
+	class="mb-auto flex snap-x snap-mandatory overflow-x-auto pb-[.25ch] *:min-w-full *:snap-start *:snap-always *:px-[.25ch]"
 	style:grid-area="matchup"
 >
 	{#if !isMiddleOrEnd}
