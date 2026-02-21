@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { getToday } from '$lib/temporal'
+	import { slash } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 
 	let { date = '', until }: { date?: string; until: string } = $props()
 
 	function getTimeDiff() {
-		return new Date(date).getTime() - getToday().getTime()
+		return new Date(slash(date)).getTime() - Date.now()
 	}
 
-	let timeDiff = $derived(getTimeDiff())
+	let timeDiff = $state(getTimeDiff())
 	let interval: NodeJS.Timeout | null = $state(null)
 
 	$effect(() => {

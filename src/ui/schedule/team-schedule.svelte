@@ -49,6 +49,7 @@
 									>
 										<time
 											class="my-auto contents text-center text-xs *:m-auto *:px-[.5ch]"
+											class:text-accent={formatDate(gameDate) === formatDate(getToday())}
 											datetime={gameDate}
 										>
 											<span class="decoration-dashed group-hover/game:underline">
