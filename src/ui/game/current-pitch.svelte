@@ -9,7 +9,7 @@
 </script>
 
 {#key pitch?.index}
-	<div class="border-dashed border-stroke text-xs" class:border-t={!!pitch}>
+	<div class="min-h-rlh border-dashed border-stroke text-xs" class:border-t={!!pitch}>
 		{#if pitch}
 			<p class="flex h-rlh anim-fade-to-r items-center justify-center gap-x-ch">
 				<span

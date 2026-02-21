@@ -33,7 +33,7 @@
 
 {#snippet indicators(key: string, max: number, color: string = 'var(--color-accent)')}
 	{@const value = isMiddleOrEnd ? 0 : ((linescore?.[key as keyof MLB.Linescore] ?? 0) as number)}
-	<dd class="flex items-center gap-[inherit]" title={count(value, key.slice(0, -1))}>
+	<dd class="flex items-center gap-[inherit]">
 		{#each Array.from({ length: max }) as _, i (`${value} ${i}`)}
 			<span
 				class="inline-block aspect-square size-[.8lh] shrink-0 rounded-full bg-linear-to-b to-foreground/10 transition-colors dark:to-foreground/25"

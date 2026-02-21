@@ -59,22 +59,29 @@
 							inning.num === currentInning &&
 							teamKey === 'home' &&
 							inning[teamKey]?.runs === undefined}
+						{@const isCurrentInning =
+							isLive &&
+							inning.num === currentInning &&
+							((teamKey === 'away' && data?.inningState === 'Top') ||
+								(teamKey === 'home' && data?.inningState === 'Bottom'))}
+						{@const runs = inning[teamKey]?.runs}
 
 						<td
 							class={cn(
-								'border-foreground/10 nth-[3n+4]:border-l',
-								(inning[teamKey]?.runs === 0 || bye) && 'text-current/40',
-								isLive &&
-									inning.num === currentInning &&
-									((teamKey === 'away' && data?.inningState === 'Top') ||
-										(teamKey === 'home' && data?.inningState === 'Bottom')) &&
-									'bg-foreground/10',
+								'overflow-clip border-foreground/10 nth-[3n+4]:border-l',
+								(runs === 0 || bye) && 'text-current/40',
+								isCurrentInning &&
+									'bg-foreground/10 group-has-data-scoring/game:animate-pulse group-has-data-scoring/game:text-accent',
 							)}
 						>
-							{#if game?.status.abstractGameState === 'Final' && inning.num === currentInning && teamKey === 'home' && inning[teamKey]?.runs === undefined}
+							{#if game?.status.abstractGameState === 'Final' && inning.num === currentInning && teamKey === 'home' && runs === undefined}
 								X
+							{:else if isCurrentInning}
+								{#key runs}
+									<span class="inline-block anim-fade-to-t">{runs}</span>
+								{/key}
 							{:else}
-								{inning[teamKey]?.runs}
+								{runs}
 							{/if}
 						</td>
 					{/each}

@@ -31,6 +31,7 @@
 				'play grid min-h-rlh items-center text-sm',
 				isScoringPlay && 'positive dark:text-accent',
 			)}
+			data-scoring={isScoringPlay || undefined}
 		>
 			{description}
 		</marquee>
