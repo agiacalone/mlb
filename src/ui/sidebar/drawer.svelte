@@ -1,13 +1,50 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
 	import { cn } from '$lib/utils'
 	import ToggleSidebar from './toggle-sidebar.svelte'
 
 	let { children } = $props()
 
-	let startX = $state(0)
-	let swipeX = $state(0)
-	let clientWidth = $state(0)
+	let nav: HTMLElement
+
+	$effect(() => {
+		let startX = 0
+		let swipeX = 0
+
+		nav.style.setProperty('--swipe-x', '0px')
+
+		const start = (e: TouchEvent) => {
+			startX = e.touches[0].clientX
+			nav.style.transition = 'none'
+		}
+		const move = (e: TouchEvent) => {
+			swipeX = Math.min(0, e.touches[0].clientX - startX)
+			nav.style.setProperty('--swipe-x', `${swipeX}px`)
+		}
+		const end = () => {
+			nav.style.transition = ''
+			if (swipeX < nav.clientWidth * -0.25) {
+				const input = document.querySelector('#sidebar-open') as HTMLInputElement
+				if (input) {
+					input.checked = false
+					input.dispatchEvent(new Event('change'))
+				}
+			}
+			swipeX = 0
+			nav.style.setProperty('--swipe-x', '0px')
+		}
+
+		nav.addEventListener('touchstart', start)
+		nav.addEventListener('touchmove', move)
+		nav.addEventListener('touchend', end)
+		nav.addEventListener('touchcancel', end)
+
+		return () => {
+			nav.removeEventListener('touchstart', start)
+			nav.removeEventListener('touchmove', move)
+			nav.removeEventListener('touchend', end)
+			nav.removeEventListener('touchcancel', end)
+		}
+	})
 </script>
 
 <label for="sidebar-open" class="fixed inset-0 z-1 cursor-default sm:hidden sidebar-not-open:hidden"
@@ -19,28 +56,9 @@
 		'relative z-1 h-dvh p-ch whitespace-nowrap backdrop-blur-xs transition-colors [grid-area:nav]',
 		'max-sm:bg-neutral-200/50 max-sm:dark:bg-neutral-800/50',
 		'sm:w-[calc(2ch+1rem)] sm:overflow-clip sm:transition-[width] sm:sidebar-open:overflow-y-auto',
-		'max-sm:absolute max-sm:inset-y-0 max-sm:left-0 max-sm:transition-transform max-sm:active:transition-none max-sm:sidebar-open:translate-x-(--swipe-x) max-sm:sidebar-not-open:-translate-x-full',
+		'max-sm:absolute max-sm:inset-y-0 max-sm:left-0 max-sm:transition-transform max-sm:sidebar-open:translate-x-(--swipe-x) max-sm:sidebar-not-open:-translate-x-full',
 	)}
-	style:--swipe-x="{swipeX}px"
-	ontouchstart={(e) => {
-		startX = e.touches[0].clientX
-	}}
-	ontouchmove={(e) => {
-		swipeX = Math.min(0, e.touches[0].clientX - startX)
-	}}
-	ontouchend={() => {
-		if (browser && swipeX < clientWidth * -0.25) {
-			const input = document.querySelector('#sidebar-open') as HTMLInputElement
-			if (input) {
-				input.checked = false
-				input.dispatchEvent(new Event('change'))
-			}
-		}
-
-		startX = 0
-		swipeX = 0
-	}}
-	bind:clientWidth
+	bind:this={nav}
 >
 	<ToggleSidebar />
 
