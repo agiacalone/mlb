@@ -23,8 +23,8 @@
 	}
 </script>
 
-<fieldset class="flex justify-center {className}">
-	<label class="min-w-[14ch] grow text-center">
+<fieldset class="flex justify-center gap-px {className}">
+	<label class="button min-w-[14ch] grow">
 		{formatWeekRange(date)}
 
 		<input
@@ -45,6 +45,7 @@
 	>
 		<ChevronLeftIcon />
 	</a>
+
 	<a
 		class="order-last button border-r border-b-0"
 		href={maintainSearchParams(`${href}/${addWeek()}`)}
@@ -52,10 +53,3 @@
 		<ChevronRightIcon />
 	</a>
 </fieldset>
-
-<style>
-	fieldset:has(label:hover) label {
-		padding-inline: 1ch;
-		text-decoration: underline dashed;
-	}
-</style>

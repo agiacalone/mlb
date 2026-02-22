@@ -6,6 +6,7 @@
 	import Linescore from '$ui/game/linescore.svelte'
 	import ProbablePitchers from '$ui/game/probable-pitchers.svelte'
 	import TeamScores from '$ui/game/team-scores.svelte'
+	import { ChevronRightIcon } from '$ui/icons'
 	import Loading from '$ui/loading.svelte'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import BaseRunners from './base-runners.svelte'
@@ -167,10 +168,11 @@
 			style:grid-area="link"
 		>
 			<a
-				class="inline-grid h-rlh place-content-center text-current/50 hover:text-current"
+				class="inline-flex h-rlh items-center gap-[.5ch] text-current/50 hover-link hover:text-current"
 				href="/game/{game.gamePk}"
 			>
 				See details
+				<ChevronRightIcon class="size-lh" />
 			</a>
 		</div>
 	{/if}

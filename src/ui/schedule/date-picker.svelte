@@ -22,8 +22,8 @@
 </script>
 
 <fieldset class="flex flex-col items-center text-center {className}">
-	<div class="flex justify-center">
-		<label class="min-w-[16ch]">
+	<div class="flex justify-center gap-px">
+		<label class="button min-w-[16ch]">
 			{formatDate(slash(date), {
 				month: 'short',
 				weekday: 'short',
@@ -57,13 +57,3 @@
 		</a>
 	</div>
 </fieldset>
-
-<style>
-	label {
-		padding-inline: 1ch;
-
-		&:hover {
-			text-decoration: underline dashed;
-		}
-	}
-</style>
