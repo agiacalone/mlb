@@ -2,7 +2,7 @@
 	import { slash } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 
-	let { date = '', until }: { date?: string; until: string } = $props()
+	let { date = '', until, href }: { date?: string; until: string; href?: string } = $props()
 
 	function getTimeDiff() {
 		return new Date(slash(date)).getTime() - Date.now()
@@ -68,7 +68,7 @@
 
 		{#if until}
 			<p>
-				until <a class="hover-link" href="/schedule/day/{date}">{until}</a>
+				until <a class="hover-link" href={href || `/schedule/day/${date}`}>{until}</a>
 			</p>
 		{/if}
 	</article>

@@ -57,6 +57,8 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 		<div
 			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
 		>
+			<SeasonInfo {season} />
+
 			<section class="space-y-ch">
 				<h2 class="text-center h1">{today}</h2>
 
@@ -69,8 +71,6 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 					<TransactionByTeam transactions={data.transactions.transactions} />
 				</article>
 			</section>
-
-			<SeasonInfo {season} />
 		</div>
 	</div>
 </div>
