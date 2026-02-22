@@ -16,15 +16,34 @@
 
 	$inspect(content)
 
-	let highlights = $derived(content.highlights.highlights.items.filter((h) => h.type === 'video'))
+	let highlights = $derived(content.highlights.highlights?.items.filter((h) => h.type === 'video'))
 
 	let selectedIndex = $state(
 		untrack(() =>
 			Math.max(
 				0,
-				content.highlights.highlights.items.findIndex((h) => h.type === 'video'),
+				highlights?.findIndex((h) => h.type === 'video'),
 			),
 		),
+	)
+
+	let grouped = $derived(
+		[
+			...(highlights ?? [])
+				.map((h, i) => ({
+					index: i,
+					title: h.title,
+					player: h.keywordsAll?.find((k) => k.type === 'player')?.displayName ?? '',
+				}))
+				.reduce((acc, item) => {
+					if (!acc.has(item.player)) acc.set(item.player, [])
+					acc.get(item.player)!.push(item)
+					return acc
+				}, new Map<string, { index: number; title: string }[]>())
+				.entries(),
+		]
+			.sort(([a], [b]) => (!a ? 1 : !b ? -1 : a.localeCompare(b)))
+			.map(([player, items]) => ({ player, items })),
 	)
 
 	let theaterMode = $state(false)
@@ -37,15 +56,27 @@
 />
 
 <article class="relative grid gap-ch text-center sm:px-ch">
-	{#if highlights.length}
+	{#if highlights?.length}
 		<div class="flex items-center gap-ch">
 			<select
 				class="order-first button w-full"
 				bind:value={selectedIndex}
 				onchange={() => document.querySelectorAll('video')?.forEach((v) => v.pause())}
 			>
-				{#each highlights as { title }, i (title)}
-					<option value={i}>{title}</option>
+				{#each grouped as { player, items } (player)}
+					{#if player}
+						<optgroup label={player}>
+							{#each items as { index, title } (title)}
+								<option value={index}>{title}</option>
+							{/each}
+						</optgroup>
+					{:else}
+						<optgroup label="Other">
+							{#each items as { index, title } (title)}
+								<option value={index}>{title}</option>
+							{/each}
+						</optgroup>
+					{/if}
 				{/each}
 			</select>
 
