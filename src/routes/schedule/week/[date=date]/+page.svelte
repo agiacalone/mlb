@@ -61,7 +61,7 @@
 <section class="space-y-px py-lh sm:px-ch">
 	{#each schedule.dates as date (date.date)}
 		<details class="group accordion" open>
-			<summary class="sticky-below-header z-1 backdrop-blur after:ml-0!">
+			<summary class="sticky-below-header z-1 backdrop-blur-xs after:ml-0!">
 				{formatDate(slash(date.date), {
 					weekday: 'short',
 					month: 'numeric',

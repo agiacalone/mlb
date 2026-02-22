@@ -34,7 +34,7 @@
 		<div class="space-y-px">
 			{#each byMonth as [month, dates], i (month)}
 				<details class="accordion" name="schedule" open={month === currentMonth || i === 0}>
-					<summary class="sticky-below-header z-1 backdrop-blur max-sm:px-ch">
+					<summary class="sticky-below-header z-1 backdrop-blur-xs max-sm:px-ch">
 						{formatDate(slash(month + '-01'), { month: 'long', year: 'numeric' })}
 					</summary>
 
