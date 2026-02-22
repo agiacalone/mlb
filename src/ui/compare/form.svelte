@@ -4,18 +4,14 @@
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
 	import { formatDate, getToday } from '$lib/temporal'
 	import { compareStore } from '$ui/compare/store.svelte'
+	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
 
 	let form = $state<HTMLFormElement | null>(null)
 
 	const PARAMETERS = {
-		season: {
-			displayName: 'season',
-			type: 'number',
-			value: getToday().getFullYear().toString(),
-			min: 1876,
-			max: getToday().getFullYear() + 1,
-		},
+		season: { displayName: 'season' },
+		month: { displayName: 'month' },
 		date: {
 			displayName: 'date',
 			type: 'date',
@@ -49,7 +45,11 @@
 				{ ...PARAMETERS.date, displayName: 'endDate' },
 			],
 		},
-		{ displayName: 'byMonth', label: 'By month' },
+		{
+			displayName: 'byMonth',
+			label: 'By month',
+			parameters: [PARAMETERS.month],
+		},
 		{ displayName: 'vsTeam', label: 'vs Team' },
 	]
 
@@ -119,10 +119,10 @@
 					</div>
 
 					{#if stats.length}
-						<div class="columns-[12ch] px-ch py-[.5ch] *:break-inside-avoid">
+						<div class="px-ch py-[.5ch] *:break-inside-avoid sm:columns-[12ch]">
 							{#each stats as { lookupParam, name, isCounting } (name)}
 								<label
-									class="flex items-baseline gap-ch px-[.5ch] py-[.25ch] leading-tight hover:bg-accent/15 has-checked:text-accent"
+									class="mb-px flex items-baseline gap-ch p-[.5ch] leading-tight hover:bg-accent/15 has-checked:bg-accent/15 has-checked:text-accent"
 								>
 									<input
 										class="shrink-0"
@@ -164,9 +164,20 @@
 			<fieldset class="contents">
 				<div class="contents">
 					<legend>{displayName}</legend>
-					<label>
-						<input class="button" name={displayName} {...props} />
-					</label>
+
+					{#if displayName === 'season'}
+						<SeasonPicker
+							class="justify-start"
+							name={displayName}
+							onchange={() => form?.requestSubmit()}
+						/>
+					{:else if displayName === 'month'}
+						<!-- <MonthPicker class="justify-start" name={displayName} buttons onNext={() => form?.requestSubmit()} onPrev={() => form?.requestSubmit()} /> -->
+					{:else}
+						<label>
+							<input class="button" name={displayName} {...props} />
+						</label>
+					{/if}
 				</div>
 			</fieldset>
 		{/each}

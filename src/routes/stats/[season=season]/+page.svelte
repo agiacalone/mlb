@@ -47,7 +47,11 @@
 	]}
 >
 	{#snippet after()}
-		<SeasonPicker class="mx-auto" />
+		<SeasonPicker
+			class="mx-auto"
+			onchange={(e) =>
+				goto(`/stats/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
+		/>
 	{/snippet}
 </Header>
 

@@ -1,54 +1,80 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
 		class: className,
+		buttons = true,
+		onPrev,
+		onNext,
+		onchange,
+		...props
 	}: {
+		name?: string
 		class?: string
-	} = $props()
+		buttons?: boolean
+		onPrev?: () => void
+		onNext?: () => void
+		onchange?: HTMLAttributes<HTMLSelectElement>['onchange']
+	} & Omit<HTMLAttributes<HTMLSelectElement>, 'onchange'> = $props()
 
-	let season = $derived(Number(page.params.season ?? getToday().getFullYear()))
-	let search = $derived(page.url.search)
+	let select = $state<HTMLSelectElement | null>(null)
+	let season = $state(Number(page.params.season ?? getToday().getFullYear()))
+
+	$effect(() => {
+		season = Number(page.params.season ?? getToday().getFullYear())
+	})
 </script>
 
-<fieldset class="flex justify-center text-center {className}">
-	<label class="min-w-[8ch]">
-		<input
-			class="min-w-[6ch] appearance-none text-center decoration-dashed hover:underline"
-			id="season"
-			type="number"
-			min="1876"
-			max={getToday().getFullYear()}
-			value={season}
-			onchange={(e) => goto(`/stats/${e.currentTarget.value}${search}`)}
-		/>
-	</label>
-
-	<a class="order-first button border-b-0 border-l" href="/stats/{season - 1}{search}">
-		<ChevronLeftIcon />
-	</a>
-
-	<a
-		class={cn(
-			'order-last button border-r border-b-0',
-			season + 1 > getToday().getFullYear() && 'pointer-events-none opacity-50',
-		)}
-		href="/stats/{season + 1}{search}"
+<fieldset class="flex justify-center gap-px text-center {className}">
+	<select
+		class="button text-center"
+		id="season"
+		bind:value={season}
+		bind:this={select}
+		{onchange}
+		{...props}
 	>
-		<ChevronRightIcon />
-	</a>
+		{#each { length: getToday().getFullYear() - 1876 + 1 } as _, i}
+			{@const year = getToday().getFullYear() - i}
+			<option value={year}>{year}</option>
+		{/each}
+	</select>
+
+	{#if buttons}
+		<button
+			class="border-p order-first button border-b-0 border-l"
+			type="button"
+			onclick={() => {
+				if (!select) return
+				season--
+				select.value = season.toString()
+				onchange?.({ currentTarget: select } as Event & {
+					currentTarget: HTMLSelectElement & EventTarget
+				})
+			}}
+		>
+			<ChevronLeftIcon />
+		</button>
+		<button
+			class={cn(
+				'order-last button border-r border-b-0',
+				season + 1 > getToday().getFullYear() && 'pointer-events-none opacity-50',
+			)}
+			type="button"
+			onclick={() => {
+				if (!select) return
+				season++
+				select.value = season.toString()
+				onchange?.({ currentTarget: select } as Event & {
+					currentTarget: HTMLSelectElement & EventTarget
+				})
+			}}
+		>
+			<ChevronRightIcon />
+		</button>
+	{/if}
 </fieldset>
-
-<style>
-	label {
-		padding-inline: 1ch;
-
-		&:hover {
-			text-decoration: underline dashed;
-		}
-	}
-</style>
