@@ -13,14 +13,14 @@ export function formatDate(
 	options: Intl.DateTimeFormatOptions & { locale?: string } = { locale: 'en-US' },
 ) {
 	return new Intl.DateTimeFormat(options.locale, options).format(
-		typeof date === 'string' ? new Date(date) : date,
+		typeof date === 'string' ? new Date(date.includes('T') ? date : slash(date)) : date,
 	)
 }
 
 export function formatWeekRange(date: string) {
 	const t = new Date(date)
-	const startDate = new Date(t.setDate(t.getDate() - ((t.getDay() - 1) % 7)))
-	const endDate = new Date(t.setDate(t.getDate() + (6 - ((t.getDay() - 1) % 7))))
+	const startDate = new Date(t.setDate(t.getDate() - ((t.getDay() + 6) % 7)))
+	const endDate = new Date(t.setDate(t.getDate() + (6 - ((t.getDay() + 6) % 7))))
 	const isSameMonth = startDate.getMonth() === endDate.getMonth()
 
 	return [

@@ -108,7 +108,7 @@
 				<li>
 					<a
 						{href}
-						class="relative flex items-center gap-ch hover-link"
+						class="relative flex items-center gap-ch py-px hover-link"
 						class:active={page.route.id?.startsWith(href)}
 					>
 						<svelte:component this={icon} />
@@ -118,7 +118,7 @@
 			{/each}
 		</ul>
 
-		<ul class="mt-auto text-sm sidebar-not-open:landscape:max-lg:overflow-clip">
+		<ul class="mt-auto text-sm *:py-[2px] sidebar-not-open:landscape:max-lg:overflow-clip">
 			<li><CompareList /></li>
 			<li><FavoritesList /></li>
 			<li><SpoilerPreventionList /></li>

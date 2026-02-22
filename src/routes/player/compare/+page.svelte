@@ -62,7 +62,7 @@
 <section class="py-lh pb-[max(1lh,env(safe-area-inset-bottom))] text-center sm:px-ch">
 	{#if people?.length}
 		<div class="grid snap-x snap-mandatory auto-cols-fr grid-flow-col overflow-x-auto">
-			<ul class="mt-[2.5lh] snap-center">
+			<ul class="mt-[2.5lh] snap-center border-t border-dashed border-stroke">
 				{#each selectedStats as stat}
 					<li class="line-clamp-1 break-all lowercase first-letter:capitalize">
 						{stat?.split(/(?=[A-Z])/g).join(' ')}
@@ -72,7 +72,7 @@
 
 			{#each people as { id, fullName, stats }, i (id)}
 				<dl class="snap-start" class:order-first={i === 0}>
-					<dt>
+					<dt class="border-b border-dashed border-stroke">
 						<a class="group/person flex flex-col items-center" href="/player/{id}">
 							<Headshot class="size-[1.5lh] shrink-0" person={{ id }} size={96} />
 
