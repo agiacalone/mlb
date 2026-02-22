@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { fetchMLB } from '$lib/fetch'
 	import { intersectionObserver } from '$lib/attachments/intersection-observer'
+	import { fetchMLB } from '$lib/fetch'
 	import { formatDate } from '$lib/temporal'
 	import Game from '$ui/game/game.svelte'
 	import Highlights from '$ui/game/highlights.svelte'
@@ -39,7 +39,7 @@
 	>
 		<Game game={entity} />
 
-		{#await fetchMLB<MLB.GameContent>( `/api/v1/game/${entity.gamePk}/content`, { highlightLimit: '0' }, ) then content}
+		{#await fetchMLB<MLB.GameContent>(`/api/v1/game/${entity.gamePk}/content`) then content}
 			<Highlights game={entity} {content} theater={false} />
 		{/await}
 	</div>

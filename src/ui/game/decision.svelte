@@ -24,7 +24,7 @@
 </script>
 
 <article class="space-y-ch has-data-empty:hidden">
-	<h2 class="text-xs text-current/50">Decisions</h2>
+	<h2 class="text-xs text-current/40">Decisions</h2>
 
 	<dl class="grid gap-[.5ch]">
 		{#await fetchAllPlayers()}

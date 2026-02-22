@@ -2,14 +2,30 @@
 	import Empty from '$ui/empty.svelte'
 	import { CollapseHorizontalIcon, ExpandHorizontalIcon } from '$ui/icons'
 	import Video from '$ui/video.svelte'
+	import { untrack } from 'svelte'
 
 	let {
-		game,
+		game: _game,
 		content,
 		theater = true,
-	}: { game: MLB.Game; content: MLB.GameContent; theater?: boolean } = $props()
+	}: {
+		game: MLB.Game
+		content: MLB.GameContent
+		theater?: boolean
+	} = $props()
 
-	let highlights = $derived(content.media.epgAlternate)
+	$inspect(content)
+
+	let highlights = $derived(content.highlights.highlights.items.filter((h) => h.type === 'video'))
+
+	let selectedIndex = $state(
+		untrack(() =>
+			Math.max(
+				0,
+				content.highlights.highlights.items.findIndex((h) => h.type === 'video'),
+			),
+		),
+	)
 
 	let theaterMode = $state(false)
 </script>
@@ -20,60 +36,47 @@
 	}}
 />
 
-<article class="relative flex flex-wrap gap-ch text-center sm:px-ch">
-	{#each highlights as { title, items }, i}
-		<div class="group/highlight contents">
-			<input
-				class="sr-only"
-				name="highlights"
-				id="highlights-{game.gamePk}-{i}"
-				type="radio"
-				value="{game.gamePk}-{i}"
-				checked={title === 'Daily Recap' || i === 0}
-				onchange={() => {
-					document.querySelectorAll('video')?.forEach((video) => {
-						if (video.id !== `highlights-${i}`) video.pause()
-					})
-				}}
-			/>
-
-			<label
-				for="highlights-{game.gamePk}-{i}"
-				class="order-first grow px-ch decoration-dashed transition-colors hover:text-current! [:checked+&]:underline [:not(:checked)+&]:text-current/25"
+<article class="relative grid gap-ch text-center sm:px-ch">
+	{#if highlights.length}
+		<div class="flex items-center gap-ch">
+			<select
+				class="order-first button w-full"
+				bind:value={selectedIndex}
+				onchange={() => document.querySelectorAll('video')?.forEach((v) => v.pause())}
 			>
-				{title}
-			</label>
+				{#each highlights as { title }, i (title)}
+					<option value={i}>{title}</option>
+				{/each}
+			</select>
 
-			{#each items as { title, playbacks, image }}
+			{#if theater}
+				<label
+					class="group/theater grid h-lh shrink-0 place-content-center not-hover:text-current/50 not-hover:transition-colors max-md:hidden"
+					hidden={!content?.media?.epgAlternate}
+					title="Theater mode (t)"
+				>
+					<input class="sr-only" id="theater-mode" type="checkbox" bind:checked={theaterMode} />
+					<ExpandHorizontalIcon class="group-has-checked/theater:hidden" />
+					<CollapseHorizontalIcon class="group-not-has-checked/theater:hidden" />
+				</label>
+			{/if}
+		</div>
+
+		{#each highlights as { playbacks, image }, i (i)}
+			{#if selectedIndex === i}
 				{@const poster = image?.cuts.find((cut) => cut.width <= 1280)?.src}
 
-				<figure
-					class="w-full space-y-ch transition-opacity group-not-has-checked/highlight:hidden starting:opacity-0"
-				>
+				<figure class="w-full space-y-ch text-balance italic transition-opacity starting:opacity-0">
 					<Video
 						class="aspect-video w-full bg-current/10"
 						id={`highlights-${i}`}
 						{playbacks}
 						{poster}
 					/>
-
-					<figcaption class="px-ch">{title}</figcaption>
 				</figure>
-			{/each}
-		</div>
+			{/if}
+		{/each}
 	{:else}
 		<Empty class="grow">No highlights</Empty>
-	{/each}
-
-	{#if theater}
-		<label
-			class="group/theater absolute right-0 bottom-0 grid h-lh place-content-center not-hover:text-current/50 not-hover:transition-colors max-md:hidden"
-			hidden={!content?.media?.epgAlternate}
-			title="Theater mode (t)"
-		>
-			<input class="sr-only" id="theater-mode" type="checkbox" bind:checked={theaterMode} />
-			<ExpandHorizontalIcon class="group-has-checked/theater:hidden" />
-			<CollapseHorizontalIcon class="group-not-has-checked/theater:hidden" />
-		</label>
 	{/if}
 </article>

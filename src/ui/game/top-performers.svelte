@@ -7,7 +7,7 @@
 </script>
 
 <article class="space-y-ch">
-	<h2 class="text-xs text-current/50">Top Performers</h2>
+	<h2 class="text-xs text-current/40">Top Performers</h2>
 
 	<dl class="grid gap-[.5ch]">
 		{#each topPerformers as { player, type } (player.person.id)}

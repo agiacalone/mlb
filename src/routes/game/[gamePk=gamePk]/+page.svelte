@@ -84,7 +84,7 @@
 	{/if}
 </Header>
 
-<section class="space-y-lh py-lh">
+<section class="space-y-[2lh] py-lh">
 	{#if !isSpoilerPrevented}
 		{#if hasTopPerformers || hasDecisions}
 			<div class="flex flex-wrap items-start gap-ch px-ch *:grow">
@@ -99,12 +99,16 @@
 		{/if}
 
 		{#if Array.isArray(winProbability)}
-			<WinProbability {winProbability} {boxscore} {linescore} />
+			<article>
+				<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
+
+				<WinProbability {winProbability} {boxscore} {linescore} />
+			</article>
 		{/if}
 	{/if}
 
 	<article
-		class="group/details grid items-center gap-y-lh md:has-[#theater-mode:not(:checked)]:grid-cols-2"
+		class="group/details grid items-center gap-y-[2lh] md:has-[#theater-mode:not(:checked)]:grid-cols-2"
 	>
 		{#if data.game?.status?.abstractGameState === 'Final' && !isSpoilerPrevented}
 			<Highlights {game} content={data.content} />

@@ -20,9 +20,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		fetchfeedLive(params.gamePk),
 		fetchBoxscore(params.gamePk),
 		fetchWinProbability(params.gamePk),
-		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`, {
-			highlightLimit: '0',
-		}),
+		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`),
 	])
 
 	return {
