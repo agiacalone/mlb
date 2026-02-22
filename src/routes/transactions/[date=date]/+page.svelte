@@ -42,7 +42,7 @@
 	{#if processedTransactions.length > 0}
 		{#each Map.groupBy(processedTransactions, (t) => t.date) as [date, txns] (date)}
 			<details class="accordion" open>
-				<summary class="sticky-below-header z-1 backdrop-blur-xs">
+				<summary class="sticky-below-header z-1 backdrop-blur">
 					{formatDate(slash(date), { weekday: 'short', month: 'short', day: 'numeric' })}
 				</summary>
 

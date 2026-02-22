@@ -14,17 +14,17 @@
 			class="sticky-below-header z-1 flex flex-wrap gap-[.5ch] p-ch text-sm max-sm:flex-col md:top-0 max-sm:[&_button]:w-full"
 		>
 			<li>
-				<ClickToCopy value={form.fetchUrl} class="action-tertiary backdrop-blur-xs"
+				<ClickToCopy value={form.fetchUrl} class="action-tertiary backdrop-blur"
 					>Copy full URL</ClickToCopy
 				>
 			</li>
 			<li>
-				<ClickToCopy value={form.fetchUrl.split(HOST)[1]} class="action-tertiary backdrop-blur-xs">
+				<ClickToCopy value={form.fetchUrl.split(HOST)[1]} class="action-tertiary backdrop-blur">
 					Copy endpoint
 				</ClickToCopy>
 			</li>
 			<li>
-				<ClickToCopy value={json} class="action-tertiary backdrop-blur-xs"
+				<ClickToCopy value={json} class="action-tertiary backdrop-blur"
 					>Copy full response</ClickToCopy
 				>
 			</li>

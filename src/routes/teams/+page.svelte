@@ -56,7 +56,7 @@
 			)}
 
 			<details class="accordion" open>
-				<summary class="sticky-below-header z-1 backdrop-blur-xs">
+				<summary class="sticky-below-header z-1 backdrop-blur">
 					{league || (teamsByLeague.length === 1 ? sport?.abbreviation : 'Other')}
 				</summary>
 

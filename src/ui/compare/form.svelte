@@ -101,7 +101,7 @@
 				)}
 
 				<div class="overflow-y-auto border border-stroke max-sm:max-h-[7.5lh]">
-					<div class="sticky top-0 w-full border-b border-stroke px-ch text-right backdrop-blur-xs">
+					<div class="sticky top-0 w-full border-b border-stroke px-ch text-right backdrop-blur">
 						<button
 							class="link"
 							type="button"
@@ -173,7 +173,11 @@
 							onchange={() => form?.requestSubmit()}
 						/>
 					{:else if displayName === 'month'}
-						<MonthPicker class="justify-start" name={displayName} onchange={() => form?.requestSubmit()} />
+						<MonthPicker
+							class="justify-start"
+							name={displayName}
+							onchange={() => form?.requestSubmit()}
+						/>
 					{:else}
 						<label>
 							<input class="button" name={displayName} {...props} />

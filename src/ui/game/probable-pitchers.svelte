@@ -12,7 +12,7 @@
 </script>
 
 {#await fetchProbablePitchers() then { gameData }}
-	<div class="z-1 grid grid-cols-2 backdrop-blur-xs" style:grid-area="pregame">
+	<div class="z-1 grid grid-cols-2 backdrop-blur" style:grid-area="pregame">
 		{@render pitcher({
 			pitcher: gameData.probablePitchers?.away,
 			team: gameData.teams.away,
