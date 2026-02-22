@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state'
 	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
@@ -21,37 +20,50 @@
 		onchange?: HTMLAttributes<HTMLSelectElement>['onchange']
 	} & Omit<HTMLAttributes<HTMLSelectElement>, 'onchange'> = $props()
 
-	let select = $state<HTMLSelectElement | null>(null)
-	let season = $state(Number(page.params.season ?? getToday().getFullYear()))
+	const MONTHS = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	]
 
-	$effect(() => {
-		season = Number(page.params.season ?? getToday().getFullYear())
-	})
+	let select = $state<HTMLSelectElement | null>(null)
+	let month = $state(getToday().getMonth() + 1)
 </script>
 
 <fieldset class="flex justify-center gap-px text-center {className}">
 	<select
 		class="button text-center"
-		id="season"
-		bind:value={season}
+		id="month"
+		bind:value={month}
 		bind:this={select}
 		{onchange}
 		{...props}
 	>
-		{#each { length: getToday().getFullYear() - 1876 + 1 } as _, i}
-			{@const year = getToday().getFullYear() - i}
-			<option value={year}>{year}</option>
+		{#each MONTHS as name, i (i)}
+			<option value={i + 1}>{name}</option>
 		{/each}
 	</select>
 
 	{#if buttons}
 		<button
 			type="button"
-			class="border-p order-first button border-b-0 border-l"
+			class={cn(
+				'order-first button border-b-0 border-l',
+				month <= 1 && 'pointer-events-none opacity-50',
+			)}
 			onclick={() => {
 				if (!select) return
-				season--
-				select.value = season.toString()
+				month--
+				select.value = month.toString()
 				onchange?.({ currentTarget: select } as Event & {
 					currentTarget: HTMLSelectElement & EventTarget
 				})
@@ -59,16 +71,17 @@
 		>
 			<ChevronLeftIcon />
 		</button>
+
 		<button
 			type="button"
 			class={cn(
 				'order-last button border-r border-b-0',
-				season + 1 > getToday().getFullYear() && 'pointer-events-none opacity-50',
+				month >= 12 && 'pointer-events-none opacity-50',
 			)}
 			onclick={() => {
 				if (!select) return
-				season++
-				select.value = season.toString()
+				month++
+				select.value = month.toString()
 				onchange?.({ currentTarget: select } as Event & {
 					currentTarget: HTMLSelectElement & EventTarget
 				})

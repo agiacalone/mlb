@@ -4,6 +4,7 @@
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
 	import { formatDate, getToday } from '$lib/temporal'
 	import { compareStore } from '$ui/compare/store.svelte'
+	import MonthPicker from '$ui/stats/month-picker.svelte'
 	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
 
@@ -172,7 +173,7 @@
 							onchange={() => form?.requestSubmit()}
 						/>
 					{:else if displayName === 'month'}
-						<!-- <MonthPicker class="justify-start" name={displayName} buttons onNext={() => form?.requestSubmit()} onPrev={() => form?.requestSubmit()} /> -->
+						<MonthPicker class="justify-start" name={displayName} onchange={() => form?.requestSubmit()} />
 					{:else}
 						<label>
 							<input class="button" name={displayName} {...props} />
