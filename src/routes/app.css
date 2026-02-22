@@ -259,7 +259,7 @@
 	@apply accordion-base;
 
 	summary {
-		@apply border-l bg-neutral-100/50 px-ch hover:bg-neutral-200/50 dark:bg-neutral-800/50 dark:hover:bg-neutral-700/50;
+		@apply border-l bg-neutral-100/50 px-ch py-[.5ch] hover:bg-neutral-200/50 dark:bg-neutral-800/50 dark:hover:bg-neutral-700/50;
 	}
 
 	&[open] {
