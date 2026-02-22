@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { formatDate, getToday } from '$lib/temporal'
+	import Banner from '$ui/banner.svelte'
 	import Baseball from '$ui/baseball.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import CountdownList from '$ui/season/countdown-list.svelte'
@@ -29,42 +30,47 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 />
 
 <div
-	class="flex min-h-[calc(100dvh-1ch)] flex-col justify-center gap-[2lh] px-ch pt-[2lh] pb-[max(2lh,env(safe-area-inset-bottom))]"
+	class="flex min-h-[calc(100dvh-1ch)] flex-col justify-center gap-[2lh] pb-[max(2lh,env(safe-area-inset-bottom))]"
 >
-	<header class="space-y-ch">
-		<h1 class="mx-auto flex max-w-max flex-col text-xl" aria-label="Welcome to MLB.TheOhtani.com">
-			<div class="mb-1">Welcome to</div>
-			<pre class="-mt-ch overflow-x-auto overflow-y-clip text-[x-small] leading-none">{ascii}</pre>
-			<p class="ml-auto">.TheOhtani.com</p>
-		</h1>
+	<Banner />
 
-		<p class="text-center text-balance italic">
-			Track MLB games, explore stats, and query the Stats API, all in one app.
-		</p>
+	<div class="my-auto flex flex-col gap-[inherit] px-ch">
+		<header class="space-y-ch">
+			<h1 class="mx-auto flex max-w-max flex-col text-xl" aria-label="Welcome to MLB.TheOhtani.com">
+				<div class="mb-1">Welcome to</div>
+				<pre
+					class="-mt-ch overflow-x-auto overflow-y-clip text-[x-small] leading-none">{ascii}</pre>
+				<p class="ml-auto">.TheOhtani.com</p>
+			</h1>
 
-		<Baseball class="mx-auto my-[-5lh] mb-[-8lh] w-[300px] text-[8px]" />
-	</header>
+			<p class="text-center text-balance italic">
+				Track MLB games, explore stats, and query the Stats API, all in one app.
+			</p>
 
-	<hr class="border-dashed border-stroke" />
+			<Baseball class="mx-auto my-[-5lh] mb-[-8lh] w-[300px] text-[8px]" />
+		</header>
 
-	<CountdownList {season} />
+		<hr class="border-dashed border-stroke" />
 
-	<div
-		class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
-	>
-		<section class="space-y-ch">
-			<h2 class="text-center h1">{today}</h2>
+		<CountdownList {season} />
 
-			<article class="[&_ul_p]:text-sm">
-				<header class="flex items-center justify-between gap-ch text-sm">
-					<h3 class="text-center text-current/50">Recent Transactions</h3>
-					<a href="/transactions" class="hover-link">View all</a>
-				</header>
+		<div
+			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
+		>
+			<section class="space-y-ch">
+				<h2 class="text-center h1">{today}</h2>
 
-				<TransactionByTeam transactions={data.transactions.transactions} />
-			</article>
-		</section>
+				<article class="[&_ul_p]:text-sm">
+					<header class="flex items-center justify-between gap-ch text-sm">
+						<h3 class="text-center text-current/50">Recent Transactions</h3>
+						<a href="/transactions" class="hover-link">View all</a>
+					</header>
 
-		<SeasonInfo {season} />
+					<TransactionByTeam transactions={data.transactions.transactions} />
+				</article>
+			</section>
+
+			<SeasonInfo {season} />
+		</div>
 	</div>
 </div>
