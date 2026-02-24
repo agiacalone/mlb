@@ -54,10 +54,36 @@
 	const isSpoilerPrevented = $derived(
 		spoilerPreventionStore.has(away?.id!) || spoilerPreventionStore.has(home?.id!),
 	)
+
+	const awayTeam = $derived(boxscore?.teams.away.team ?? game?.teams?.away?.team)
+	const homeTeam = $derived(boxscore?.teams.home.team ?? game?.teams?.home?.team)
+
+	const gameSchema = $derived(
+		awayTeam && homeTeam && game
+			? {
+					'@context': 'https://schema.org',
+					'@type': 'SportsEvent',
+					name: `${awayTeam.name} at ${homeTeam.name}`,
+					startDate: game.gameDate,
+					...(game.status?.abstractGameState === 'Preview' && {
+						eventStatus: 'https://schema.org/EventScheduled',
+					}),
+					location: { '@type': 'Place', name: game.venue?.name },
+					awayTeam: { '@type': 'SportsTeam', name: awayTeam.name },
+					homeTeam: { '@type': 'SportsTeam', name: homeTeam.name },
+					url: `https://mlb.theohtani.com/game/${game.gamePk}`,
+					organizer: { '@type': 'SportsOrganization', name: 'Major League Baseball' },
+					sport: 'https://en.wikipedia.org/wiki/Baseball',
+				}
+			: null,
+	)
 </script>
 
 <svelte:head>
 	<link rel="preconnect" href="https://mlb-cuts-diamond.mlb.com" />
+	{#if gameSchema}
+		{@html `<script type="application/ld+json">${JSON.stringify(gameSchema)}<\/script>`}
+	{/if}
 </svelte:head>
 
 <Metadata

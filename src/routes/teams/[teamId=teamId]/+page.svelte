@@ -13,7 +13,24 @@
 	let { data }: PageProps = $props()
 
 	const team = $derived(data.team as MLB.TeamDetailed)
+
+	const teamSchema = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'SportsTeam',
+		name: team.name,
+		sport: 'https://en.wikipedia.org/wiki/Baseball',
+		url: `https://mlb.theohtani.com/teams/${team.id}`,
+		memberOf: {
+			'@type': 'SportsOrganization',
+			name: 'Major League Baseball',
+			url: 'https://www.mlb.com',
+		},
+	})
 </script>
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify(teamSchema)}<\/script>`}
+</svelte:head>
 
 <Metadata title="{team.name} | MLB.TheOhtani.com" description="{team.name} team page" />
 
