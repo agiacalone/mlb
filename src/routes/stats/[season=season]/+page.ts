@@ -6,6 +6,10 @@ export const load: PageLoad = async ({ params, url }) => {
 	const hittingSortStat = url.searchParams.get('hittingSortStat') ?? 'homeRuns'
 	const pitchingSortStat = url.searchParams.get('pitchingSortStat') ?? 'era'
 
+	const standingsType = url.searchParams.get('standingsType') ?? 'regularSeason'
+	const gameType = standingsType === 'springTraining' ? 'S' : 'R'
+	const { standingsType: _excluded, ...restSearchParams } = searchParams
+
 	const [baseballStats, hittingLeaders, pitchingLeaders, positions] = await Promise.all([
 		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats'),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
@@ -20,7 +24,8 @@ export const load: PageLoad = async ({ params, url }) => {
 				'stat,avg,homeRuns,rbi,hits,doubles,triples,stolenBases,obp,slg,ops',
 				'team,league,name',
 			],
-			...searchParams,
+			gameType,
+			...restSearchParams,
 		}),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
 			stats: 'season',
@@ -34,7 +39,8 @@ export const load: PageLoad = async ({ params, url }) => {
 				'stat,era,wins,losses,strikeOuts,saves,whip,inningsPitched',
 				'team,league,name',
 			],
-			...searchParams,
+			gameType,
+			...restSearchParams,
 		}),
 		fetchMLB<MLB.PositionMeta[]>('/api/v1/positions'),
 	])

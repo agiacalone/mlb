@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { cn } from '$lib/utils'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import YearPicker from '$ui/schedule/year-picker.svelte'
+	import SelectStandingsType from '$ui/select-standings-type.svelte'
+	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 	import type { PageProps } from './$types'
 
@@ -17,7 +19,15 @@
 
 <Header title="Standings" crumbs={[{ name: 'Standings' }]}>
 	{#snippet after()}
-		<YearPicker class="mx-auto" />
+		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
+			<SelectStandingsType class="button text-center" />
+			<SeasonPicker
+				onchange={(e) =>
+					goto(
+						`/standings/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`,
+					)}
+			/>
+		</div>
 	{/snippet}
 </Header>
 
