@@ -28,7 +28,7 @@
 	const currentMonth = getToday().toISOString().slice(0, 7)
 </script>
 
-<article class="space-y-ch">
+<article class="space-y-ch px-ch">
 	{#if byMonth.length > 0}
 		<h2 class="h2 max-sm:px-ch">Schedule</h2>
 

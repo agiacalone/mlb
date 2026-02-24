@@ -51,18 +51,16 @@
 	{/snippet}
 </Header>
 
-<section class="grid gap-lh py-lh sm:grid-cols-2 sm:px-ch">
+<section class="grid gap-ch py-lh">
+	<h2 class="px-rch h2">Roster</h2>
+
 	{#if data.roster.roster}
-		<Roster roster={data.roster.roster} coaches={data.coaches.roster} />
+		<div class="grid gap-y-ch md:grid-cols-[repeat(auto-fill,minmax(var(--container-xs),1fr))]">
+			<Roster roster={data.roster.roster} coaches={data.coaches.roster} />
+		</div>
 	{:else}
 		<Empty>No roster</Empty>
 	{/if}
-
-	<TeamSchedule schedule={data.schedule} {team} />
 </section>
 
-<style>
-	section {
-		padding-bottom: max(1ch, env(safe-area-inset-bottom));
-	}
-</style>
+<TeamSchedule schedule={data.schedule} {team} />
