@@ -10,6 +10,18 @@
 	import type { PageProps } from './$types'
 
 	let { data }: PageProps = $props()
+
+	const leagueGroups = $derived(
+		data.standings.records.reduce(
+			(acc, record) => {
+				const id = record.league?.id ?? 0
+				if (!acc.has(id)) acc.set(id, { name: record.league?.name ?? '', records: [] })
+				acc.get(id)!.records.push(record)
+				return acc
+			},
+			new Map<number, { name: string; records: typeof data.standings.records }>(),
+		),
+	)
 </script>
 
 <Metadata
@@ -31,55 +43,65 @@
 	{/snippet}
 </Header>
 
-<section
-	class={cn('items-start gap-lh p-ch has-[table]:grid', {
-		'sm:grid-cols-2 lg:grid-cols-3': data.standings.records.length > 4,
-		'sm:grid-cols-2': data.standings.records.length % 2 === 0,
-	})}
->
-	{#each data.standings.records as { division, teamRecords } (division?.id)}
-		<table class="w-full text-center">
-			<thead>
-				<tr class="text-sm text-current/50">
-					<th class="line-clamp-1 break-all text-foreground">{division?.nameShort}</th>
-					<th class="w-[8ch]">W-L</th>
-					<th class="w-[5ch]">%</th>
-					<th class="w-[5ch]">GB</th>
-					<th class="w-[5ch]">Strk</th>
-					<th class="w-[5ch]">#</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each teamRecords as { team, wins, losses, winningPercentage, sportGamesBack, streak, leagueRank } (team.id)}
-					<tr class="hover:[&>td]:bg-foreground/10">
-						<td class="sticky left-0 min-w-lh @min-[8ch]:min-w-[3.5ch]">
-							<StyledTeam class="text-left" {team} linked />
-						</td>
-						<td class="flex justify-center tabular-nums">
-							<span class="positive">{wins}</span>
-							-
-							<span class="negative">{losses}</span>
-						</td>
-						<td
-							class={cn('tabular-nums', Number(winningPercentage) >= 0.5 ? 'positive' : 'negative')}
-						>
-							{winningPercentage}
-						</td>
-						<td class={cn('tabular-nums', sportGamesBack === '-' && 'text-current/50')}>
-							{sportGamesBack}
-						</td>
-						<td
-							class="tabular-nums"
-							class:positive={streak?.streakCode?.startsWith('W')}
-							class:negative={streak?.streakCode?.startsWith('L')}
-						>
-							{streak?.streakCode}
-						</td>
-						<td class="tabular-nums">{leagueRank}</td>
-					</tr>
+<section class="flex flex-col gap-lh p-ch">
+	{#each [...leagueGroups.entries()] as [leagueId, { name, records }] (leagueId)}
+		<div class="flex flex-col gap-ch">
+			<h2 class="px-ch text-sm text-current/50">{name}</h2>
+			<div
+				class={cn('grid items-start gap-lh', {
+					'sm:grid-cols-2 lg:grid-cols-3': records.length > 2,
+					'sm:grid-cols-2': records.length === 2,
+				})}
+			>
+				{#each records as { division, league, teamRecords }, i (division?.id ?? i)}
+					<table class="w-full text-center">
+						<thead>
+							<tr class="text-sm text-current/50">
+								<th class="line-clamp-1 break-all text-foreground">{division?.nameShort ?? league?.name}</th>
+								<th class="w-[8ch]">W-L</th>
+								<th class="w-[5ch]">%</th>
+								<th class="w-[5ch]">GB</th>
+								<th class="w-[5ch]">Strk</th>
+								<th class="w-[5ch]">#</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each teamRecords as { team, wins, losses, winningPercentage, sportGamesBack, streak, leagueRank } (team.id)}
+								<tr class="hover:[&>td]:bg-foreground/10">
+									<td class="sticky left-0 min-w-lh @min-[8ch]:min-w-[3.5ch]">
+										<StyledTeam class="text-left" {team} linked />
+									</td>
+									<td class="flex justify-center tabular-nums">
+										<span class="positive">{wins}</span>
+										-
+										<span class="negative">{losses}</span>
+									</td>
+									<td
+										class={cn(
+											'tabular-nums',
+											Number(winningPercentage) >= 0.5 ? 'positive' : 'negative',
+										)}
+									>
+										{winningPercentage}
+									</td>
+									<td class={cn('tabular-nums', sportGamesBack === '-' && 'text-current/50')}>
+										{sportGamesBack}
+									</td>
+									<td
+										class="tabular-nums"
+										class:positive={streak?.streakCode?.startsWith('W')}
+										class:negative={streak?.streakCode?.startsWith('L')}
+									>
+										{streak?.streakCode}
+									</td>
+									<td class="tabular-nums">{leagueRank}</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
 				{/each}
-			</tbody>
-		</table>
+			</div>
+		</div>
 	{:else}
 		<div class="text-center">No standings for {page.params.season} season</div>
 	{/each}
