@@ -53,11 +53,11 @@
 					'sm:grid-cols-2': records.length === 2,
 				})}
 			>
-				{#each records as { division, teamRecords }, i (division?.id ?? i)}
+				{#each records as { division, league, teamRecords }, i (division?.id ?? i)}
 					<table class="w-full text-center">
 						<thead>
 							<tr class="text-sm text-current/50">
-								<th class="line-clamp-1 break-all text-foreground">{division?.nameShort}</th>
+								<th class="line-clamp-1 break-all text-foreground">{division?.nameShort ?? league?.name}</th>
 								<th class="w-[8ch]">W-L</th>
 								<th class="w-[5ch]">%</th>
 								<th class="w-[5ch]">GB</th>
