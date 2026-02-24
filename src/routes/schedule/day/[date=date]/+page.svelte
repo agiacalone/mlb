@@ -74,7 +74,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
 			<SelectSport class="button text-center" />
-			<DatePicker date={currentDate} {onDateChange} class="mx-auto" />
+			<DatePicker date={currentDate} onchange={onDateChange} class="mx-auto" />
 		</div>
 	{/snippet}
 </Header>

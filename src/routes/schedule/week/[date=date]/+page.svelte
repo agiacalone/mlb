@@ -52,7 +52,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
 			<SelectSport class="button text-center" />
-			<WeekPicker date={currentDate} {onDateChange} />
+			<WeekPicker date={currentDate} onchange={onDateChange} />
 			<ToggleAllDetails />
 		</div>
 	{/snippet}

@@ -32,7 +32,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center justify-center gap-ch text-center">
 			<SelectTeam class="button grow" />
-			<WeekPicker class="grow" date={currentDate} {onDateChange} href="/transactions" />
+			<WeekPicker class="grow" date={currentDate} onchange={onDateChange} href="/transactions" />
 			<ToggleAllDetails />
 		</div>
 	{/snippet}

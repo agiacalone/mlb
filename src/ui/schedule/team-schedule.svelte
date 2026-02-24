@@ -28,69 +28,63 @@
 	const currentMonth = getToday().toISOString().slice(0, 7)
 </script>
 
-<article class="space-y-ch px-ch">
-	{#if byMonth.length > 0}
-		<h2 class="h2 max-sm:px-ch">Schedule</h2>
+<article class="space-y-px">
+	{#each byMonth as [month, dates], i (month)}
+		<details class="accordion" name="schedule" open={month === currentMonth || i === 0}>
+			<summary class="sticky-below-header z-1 backdrop-blur-xs max-sm:px-ch">
+				{formatDate(slash(month + '-01'), { month: 'long', year: 'numeric' })}
+			</summary>
 
-		<div class="space-y-px">
-			{#each byMonth as [month, dates], i (month)}
-				<details class="accordion" name="schedule" open={month === currentMonth || i === 0}>
-					<summary class="sticky-below-header z-1 backdrop-blur-xs max-sm:px-ch">
-						{formatDate(slash(month + '-01'), { month: 'long', year: 'numeric' })}
-					</summary>
+			<ol class="isolate grid overflow-x-auto">
+				{#each dates as { date, games } (date)}
+					{#each games as { gamePk, gameDate, teams } (gamePk)}
+						{@const atHome = teams.home.team.id === team.id}
 
-					<ol class="isolate grid overflow-x-auto">
-						{#each dates as { date, games } (date)}
-							{#each games as { gamePk, gameDate, teams } (gamePk)}
-								{@const atHome = teams.home.team.id === team.id}
+						<li class="col-span-full grid grid-cols-subgrid">
+							<a
+								class="group/game col-span-full grid grid-cols-subgrid items-stretch *:px-[.5ch]"
+								href="/game/{gamePk}"
+							>
+								<time
+									class="my-auto contents text-center text-xs *:m-auto *:px-[.5ch]"
+									class:text-accent={formatDate(gameDate) === formatDate(getToday())}
+									datetime={gameDate}
+								>
+									<span class="decoration-dashed group-hover/game:underline">
+										{formatDate(slash(date), {
+											weekday: 'short',
+											month: 'numeric',
+											day: 'numeric',
+										})}
+									</span>
 
-								<li class="col-span-full grid grid-cols-subgrid">
-									<a
-										class="group/game col-span-full grid grid-cols-subgrid items-stretch *:px-[.5ch]"
-										href="/game/{gamePk}"
-									>
-										<time
-											class="my-auto contents text-center text-xs *:m-auto *:px-[.5ch]"
-											class:text-accent={formatDate(gameDate) === formatDate(getToday())}
-											datetime={gameDate}
-										>
-											<span class="decoration-dashed group-hover/game:underline">
-												{formatDate(slash(date), {
-													weekday: 'short',
-													month: 'numeric',
-													day: 'numeric',
-												})}
-											</span>
+									<span>
+										{formatDate(gameDate, {
+											hour: 'numeric',
+											minute: '2-digit',
+										})}
+									</span>
+								</time>
 
-											<span>
-												{formatDate(gameDate, {
-													hour: 'numeric',
-													minute: '2-digit',
-												})}
-											</span>
-										</time>
+								<span class="m-auto text-center text-xs">
+									{atHome ? 'vs' : '@'}
+								</span>
 
-										<span class="m-auto text-center text-xs">
-											{atHome ? 'vs' : '@'}
-										</span>
-
-										<StyledTeam
-											class="pl-[.5ch] *:data-name:shrink-0 *:data-name:grow"
-											team={atHome ? teams.away.team : teams.home.team}
-										>
-											<StartingPitcher {gamePk} teamId={team.id} />
-										</StyledTeam>
-									</a>
-								</li>
-							{/each}
-						{/each}
-					</ol>
-				</details>
-			{/each}
-		</div>
+								<StyledTeam
+									class="pl-[.5ch] *:data-name:shrink-0 *:data-name:grow"
+									team={atHome ? teams.away.team : teams.home.team}
+								>
+									<StartingPitcher {gamePk} teamId={team.id} />
+								</StyledTeam>
+							</a>
+						</li>
+					{/each}
+				{/each}
+			</ol>
+		</details>
 	{:else}
 		<Empty>No schedule</Empty>
-	{/if}
+	{/each}
 </article>
 
 <style>

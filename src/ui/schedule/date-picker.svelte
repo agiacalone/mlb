@@ -5,11 +5,11 @@
 
 	let {
 		date,
-		onDateChange,
+		onchange,
 		class: className,
 	}: {
 		date: string
-		onDateChange?: (date: string) => void
+		onchange?: (date: string) => void
 		class?: string
 	} = $props()
 
@@ -39,7 +39,7 @@
 				max={`${getToday().getFullYear()}-12-31`}
 				value={date}
 				onclick={(e) => (e.target as HTMLInputElement)?.showPicker()}
-				onchange={(e) => onDateChange?.(e.currentTarget.value)}
+				onchange={(e) => onchange?.(e.currentTarget.value)}
 			/>
 		</label>
 

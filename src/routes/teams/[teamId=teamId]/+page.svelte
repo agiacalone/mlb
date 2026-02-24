@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
+	import Calendar from '$ui/schedule/calendar.svelte'
 	import TeamSchedule from '$ui/schedule/team-schedule.svelte'
 	import ToggleSpoilerPrevention from '$ui/spoiler-prevention/toggle-spoiler-prevention.svelte'
 	import Logo from '$ui/team/logo.svelte'
@@ -51,6 +53,11 @@
 	{/snippet}
 </Header>
 
+<section class="grid gap-lh px-ch md:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]">
+	<Calendar inputProps={{ min: `${getToday().getFullYear()}-01` }} />
+	<TeamSchedule schedule={data.schedule} {team} />
+</section>
+
 <section class="grid gap-ch py-lh">
 	<h2 class="px-rch h2">Roster</h2>
 
@@ -62,5 +69,3 @@
 		<Empty>No roster</Empty>
 	{/if}
 </section>
-
-<TeamSchedule schedule={data.schedule} {team} />
