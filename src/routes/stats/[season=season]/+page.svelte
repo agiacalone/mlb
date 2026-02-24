@@ -33,7 +33,48 @@
 		}
 		return url.toString()
 	}
+
+	const hittingSchema = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		name: `${page.params.season} MLB Hitting Leaders`,
+		url: `https://mlb.theohtani.com/stats/${page.params.season}`,
+		itemListElement:
+			data.hittingLeaders?.stats?.[0]?.splits?.map(({ rank, player, stat }) => ({
+				'@type': 'ListItem',
+				position: rank,
+				item: {
+					'@type': 'Person',
+					name: player?.lastName ?? '',
+					url: player?.id ? `https://mlb.theohtani.com/player/${player.id}` : undefined,
+					description: `HR: ${stat?.homeRuns}, AVG: ${stat?.avg}, RBI: ${stat?.rbi}`,
+				},
+			})) ?? [],
+	})
+
+	const pitchingSchema = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		name: `${page.params.season} MLB Pitching Leaders`,
+		url: `https://mlb.theohtani.com/stats/${page.params.season}`,
+		itemListElement:
+			data.pitchingLeaders?.stats?.[0]?.splits?.map(({ rank, player, stat }) => ({
+				'@type': 'ListItem',
+				position: rank,
+				item: {
+					'@type': 'Person',
+					name: player?.lastName ?? '',
+					url: player?.id ? `https://mlb.theohtani.com/player/${player.id}` : undefined,
+					description: `ERA: ${stat?.era}, W: ${stat?.wins}, K: ${stat?.strikeOuts}`,
+				},
+			})) ?? [],
+	})
 </script>
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify(hittingSchema)}<\/script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify(pitchingSchema)}<\/script>`}
+</svelte:head>
 
 <Metadata
 	title="{page.params.season} Stat Leaders | MLB.TheOhtani.com"

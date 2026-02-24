@@ -11,6 +11,26 @@
 
 	let { data }: PageProps = $props()
 
+	const standingsSchema = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		name: `${page.params.season} MLB Standings`,
+		url: `https://mlb.theohtani.com/standings/${page.params.season}`,
+		itemListElement: data.standings.records.flatMap(({ division, teamRecords }) =>
+			teamRecords.map(({ team, wins, losses, winningPercentage, leagueRank }) => ({
+				'@type': 'ListItem',
+				position: Number(leagueRank),
+				name: `${team.name} (${wins}-${losses}, ${winningPercentage})`,
+				item: {
+					'@type': 'SportsTeam',
+					name: team.name,
+					url: `https://mlb.theohtani.com/teams/${team.id}`,
+					description: `${division?.nameShort ?? 'MLB'} | ${wins}-${losses} | ${winningPercentage}`,
+				},
+			})),
+		),
+	})
+
 	const leagueGroups = $derived(
 		data.standings.records.reduce(
 			(acc, record) => {
@@ -23,6 +43,10 @@
 		),
 	)
 </script>
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify(standingsSchema)}<\/script>`}
+</svelte:head>
 
 <Metadata
 	title="{page.params.season} MLB Standings | MLB.TheOhtani.com"
