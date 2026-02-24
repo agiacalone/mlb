@@ -44,16 +44,16 @@
 </Header>
 
 <section class="flex flex-col gap-lh p-ch">
-	{#each [...leagueGroups.values()] as { name, records }}
+	{#each [...leagueGroups.entries()] as [leagueId, { name, records }] (leagueId)}
 		<div class="flex flex-col gap-ch">
 			<h2 class="px-ch text-sm text-current/50">{name}</h2>
 			<div
 				class={cn('grid items-start gap-lh', {
-					'sm:grid-cols-2 lg:grid-cols-3': records.length > 4,
-					'sm:grid-cols-2': records.length <= 4 && records.length % 2 === 0,
+					'sm:grid-cols-2 lg:grid-cols-3': records.length > 2,
+					'sm:grid-cols-2': records.length === 2,
 				})}
 			>
-				{#each records as { division, teamRecords } (division?.id)}
+				{#each records as { division, teamRecords }, i (division?.id ?? i)}
 					<table class="w-full text-center">
 						<thead>
 							<tr class="text-sm text-current/50">
