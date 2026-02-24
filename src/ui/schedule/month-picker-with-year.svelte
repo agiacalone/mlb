@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
-	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import { CalendarTodayIcon, ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 	import type { HTMLAttributes, HTMLInputAttributes } from 'svelte/elements'
 
 	let {
@@ -65,6 +65,14 @@
 </script>
 
 <fieldset class="flex justify-center gap-px text-center">
+	<button
+		type="button"
+		class="button"
+		onclick={() => (value = toValue(todayYear, getToday().getMonth() + 1))}
+	>
+		<CalendarTodayIcon value={getToday().getMonth() + 1} />
+	</button>
+
 	<label class="button grow">
 		{MONTHS[month - 1]}
 		{year}
