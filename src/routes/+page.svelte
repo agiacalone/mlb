@@ -77,7 +77,7 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 		<div
 			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
 		>
-			<SeasonInfo {season} />
+			<SeasonInfo {season} bordered />
 
 			<section class="space-y-ch">
 				{#if favoriteTeam}

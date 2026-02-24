@@ -69,7 +69,9 @@
 							{#if day}
 								<a
 									class={cn('block hover-link', cells && 'not-has-[+*]:text-current/40')}
-									href="/schedule/day/{year}-{String(month).padStart(2, '0')}-{day}"
+									href="/schedule/day/{year}-{String(month).padStart(2, '0')}-{day
+										.toString()
+										.padStart(2, '0')}"
 								>
 									{day}
 								</a>

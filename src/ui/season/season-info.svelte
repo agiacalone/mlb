@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { formatDate, getToday, slash } from '$lib/temporal'
+	import { cn } from '$lib/utils'
 
-	let { season }: { season: MLB.SeasonDateInfo } = $props()
+	let { season, bordered }: { season: MLB.SeasonDateInfo; bordered?: boolean } = $props()
 </script>
 
 {#if season}
 	<article class="space-y-ch">
 		<h2 class="text-center h1">{season?.seasonId} Season Schedule</h2>
 
-		<div class="border border-stroke p-ch">
+		<div class={cn(bordered && 'border border-stroke p-ch')}>
 			<dl class="mx-auto description-list max-w-max tabular-nums">
 				{#if season.seasonId === getToday().getFullYear().toString()}
 					<dt>Today's games</dt>
