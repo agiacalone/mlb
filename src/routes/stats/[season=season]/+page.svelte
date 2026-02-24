@@ -7,7 +7,7 @@
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
-	import StandingsTypePicker from '$ui/standings-type-picker.svelte'
+	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import type { PageProps } from './$types'
 
@@ -49,7 +49,7 @@
 >
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
-			<StandingsTypePicker class="button text-center" />
+			<GameTypePicker class="button text-center" />
 			<SeasonPicker
 				onchange={(e) =>
 					goto(`/stats/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
