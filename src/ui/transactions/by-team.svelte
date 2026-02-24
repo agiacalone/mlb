@@ -27,8 +27,7 @@
 	)
 
 	let teamId = $derived<number | 'all'>(
-		favoriteTeamIds.find((id) => txns.some((t) => t.toTeam?.id === id)) ??
-			'all',
+		favoriteTeamIds.find((id) => txns.some((t) => t.toTeam?.id === id)) ?? 'all',
 	)
 
 	const filteredTxns = $derived(
@@ -54,7 +53,7 @@
 		</select>
 	</label>
 
-	<div class="h-[20ch] overflow-y-auto px-ch py-[.5ch]">
+	<div class="h-[25ch] overflow-y-auto px-ch py-[.5ch]">
 		{#if filteredTxns.length}
 			<ul>
 				{#each filteredTxns as transaction (transaction.id)}

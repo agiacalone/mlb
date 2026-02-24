@@ -54,7 +54,7 @@
 <section class="grid gap-[2lh] pt-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
 	<div class="space-y-ch px-ch">
 		<h2 class="h2">Schedule</h2>
-		<TeamCalendar schedule={data.schedule} {team} />
+		<TeamCalendar {team} />
 	</div>
 
 	<div class="space-y-ch">

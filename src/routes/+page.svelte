@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { fetchMLB } from '$lib/fetch'
 	import { formatDate, getToday } from '$lib/temporal'
 	import Banner from '$ui/banner.svelte'
 	import Baseball from '$ui/baseball.svelte'
+	import { favoritesStore } from '$ui/favorites/store.svelte'
+	import { ChevronRightIcon } from '$ui/icons'
 	import Metadata from '$ui/metadata.svelte'
+	import Calendar from '$ui/schedule/calendar.svelte'
 	import CountdownList from '$ui/season/countdown-list.svelte'
 	import SeasonInfo from '$ui/season/season-info.svelte'
+	import TeamCalendar from '$ui/team/team-calendar.svelte'
 	import TransactionByTeam from '$ui/transactions/by-team.svelte'
 	import type { PageProps } from './$types'
 
@@ -22,6 +27,21 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 `
 
 	const today = formatDate(getToday(), { weekday: 'long', month: 'long', day: 'numeric' })
+
+	const favoriteTeam = favoritesStore.favorites
+		.find((f) => f.href.includes('team'))
+		?.href.split('/')
+		.pop()
+
+	async function fetchFavoriteTeam() {
+		const {
+			teams: [team],
+		} = await fetchMLB<MLB.TeamsResponse>(`/api/v1/teams/${favoriteTeam}`, {
+			fields: ['teams,id,name,abbreviation,sport'],
+		})
+
+		return team
+	}
 </script>
 
 <Metadata
@@ -55,22 +75,56 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 		<CountdownList {season} />
 
 		<div
-			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
+			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
 		>
 			<SeasonInfo {season} />
 
 			<section class="space-y-ch">
-				<h2 class="text-center h1">{today}</h2>
+				{#if favoriteTeam}
+					{#await fetchFavoriteTeam() then team}
+						<h2 class="text-center h1">{team.name} Schedule</h2>
+						<TeamCalendar class="border-t border-stroke" {team} />
+						<div class="text-center text-sm">
+							{@render link({ href: `/teams/${favoriteTeam}`, label: 'View team' })}
+						</div>
+					{/await}
+				{:else}
+					<h2 class="text-center h1">Calendar</h2>
+					<Calendar class="border-t border-stroke" />
+				{/if}
+			</section>
 
-				<article class="[&_ul_p]:text-sm">
-					<header class="flex items-center justify-between gap-ch text-sm">
-						<h3 class="text-center text-current/50">Recent Transactions</h3>
-						<a href="/transactions" class="hover-link">View all</a>
-					</header>
-
-					<TransactionByTeam transactions={data.transactions.transactions} />
-				</article>
+			<section class="space-y-ch [&_ul_p]:text-sm">
+				<h2 class="text-center h1">Today's Transactions</h2>
+				<TransactionByTeam transactions={data.transactions.transactions} />
+				<div class="text-center text-sm">
+					{@render link({ href: '/transactions', label: 'View all transactions' })}
+				</div>
 			</section>
 		</div>
 	</div>
 </div>
+
+{#snippet link({ href, label }: { href: string; label: string })}
+	<div class="text-center text-sm">
+		<a {href} class="inline-flex h-rlh items-center gap-[.5ch] hover-link hover:text-current">
+			{label}
+			<ChevronRightIcon class="size-lh" />
+		</a>
+	</div>
+{/snippet}
+
+<style>
+	section :global(table) {
+		position: relative;
+
+		&::after {
+			content: '';
+			pointer-events: none;
+			position: absolute;
+			inset: 0;
+			border: 1px solid var(--color-stroke);
+			border-top: none;
+		}
+	}
+</style>

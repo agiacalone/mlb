@@ -8,36 +8,38 @@
 	<article class="space-y-ch">
 		<h2 class="text-center h1">{season?.seasonId} Season Schedule</h2>
 
-		<dl class="mx-auto description-list max-w-max tabular-nums">
-			{#if season.seasonId === getToday().getFullYear().toString()}
-				<dt>Today's games</dt>
-				<dd class="*:text-accent *:link">
-					{@render linkedDate(formatDate(getToday(), { locale: 'en-CA' }), 'day')}
+		<div class="border border-stroke p-ch">
+			<dl class="mx-auto description-list max-w-max tabular-nums">
+				{#if season.seasonId === getToday().getFullYear().toString()}
+					<dt>Today's games</dt>
+					<dd class="*:positive *:link *:dark:text-accent">
+						{@render linkedDate(formatDate(getToday(), { locale: 'en-CA' }), 'day')}
+					</dd>
+				{/if}
+
+				<dt>Spring Training</dt>
+				<dd>
+					{@render linkedDate(season.springStartDate)} - {@render linkedDate(season.springEndDate)}
 				</dd>
-			{/if}
 
-			<dt>Spring Training</dt>
-			<dd>
-				{@render linkedDate(season.springStartDate)} - {@render linkedDate(season.springEndDate)}
-			</dd>
+				<dt>Regular Season</dt>
+				<dd>
+					{@render linkedDate(season.regularSeasonStartDate)}
+					-
+					{@render linkedDate(season.regularSeasonEndDate)}
+				</dd>
 
-			<dt>Regular Season</dt>
-			<dd>
-				{@render linkedDate(season.regularSeasonStartDate)}
-				-
-				{@render linkedDate(season.regularSeasonEndDate)}
-			</dd>
+				<dt>All-Star Game</dt>
+				<dd>{@render linkedDate(season.allStarDate, 'day')}</dd>
 
-			<dt>All-Star Game</dt>
-			<dd>{@render linkedDate(season.allStarDate, 'day')}</dd>
-
-			<dt>Postseason</dt>
-			<dd>
-				{@render linkedDate(season.postSeasonStartDate)}
-				-
-				{@render linkedDate(season.postSeasonEndDate)}
-			</dd>
-		</dl>
+				<dt>Postseason</dt>
+				<dd>
+					{@render linkedDate(season.postSeasonStartDate)}
+					-
+					{@render linkedDate(season.postSeasonEndDate)}
+				</dd>
+			</dl>
+		</div>
 	</article>
 {/if}
 

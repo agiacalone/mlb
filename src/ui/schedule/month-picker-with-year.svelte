@@ -68,7 +68,10 @@
 	<button
 		type="button"
 		class="button"
-		onclick={() => (value = toValue(todayYear, getToday().getMonth() + 1))}
+		onclick={() => {
+			value = toValue(todayYear, getToday().getMonth() + 1)
+			fireChange()
+		}}
 	>
 		<CalendarTodayIcon value={getToday().getMonth() + 1} />
 	</button>

@@ -10,13 +10,13 @@
 		buttons = true,
 		onchange,
 		inputProps,
-		cell,
+		cells,
 	}: {
 		class?: string
 		buttons?: boolean
 		onchange?: HTMLAttributes<HTMLInputElement>['onchange']
 		inputProps?: HTMLInputAttributes
-		cell?: Snippet<[{ day: number | null; year: number; month: number }]>
+		cells?: Snippet<[{ day: number | null; year: number; month: number }]>
 	} & Omit<HTMLAttributes<HTMLInputElement>, 'onchange'> = $props()
 
 	const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -46,10 +46,10 @@
 	<MonthPickerWithYear bind:value={selected} {buttons} {onchange} {...inputProps} />
 
 	<table class="w-full table-fixed text-center">
-		<thead>
+		<thead class="text-sm">
 			<tr>
 				{#each DOW as d (d)}
-					<th class="font-normal text-current/40">{d}</th>
+					<th class="border border-transparent font-normal text-current/40">{d}</th>
 				{/each}
 			</tr>
 		</thead>
@@ -59,16 +59,23 @@
 					{#each week as day, di (di)}
 						<td
 							class={cn(
-								'border border-background align-top',
+								'border border-transparent align-top',
 								!day && 'opacity-0',
 								formatDate(getToday(), { locale: 'en-CA' }) ===
 									`${year}-${String(month).padStart(2, '0')}-${day}` &&
 									'bg-accent/15 positive dark:text-accent',
 							)}
 						>
-							<span>{day}</span>
+							{#if day}
+								<a
+									class={cn('block hover-link', cells && 'not-has-[+*]:text-current/40')}
+									href="/schedule/day/{year}-{String(month).padStart(2, '0')}-{day}"
+								>
+									{day}
+								</a>
+							{/if}
 
-							{@render cell?.({ day, year, month })}
+							{@render cells?.({ day, year, month })}
 						</td>
 					{/each}
 				</tr>
