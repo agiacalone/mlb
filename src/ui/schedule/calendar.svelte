@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatDate, getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
+	import type { Snippet } from 'svelte'
 	import type { HTMLAttributes, HTMLInputAttributes } from 'svelte/elements'
 	import MonthPickerWithYear from './month-picker-with-year.svelte'
 
@@ -9,11 +10,13 @@
 		buttons = true,
 		onchange,
 		inputProps,
+		cell,
 	}: {
 		class?: string
 		buttons?: boolean
 		onchange?: HTMLAttributes<HTMLInputElement>['onchange']
 		inputProps?: HTMLInputAttributes
+		cell?: Snippet<[{ day: number | null; year: number; month: number }]>
 	} & Omit<HTMLAttributes<HTMLInputElement>, 'onchange'> = $props()
 
 	const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -46,7 +49,7 @@
 		<thead>
 			<tr>
 				{#each DOW as d (d)}
-					<th class="px-1 py-0.5 font-normal text-current/40">{d}</th>
+					<th class="font-normal text-current/40">{d}</th>
 				{/each}
 			</tr>
 		</thead>
@@ -56,13 +59,16 @@
 					{#each week as day, di (di)}
 						<td
 							class={cn(
-								'px-1 py-0.5 text-sm',
+								'border border-background align-top',
 								!day && 'opacity-0',
 								formatDate(getToday(), { locale: 'en-CA' }) ===
-									`${year}-${String(month).padStart(2, '0')}-${day}` && 'text-accent',
+									`${year}-${String(month).padStart(2, '0')}-${day}` &&
+									'bg-accent/15 positive dark:text-accent',
 							)}
 						>
-							{day}
+							<span>{day}</span>
+
+							{@render cell?.({ day, year, month })}
 						</td>
 					{/each}
 				</tr>

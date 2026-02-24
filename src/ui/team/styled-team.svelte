@@ -23,7 +23,7 @@
 
 <div
 	class={cn(
-		'group/team @container/team relative flex items-center gap-[.5ch]',
+		'group/team @container/team relative isolate flex items-center gap-[.5ch]',
 		isDarkOnLightTeam(team) && 'dark:text-dark',
 		isLightOnDarkTeam(team) && 'dark:text-light',
 		className,

@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import Calendar from '$ui/schedule/calendar.svelte'
-	import TeamSchedule from '$ui/schedule/team-schedule.svelte'
 	import ToggleSpoilerPrevention from '$ui/spoiler-prevention/toggle-spoiler-prevention.svelte'
 	import Logo from '$ui/team/logo.svelte'
 	import Roster from '$ui/team/roster.svelte'
+	import TeamCalendar from '$ui/team/team-calendar.svelte'
 	import type { PageProps } from './$types'
 
 	let { data }: PageProps = $props()
@@ -53,19 +51,20 @@
 	{/snippet}
 </Header>
 
-<section class="grid gap-lh px-ch md:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]">
-	<Calendar inputProps={{ min: `${getToday().getFullYear()}-01` }} />
-	<TeamSchedule schedule={data.schedule} {team} />
-</section>
+<section class="grid gap-[2lh] pt-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
+	<div class="space-y-ch px-ch">
+		<h2 class="h2">Schedule</h2>
+		<TeamCalendar schedule={data.schedule} {team} />
+	</div>
 
-<section class="grid gap-ch py-lh">
-	<h2 class="px-rch h2">Roster</h2>
-
-	{#if data.roster.roster}
-		<div class="grid gap-y-ch md:grid-cols-[repeat(auto-fill,minmax(var(--container-xs),1fr))]">
-			<Roster roster={data.roster.roster} coaches={data.coaches.roster} />
-		</div>
-	{:else}
-		<Empty>No roster</Empty>
-	{/if}
+	<div class="space-y-ch">
+		<h2 class="px-rch h2">Roster</h2>
+		{#if data.roster.roster}
+			<div class="grid gap-y-ch md:grid-cols-[repeat(auto-fill,minmax(var(--container-xs),1fr))]">
+				<Roster roster={data.roster.roster} coaches={data.coaches.roster} />
+			</div>
+		{:else}
+			<Empty>No roster</Empty>
+		{/if}
+	</div>
 </section>
