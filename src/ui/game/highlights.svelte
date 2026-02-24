@@ -14,8 +14,6 @@
 		theater?: boolean
 	} = $props()
 
-	$inspect(content)
-
 	let highlights = $derived(content.highlights.highlights?.items.filter((h) => h.type === 'video'))
 
 	let selectedIndex = $state(

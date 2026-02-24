@@ -2,6 +2,7 @@
 	import { formatDate, getToday, slash } from '$lib/temporal'
 	import Empty from '$ui/empty.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
+	import StartingPitcher from './starting-pitcher.svelte'
 
 	let {
 		schedule,
@@ -40,8 +41,9 @@
 
 					<ol class="isolate grid overflow-x-auto">
 						{#each dates as { date, games } (date)}
-							{#each games as { gamePk, gameDate, teams, venue } (gamePk)}
+							{#each games as { gamePk, gameDate, teams } (gamePk)}
 								{@const atHome = teams.home.team.id === team.id}
+
 								<li class="col-span-full grid grid-cols-subgrid">
 									<a
 										class="group/game col-span-full grid grid-cols-subgrid items-stretch *:px-[.5ch]"
@@ -76,9 +78,7 @@
 											class="pl-[.5ch] *:data-name:shrink-0 *:data-name:grow"
 											team={atHome ? teams.away.team : teams.home.team}
 										>
-											<small class="line-clamp-1 pl-ch text-[x-small] break-all text-current/50">
-												{venue.name}
-											</small>
+											<StartingPitcher {gamePk} teamId={team.id} />
 										</StyledTeam>
 									</a>
 								</li>

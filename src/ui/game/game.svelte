@@ -84,7 +84,7 @@
 			)}
 		>
 			<BaseRunners
-				className="w-max"
+				class="w-max"
 				linescore={!isSpoilerPrevented ? liveGame?.liveData?.linescore : undefined}
 			/>
 		</div>

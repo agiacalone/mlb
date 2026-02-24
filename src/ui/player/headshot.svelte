@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
 		person,
 		size = 96,
 		type = 'spots',
 		class: className,
+		...props
 	}: {
 		person: Partial<MLB.Person>
 		size?: number
 		type?: 'spots' | 'silo'
-		class?: string
-	} = $props()
+	} & HTMLAttributes<HTMLImageElement> = $props()
 </script>
 
 <img
@@ -28,4 +29,5 @@
 	onload={(e) => {
 		e.currentTarget.classList.remove('opacity-0')
 	}}
+	{...props}
 />

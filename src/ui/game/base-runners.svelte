@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
-		className,
 		linescore,
+		class: className,
+		...props
 	}: {
-		className?: string
 		linescore?: MLB.Linescore
-	} = $props()
+	} & HTMLAttributes<HTMLDivElement> = $props()
 
 	const { first, second, third } = $derived(linescore?.offense ?? {})
 
@@ -15,7 +16,7 @@
 	const isTopOrBottom = $derived(['Top', 'Bottom'].includes(linescore?.inningState ?? ''))
 </script>
 
-<div class="grid rotate-45 grid-cols-2 gap-[.5ch] {className}">
+<div class="grid rotate-45 grid-cols-2 gap-[.5ch] {className}" {...props}>
 	{#each Array.from({ length: 3 }) as _, base (runners[base] ?? base)}
 		{@const runner = runners[base]}
 
