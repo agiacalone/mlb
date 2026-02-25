@@ -83,7 +83,7 @@
 											isLightOnDarkTeam(team) && 'dark:text-light',
 										)}
 									>
-										{teams.home.team.id === team.id ? '@' : 'vs'}
+										{teams.home.team.id === team.id ? 'vs' : '@'}
 									</small>
 								</StyledTeam>
 							</a>
