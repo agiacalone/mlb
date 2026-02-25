@@ -4,10 +4,10 @@
 	import { isDarkOnLightTeam, isLightOnDarkTeam } from '$lib/colors'
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
+	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
-	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import type { PageProps } from './$types'
 
@@ -33,8 +33,10 @@
 		}
 		return url.toString()
 	}
+</script>
 
-	const hittingSchema = $derived({
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
 		name: `${page.params.season} MLB Hitting Leaders`,
@@ -50,9 +52,9 @@
 					description: `HR: ${stat?.homeRuns}, AVG: ${stat?.avg}, RBI: ${stat?.rbi}`,
 				},
 			})) ?? [],
-	})
+	})}<\/script>`}
 
-	const pitchingSchema = $derived({
+	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
 		name: `${page.params.season} MLB Pitching Leaders`,
@@ -68,12 +70,7 @@
 					description: `ERA: ${stat?.era}, W: ${stat?.wins}, K: ${stat?.strikeOuts}`,
 				},
 			})) ?? [],
-	})
-</script>
-
-<svelte:head>
-	{@html `<script type="application/ld+json">${JSON.stringify(hittingSchema)}<\/script>`}
-	{@html `<script type="application/ld+json">${JSON.stringify(pitchingSchema)}<\/script>`}
+	})}<\/script>`}
 </svelte:head>
 
 <Metadata

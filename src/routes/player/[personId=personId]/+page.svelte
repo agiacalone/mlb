@@ -25,8 +25,10 @@
 	const team = $derived(person.active ? person.currentTeam : person.preferredTeam?.team)
 
 	const isPitcher = $derived(person.primaryPosition?.abbreviation === 'P')
+</script>
 
-	const personSchema = $derived({
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'Person',
 		name: person.fullName,
@@ -46,11 +48,7 @@
 			},
 		}),
 		...(person.primaryPosition?.abbreviation && { jobTitle: person.primaryPosition.abbreviation }),
-	})
-</script>
-
-<svelte:head>
-	{@html `<script type="application/ld+json">${JSON.stringify(personSchema)}<\/script>`}
+	})}<\/script>`}
 </svelte:head>
 
 <Metadata title="{person.fullName} | MLB.TheOhtani.com" description="{person.fullName} profile" />

@@ -2,16 +2,27 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { cn } from '$lib/utils'
+	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 	import type { PageProps } from './$types'
 
 	let { data }: PageProps = $props()
 
-	const standingsSchema = $derived({
+	const leagueGroups = $derived(
+		data.standings.records.reduce((acc, record) => {
+			const id = record.league?.id ?? 0
+			if (!acc.has(id)) acc.set(id, { name: record.league?.name ?? '', records: [] })
+			acc.get(id)!.records.push(record)
+			return acc
+		}, new Map<number, { name: string; records: typeof data.standings.records }>()),
+	)
+</script>
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
 		name: `${page.params.season} MLB Standings`,
@@ -29,23 +40,7 @@
 				},
 			})),
 		),
-	})
-
-	const leagueGroups = $derived(
-		data.standings.records.reduce(
-			(acc, record) => {
-				const id = record.league?.id ?? 0
-				if (!acc.has(id)) acc.set(id, { name: record.league?.name ?? '', records: [] })
-				acc.get(id)!.records.push(record)
-				return acc
-			},
-			new Map<number, { name: string; records: typeof data.standings.records }>(),
-		),
-	)
-</script>
-
-<svelte:head>
-	{@html `<script type="application/ld+json">${JSON.stringify(standingsSchema)}<\/script>`}
+	})}<\/script>`}
 </svelte:head>
 
 <Metadata
@@ -59,9 +54,7 @@
 			<GameTypePicker class="button text-center" />
 			<SeasonPicker
 				onchange={(e) =>
-					goto(
-						`/standings/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`,
-					)}
+					goto(`/standings/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
 			/>
 		</div>
 	{/snippet}
@@ -81,7 +74,9 @@
 					<table class="w-full text-center">
 						<thead>
 							<tr class="text-sm text-current/50">
-								<th class="line-clamp-1 break-all text-foreground">{division?.nameShort ?? league?.name}</th>
+								<th class="line-clamp-1 break-all text-foreground"
+									>{division?.nameShort ?? league?.name}</th
+								>
 								<th class="w-[8ch]">W-L</th>
 								<th class="w-[5ch]">%</th>
 								<th class="w-[5ch]">GB</th>

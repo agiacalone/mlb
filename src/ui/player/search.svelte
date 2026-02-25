@@ -35,8 +35,10 @@
 	$effect(() => {
 		if (page) search()
 	})
+</script>
 
-	const searchActionSchema = {
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'WebSite',
 		name: 'MLB.TheOhtani.com',
@@ -49,11 +51,7 @@
 			},
 			'query-input': 'required name=search_term_string',
 		},
-	}
-</script>
-
-<svelte:head>
-	{@html `<script type="application/ld+json">${JSON.stringify(searchActionSchema)}<\/script>`}
+	})}<\/script>`}
 </svelte:head>
 
 <search class="relative space-y-ch {className}">
