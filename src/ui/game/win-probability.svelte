@@ -1,16 +1,22 @@
 <script lang="ts">
+	import { colorSchemeStore } from '$ui/store.svelte'
+	import type { HTMLAttributes } from 'svelte/elements'
+
 	let {
 		winProbability,
 		boxscore,
 		linescore,
+		hoveredAtBatIndex,
+		class: className,
 	}: {
 		winProbability: MLB.PlayWinProbability[]
 		boxscore?: MLB.Boxscore
 		linescore?: MLB.Linescore
-	} = $props()
+		hoveredAtBatIndex?: number | null
+	} & HTMLAttributes<HTMLElement> = $props()
 
 	let width = $state(0)
-	let height = $state(100)
+	let height = $state(150)
 	const padding = 2
 
 	const maxInningInData = $derived(
@@ -62,13 +68,13 @@
 		// Find index within this inning
 		let inningStartIndex = 0
 		for (let i = 0; i < index; i++) {
-			if (((winProbability[i].about?.inning ?? 1) - 1) === inning) continue
-			if (((winProbability[i].about?.inning ?? 1) - 1) < inning) inningStartIndex = i + 1
+			if ((winProbability[i].about?.inning ?? 1) - 1 === inning) continue
+			if ((winProbability[i].about?.inning ?? 1) - 1 < inning) inningStartIndex = i + 1
 		}
 		// Count from the first point of this inning
 		let firstInThisInning = index
 		for (let i = index; i >= 0; i--) {
-			if (((winProbability[i].about?.inning ?? 1) - 1) === inning) firstInThisInning = i
+			if ((winProbability[i].about?.inning ?? 1) - 1 === inning) firstInThisInning = i
 			else break
 		}
 		const indexInInning = index - firstInThisInning
@@ -107,6 +113,35 @@
 		return d
 	})
 
+	const hoveredDataIndex = $derived(
+		hoveredAtBatIndex != null
+			? winProbability.findIndex((d) => d.about.atBatIndex === hoveredAtBatIndex)
+			: -1,
+	)
+
+	const highlightPathData = $derived(() => {
+		if (hoveredDataIndex < 1) return ''
+
+		const points = winProbability.map((d, i) => ({
+			x: dataIndexToX(i),
+			y: (d.homeTeamWinProbability / 100) * height,
+		}))
+
+		const i = hoveredDataIndex
+		const p0 = points[i - 2] ?? points[i - 1]
+		const p1 = points[i - 1]
+		const p2 = points[i]
+		const p3 = points[i + 1] ?? points[i]
+
+		const tension = 6
+		const cp1x = p1.x + (p2.x - p0.x) / tension
+		const cp1y = p1.y + (p2.y - p0.y) / tension
+		const cp2x = p2.x - (p3.x - p1.x) / tension
+		const cp2y = p2.y - (p3.y - p1.y) / tension
+
+		return `M ${p1.x},${p1.y} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`
+	})
+
 	const inningDividers = $derived(() => {
 		const { startXs, halfInningStarts } = inningLayout()
 		const result = []
@@ -127,7 +162,7 @@
 	})
 </script>
 
-<figure class="grid px-ch *:col-span-full *:row-span-full" bind:clientWidth={width}>
+<figure class="grid px-ch *:col-span-full *:row-span-full {className}" bind:clientWidth={width}>
 	<figcaption
 		class="mr-auto grid grid-cols-2 text-center text-[xx-small] text-current/25 uppercase sm:text-xs"
 		style:writing-mode="vertical-rl"
@@ -184,5 +219,17 @@
 			stroke-linecap="round"
 			stroke-linejoin="round"
 		/>
+
+		{#if highlightPathData()}
+			<path
+				d={highlightPathData()}
+				fill="none"
+				stroke={colorSchemeStore.colorScheme === 'dark' ? 'currentColor' : 'var(--color-green-500)'}
+				stroke-width="4"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				opacity="0.85"
+			/>
+		{/if}
 	</svg>
 </figure>

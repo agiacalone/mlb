@@ -6,6 +6,7 @@
 		fetchWinProbability,
 	} from '$lib/fetch/presets'
 	import { formatDate } from '$lib/temporal'
+	import AllPlays from '$ui/game/all-plays.svelte'
 	import Boxscore from '$ui/game/boxscore.svelte'
 	import Decision from '$ui/game/decision.svelte'
 	import GameData from '$ui/game/game-data.svelte'
@@ -57,10 +58,13 @@
 
 	const awayTeam = $derived(boxscore?.teams.away.team ?? game?.teams?.away?.team)
 	const homeTeam = $derived(boxscore?.teams.home.team ?? game?.teams?.home?.team)
+
+	let hoveredAtBatIndex = $state<number | null>(null)
 </script>
 
 <svelte:head>
 	<link rel="preconnect" href="https://mlb-cuts-diamond.mlb.com" />
+
 	{#if awayTeam && homeTeam && game}
 		{@html `<script type="application/ld+json">${JSON.stringify({
 			'@context': 'https://schema.org',
@@ -118,13 +122,20 @@
 			</div>
 		{/if}
 
-		{#if Array.isArray(winProbability)}
-			<article>
-				<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
+		<article class="grid gap-lh md:grid-cols-[2fr_1fr]">
+			{#if Array.isArray(winProbability)}
+				<div class="grow space-y-ch">
+					<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
+					<WinProbability {winProbability} {boxscore} {linescore} {hoveredAtBatIndex} />
+				</div>
+			{/if}
 
-				<WinProbability {winProbability} {boxscore} {linescore} />
-			</article>
-		{/if}
+			<AllPlays
+				plays={feedLive?.liveData?.plays}
+				{winProbability}
+				onPlayHover={(i) => { hoveredAtBatIndex = i }}
+			/>
+		</article>
 	{/if}
 
 	<article
