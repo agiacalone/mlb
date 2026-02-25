@@ -6,13 +6,13 @@
 
 	let {
 		buttons = true,
-		value = $bindable(),
+		value = $bindable(getToday().toISOString().split('T')[0]),
 		min = '1876-01',
 		onchange,
 		...props
 	}: {
 		buttons?: boolean
-		value: string
+		value?: string
 		onchange?: HTMLAttributes<HTMLInputElement>['onchange']
 	} & HTMLInputAttributes = $props()
 

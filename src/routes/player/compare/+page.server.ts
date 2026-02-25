@@ -15,6 +15,9 @@ export const actions = {
 			['season,seasonAdvanced', 'projected'].includes(type) && `season=${formData.get('season')}`,
 			['byDateRange'].includes(type) &&
 				`startDate=${formData.get('startDate')},endDate=${formData.get('endDate')}`,
+			['vsTeam'].includes(type) &&
+				formData.get('opposingTeamId') &&
+				`opposingTeamId=${formData.get('opposingTeamId')}`,
 		]
 			.filter(Boolean)
 			.join(',')
@@ -28,6 +31,7 @@ export const actions = {
 		return {
 			entries: {
 				...Object.fromEntries(formData.entries()),
+				group: formData.get('group') as string,
 				stats: allStats,
 			},
 			results,

@@ -4,15 +4,16 @@
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
 	import { formatDate, getToday } from '$lib/temporal'
 	import { compareStore } from '$ui/compare/store.svelte'
-	import MonthPicker from '$ui/stats/month-picker.svelte'
 	import SeasonPicker from '$ui/stats/season-picker.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
+
+	// MLB API inconsistency: `name` from /baseballStats doesn't always match the actual JSON key
+	const STAT_KEY: Record<string, string> = { strikeouts: 'strikeOuts' }
 
 	let form = $state<HTMLFormElement | null>(null)
 
 	const PARAMETERS = {
 		season: { displayName: 'season' },
-		month: { displayName: 'month' },
 		date: {
 			displayName: 'date',
 			type: 'date',
@@ -20,6 +21,7 @@
 			min: '1901-01-01',
 			max: `${getToday().getFullYear() + 1}-12-31`,
 		},
+		vsTeam: { displayName: 'opposingTeamId' },
 	} as Record<string, HTMLAttributes<HTMLInputElement> & { displayName?: string }>
 
 	const TYPES: {
@@ -46,12 +48,7 @@
 				{ ...PARAMETERS.date, displayName: 'endDate' },
 			],
 		},
-		{
-			displayName: 'byMonth',
-			label: 'By month',
-			parameters: [PARAMETERS.month],
-		},
-		{ displayName: 'vsTeam', label: 'vs Team' },
+		{ displayName: 'vsTeam', label: 'vs Team', parameters: [PARAMETERS.vsTeam] },
 	]
 
 	let selectedGroup = $state<MLB.StatGroupRef['displayName']>('hitting')
@@ -129,7 +126,7 @@
 										class="shrink-0"
 										name="stats"
 										type="checkbox"
-										value={isCounting ? name || lookupParam : lookupParam || name}
+										value={STAT_KEY[name] ?? (isCounting ? name || lookupParam : lookupParam || name)}
 									/>
 
 									<span>
@@ -173,7 +170,22 @@
 							onchange={() => form?.requestSubmit()}
 						/>
 					{:else if displayName === 'month'}
-						<MonthPicker class="justify-start" name={displayName} onchange={() => form?.requestSubmit()} />
+						<select class="button" name={displayName}>
+							{#each Array.from({ length: 12 }, (_, i) => i + 1) as m (m)}
+								<option value={m}>
+									{new Date(2000, m - 1).toLocaleString('en-US', { month: 'long' })}
+								</option>
+							{/each}
+						</select>
+					{:else if displayName === 'opposingTeamId'}
+						{#await fetchMLB<MLB.TeamsResponse>( '/api/v1/teams', { sportId: '1', fields: ['teams,id,name,abbreviation'] }, ) then { teams }}
+							<select class="button" name={displayName}>
+								<option value="">All teams</option>
+								{#each teams.sort((a, b) => a.name.localeCompare(b.name)) as t (t.id)}
+									<option value={t.id}>{t.abbreviation ?? t.name}</option>
+								{/each}
+							</select>
+						{/await}
 					{:else}
 						<label>
 							<input class="button" name={displayName} {...props} />

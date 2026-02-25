@@ -20,15 +20,16 @@
 	)
 
 	let selectedStats = $derived(form?.entries.stats.split(','))
+	let selectedGroup = $derived(form?.entries.group as string)
 
 	function combineStats(stats: MLB.PlayerStats[]) {
 		return Object.assign({}, ...(stats?.flatMap((s) => s.splits.map((s) => s.stat)) ?? []))
 	}
 
-	function bestValue(stat: string, values: (string | number)[]) {
+	function bestValue(stat: string, group: string, values: (string | number)[]) {
 		const nums = values.map(Number).filter((n) => !isNaN(n))
 		if (!nums.length) return undefined
-		return LOWER_IS_BETTER.has(stat) ? Math.min(...nums) : Math.max(...nums)
+		return LOWER_IS_BETTER[group]?.has(stat) ? Math.min(...nums) : Math.max(...nums)
 	}
 
 	$effect(() => {
@@ -85,6 +86,7 @@
 					{#each selectedStats as stat}
 						{@const bestStat = bestValue(
 							stat,
+							selectedGroup,
 							people?.map((p) => combineStats(p.stats)[stat]) ?? [],
 						)}
 						{@const value = combineStats(stats)[stat]}

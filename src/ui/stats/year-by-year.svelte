@@ -114,7 +114,7 @@
 		return d
 	})
 
-	const lowerIsBetter = $derived(LOWER_IS_BETTER.has(key))
+	const lowerIsBetter = $derived(LOWER_IS_BETTER[group]?.has(key) ?? false)
 
 	const maxPoint = $derived(
 		scaledPoints.reduce(

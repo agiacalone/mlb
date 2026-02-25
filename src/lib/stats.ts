@@ -1,16 +1,40 @@
-export const LOWER_IS_BETTER = new Set([
-	'balks',
-	'caughtStealing',
-	'era',
-	'errors',
-	'groundIntoDoublePlay',
-	'hitBatsmen',
-	'leftOnBase',
-	'losses',
-	'passedBall',
-	'whip',
-	'wildPitches',
-])
+export const LOWER_IS_BETTER: Record<string, Set<string>> = {
+	hitting: new Set([
+		'atBatsPerHomeRun',
+		'caughtStealing',
+		'groundIntoDoublePlay',
+		'groundIntoDoublePlays',
+		'groundIntoTriplePlays',
+		'leftOnBase',
+		'strikeOuts',
+	]),
+	pitching: new Set([
+		'balks',
+		'bequeathedRunners',
+		'bequeathedRunnersScored',
+		'blownSaves',
+		'cera',
+		'earnedRun',
+		'era',
+		'hitBatsman',
+		'hits',
+		'homeRuns',
+		'inheritedRunnerScored',
+		'losses',
+		'numberOfBalls',
+		'pitchesPerPlateAppearance',
+		'runs',
+		'walks',
+		'walksPerPlateAppearance',
+		'whip',
+		'wildPitches',
+	]),
+	fielding: new Set([
+		'errors',
+		'passedBalls',
+		'throwingErrors',
+	]),
+}
 
 export const ENABLED_BASEBALL_STATS = new Set([
 	'airOuts',
