@@ -25,31 +25,33 @@
 	])
 </script>
 
-<div
-	class="mb-auto flex snap-x snap-mandatory overflow-x-auto pb-[.25ch] *:min-w-full *:snap-start *:snap-always *:px-[.25ch]"
-	style:grid-area="matchup"
->
-	{#if !isMiddleOrEnd}
-		<div>
-			{@render player(
-				{ type: 'pitcher', person: pitcher, side: pitchHand },
-				`P:${pitching?.numberOfPitches ?? 0}`,
-			)}
-			{@render player({ type: 'batter', person: batter, side: batSide }, batting?.summary)}
-			<CurrentPitch {liveGame} />
-		</div>
-	{/if}
+{#key `${pitcher?.id}-${batter?.id}`}
+	<div
+		class="mb-auto flex snap-x snap-mandatory overflow-x-auto pb-[.25ch] *:min-w-full *:snap-start *:snap-always *:px-[.25ch]"
+		style:grid-area="matchup"
+	>
+		{#if !isMiddleOrEnd}
+			<div>
+				{@render player(
+					{ type: 'pitcher', person: pitcher, side: pitchHand },
+					`P:${pitching?.numberOfPitches ?? 0}`,
+				)}
+				{@render player({ type: 'batter', person: batter, side: batSide }, batting?.summary)}
+				<CurrentPitch {liveGame} />
+			</div>
+		{/if}
 
-	{#each lineups as { batter: nextUp, onDeck, inHole }}
-		<div>
-			{#if nextUp && onDeck && inHole}
-				{@render player({ type: 'batter', person: nextUp }, 'Next up')}
-				{@render player({ type: 'batter', person: onDeck }, 'On deck')}
-				{@render player({ type: 'batter', person: inHole }, 'In the hole')}
-			{/if}
-		</div>
-	{/each}
-</div>
+		{#each lineups as { batter: nextUp, onDeck, inHole }}
+			<div>
+				{#if nextUp && onDeck && inHole}
+					{@render player({ type: 'batter', person: nextUp }, 'Next up')}
+					{@render player({ type: 'batter', person: onDeck }, 'On deck')}
+					{@render player({ type: 'batter', person: inHole }, 'In the hole')}
+				{/if}
+			</div>
+		{/each}
+	</div>
+{/key}
 
 {#snippet player(
 	{
