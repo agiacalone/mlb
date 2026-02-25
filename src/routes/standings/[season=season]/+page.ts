@@ -10,13 +10,13 @@ export const load: PageLoad = async ({ params, url }) => {
 	const standings = await fetchMLB<MLB.StandingsResponse>('/api/v1/standings', {
 		leagueId,
 		season: params.season,
+		standingsType,
 		hydrate: 'division,team',
 		fields: [
-			'records,division,nameShort,league,id,name',
+			'records,division,nameShort,league,springLeague,id,name',
 			'teamRecords,wins,losses,winningPercentage,sportGamesBack,magicNumber,streak,streakCode,leagueRank',
 			'team,id,name,clubName,teamName,abbreviation',
 		],
-		standingsType,
 	})
 
 	return {

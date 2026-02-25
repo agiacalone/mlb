@@ -64,13 +64,13 @@
 				{#each grouped as { player, items } (player)}
 					{#if player}
 						<optgroup label={player}>
-							{#each items as { index, title } (title)}
+							{#each items as { index, title } (index)}
 								<option value={index}>{title}</option>
 							{/each}
 						</optgroup>
 					{:else}
 						<optgroup label="Other">
-							{#each items as { index, title } (title)}
+							{#each items as { index, title } (index)}
 								<option value={index}>{title}</option>
 							{/each}
 						</optgroup>
