@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { fetchWeekTransactions } from '$lib/fetch/presets'
-	import { formatDate, slash } from '$lib/temporal'
+	import { formatDate, getToday, slash } from '$lib/temporal'
 	import Empty from '$ui/empty.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
@@ -44,6 +44,10 @@
 			<details class="accordion" open>
 				<summary class="sticky-below-header z-1 backdrop-blur-xs">
 					{formatDate(slash(date), { weekday: 'short', month: 'short', day: 'numeric' })}
+
+					{#if formatDate(slash(date)) === formatDate(getToday())}
+						<small class="text-accent">Today</small>
+					{/if}
 				</summary>
 
 				<TransactionList
