@@ -61,17 +61,17 @@ export const fetchfeedLive = createFetcher<[gamePk: string | number], MLB.LiveGa
 	(gamePk) => ({
 		endpoint: `/api/v1.1/game/${gamePk}/feed/live`,
 		params: {
-			// fields: [
-			// 	'gamePk,gameData,liveData',
-			// 	'players,fullName,lastName',
-			// 	'gameInfo,attendance,gameDurationMinutes',
-			// 	'weather,condition,temp,wind',
-			// 	'teams,home,away',
-			// 	'linescore,currentInning,scheduledInnings,innings,num,runs,hits,errors,leftOnBase',
-			// 	'boxscore,position,abbreviation,topPerformers,type,player,boxscoreName,stats,batting,pitching,summary',
-			// 	'decisions,winner,loser,save,id',
-			// 	'plays,allPlays,result,description',
-			// ],
+			fields: [
+				'gamePk,gameData,liveData',
+				'players,fullName,lastName',
+				'gameInfo,attendance,gameDurationMinutes',
+				'weather,condition,temp,wind',
+				'teams,home,away',
+				'linescore,currentInning,scheduledInnings,innings,num,runs,hits,errors,leftOnBase',
+				'boxscore,position,abbreviation,topPerformers,type,player,boxscoreName,stats,batting,pitching,summary',
+				'decisions,winner,loser,save,id',
+				'plays,allPlays,result,description,about,inning,isTopInning,atBatIndex,isScoringPlay,runnerIndex,count,outs',
+			],
 		},
 	}),
 )
@@ -109,7 +109,8 @@ export const fetchWinProbability = createFetcher<
 >((gamePk) => ({
 	endpoint: `/api/v1/game/${gamePk}/winProbability`,
 	params: {
-		fields: 'result,about,inning,isTopInning,isScoringPlay,atBatIndex,halfInning,homeTeamWinProbability,awayTeamWinProbability,homeTeamWinProbabilityAdded',
+		fields:
+			'result,about,inning,isTopInning,isScoringPlay,atBatIndex,halfInning,homeTeamWinProbability,awayTeamWinProbability,homeTeamWinProbabilityAdded',
 	},
 }))
 

@@ -122,7 +122,7 @@
 			</div>
 		{/if}
 
-		<article class="grid gap-lh md:grid-cols-[2fr_1fr]">
+		<article class="grid gap-y-lh md:grid-cols-[2fr_1fr]">
 			{#if Array.isArray(winProbability)}
 				<div class="grow space-y-ch">
 					<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
@@ -130,11 +130,13 @@
 				</div>
 			{/if}
 
-			<AllPlays
-				plays={feedLive?.liveData?.plays}
-				{winProbability}
-				onPlayHover={(i) => { hoveredAtBatIndex = i }}
-			/>
+			{#if ['Live', 'Final'].includes(game?.status?.abstractGameState)}
+				<AllPlays
+					plays={feedLive?.liveData?.plays}
+					{winProbability}
+					onPlayHover={(i) => (hoveredAtBatIndex = i)}
+				/>
+			{/if}
 		</article>
 	{/if}
 
