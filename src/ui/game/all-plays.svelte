@@ -49,6 +49,19 @@
 
 		return groups
 	})
+
+	let container: HTMLDivElement | undefined = $state(undefined)
+
+	$effect(() => {
+		if (container && plays?.allPlays.length) {
+			setTimeout(() => {
+				container?.scrollTo({
+					top: container.scrollHeight,
+					behavior: 'smooth',
+				})
+			}, 100)
+		}
+	})
 </script>
 
 <div
@@ -69,7 +82,7 @@
 	</fieldset>
 
 	{#if groupedPlays.length}
-		<div class="h-[12lh] overflow-y-auto">
+		<div class="h-[12lh] overflow-y-auto" bind:this={container}>
 			{#each groupedPlays as group (group.key)}
 				<div
 					data-has-scoring={group.hasScoring ? '' : undefined}
