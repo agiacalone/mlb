@@ -79,8 +79,8 @@
 									<small
 										class={cn(
 											'order-first @max-[10ch]/team:text-[xx-small]',
-											isDarkOnLightTeam(team) && 'dark:text-dark',
-											isLightOnDarkTeam(team) && 'dark:text-light',
+											isDarkOnLightTeam(opponent) && 'dark:text-dark',
+											isLightOnDarkTeam(opponent) && 'dark:text-light',
 										)}
 									>
 										{teams.home.team.id === team.id ? 'vs' : '@'}
