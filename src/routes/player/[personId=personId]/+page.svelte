@@ -1,13 +1,12 @@
 <script lang="ts">
 	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
-	import Empty from '$ui/empty.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
+	import HotColdZonesList from '$ui/player/hot-cold-zones-list.svelte'
 	import PlayerInfo from '$ui/player/player-info.svelte'
 	import RosterEntries from '$ui/player/roster-entries.svelte'
-	import HotColdZones from '$ui/stats/hot-cold-zones.svelte'
 	import YearByYearList from '$ui/stats/year-by-year-list.svelte'
 	import type { PageProps } from './$types'
 
@@ -82,7 +81,7 @@
 	{/snippet}
 </Header>
 
-<div class="space-y-lh">
+<div class="space-y-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
 	<section class="space-y-lh">
 		<header class="grid items-center gap-y-ch md:grid-cols-2">
 			<figure class="max-md:mask-b-from-25% md:mask-r-from-50%">
@@ -124,33 +123,20 @@
 			</label>
 		</nav>
 
-		<article class="group/yby">
-			<h2 class="text-center text-sm text-current/50 group-has-data-empty/yby:hidden">
-				Year-by-year Stats
-			</h2>
-			<YearByYearList {person} />
-		</article>
+		<div
+			class="grid items-start gap-[2lh] md:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
+		>
+			<article class="group/yby">
+				<h2 class="text-center text-sm text-current/50 group-has-data-empty/yby:hidden">
+					Year-by-year Stats
+				</h2>
+				<YearByYearList {person} />
+			</article>
 
-		<article data-group="pitching">
-			{#if data.hittingHotColdZones}
-				<HotColdZones
-					hotColdZones={data.hittingHotColdZones}
-					baseballStats={data.baseballStats}
-					data-group="hitting"
-				/>
-			{/if}
-			{#if data.pitchingHotColdZones}
-				<HotColdZones
-					hotColdZones={data.pitchingHotColdZones}
-					baseballStats={data.baseballStats}
-					data-group="pitching"
-				/>
-			{/if}
-
-			{#if !data.hittingHotColdZones && !data.pitchingHotColdZones}
-				<Empty>No hot/cold zones data</Empty>
-			{/if}
-		</article>
+			<article class="space-y-lh" data-group="pitching">
+				<HotColdZonesList {person} baseballStats={data.baseballStats} />
+			</article>
+		</div>
 	</section>
 </div>
 

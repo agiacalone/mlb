@@ -54,7 +54,7 @@
 		},
 		{
 			href: '/player',
-			label: 'Player',
+			label: 'Players',
 			icon: HelmetIcon,
 		},
 		{
