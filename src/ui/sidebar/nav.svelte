@@ -18,6 +18,7 @@
 	import CompareList from './compare-list.svelte'
 	import Drawer from './drawer.svelte'
 	import FavoritesList from './favorites-list.svelte'
+	import GameCount from './game-count.svelte'
 	import SpoilerPreventionList from './spoiler-prevention-list.svelte'
 	import ToggleColorScheme from './toggle-color-scheme.svelte'
 
@@ -95,15 +96,24 @@
 		</div>
 
 		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
-			{#each internalLinks.filter(({ disabled }) => !disabled) as { href, label, icon } (href)}
+			{#each internalLinks.filter(({ disabled }) => !disabled) as { href, label, icon: Icon } (href)}
 				<li>
 					<a
 						{href}
-						class="relative flex items-center gap-ch py-px hover-link"
+						class="group/link relative flex items-center gap-ch py-px"
 						class:active={page.route.id?.startsWith(href)}
 					>
-						<svelte:component this={icon} />
-						<span class="sm:sidebar-closed-hidden">{label}</span>
+						<Icon />
+
+						<span
+							class="grow decoration-dashed group-hover/link:underline sm:sidebar-closed-hidden"
+						>
+							{label}
+						</span>
+
+						{#if href === '/schedule/day'}
+							<GameCount />
+						{/if}
 					</a>
 				</li>
 			{/each}
@@ -114,10 +124,10 @@
 			<li><FavoritesList /></li>
 			<li><SpoilerPreventionList /></li>
 			<li><ToggleColorScheme /></li>
-			{#each externalLinks as { href, label, icon } (href)}
+			{#each externalLinks as { href, label, icon: Icon } (href)}
 				<li class="sm:sidebar-not-open:hidden">
 					<a class="flex items-center gap-ch hover-link" {href}>
-						<svelte:component this={icon} />
+						<Icon />
 						<span>{label}</span>
 					</a>
 				</li>
