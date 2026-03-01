@@ -52,8 +52,10 @@
 
 	let container: HTMLDivElement | undefined = $state(undefined)
 
+	const playCount = $derived(plays?.allPlays.length ?? 0)
+
 	$effect(() => {
-		if (container && plays?.allPlays.length) {
+		if (container && playCount) {
 			setTimeout(() => {
 				container?.scrollTo({
 					top: container.scrollHeight,
