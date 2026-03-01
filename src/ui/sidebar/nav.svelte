@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment'
 	import { page } from '$app/state'
 	import { version } from '$pkg'
 	import {
@@ -13,7 +14,6 @@
 		JerseyIcon,
 		JsonIcon,
 		RankIcon,
-		RobotIcon,
 	} from '$ui/icons'
 	import type { Component } from 'svelte'
 	import CompareList from './compare-list.svelte'
@@ -26,6 +26,7 @@
 		href: string
 		label: string
 		icon: Component
+		disabled?: boolean
 	}[] = [
 		{
 			href: '/schedule/day',
@@ -67,15 +68,11 @@
 			label: 'Random',
 			icon: DiceIcon,
 		},
-		// {
-		// 	href: '/chat',
-		// 	label: 'Ask Mitch',
-		// 	icon: RobotIcon,
-		// },
 		{
 			href: '/api/v1',
 			label: 'Stats API Playground',
 			icon: JsonIcon,
+			disabled: !dev,
 		},
 	]
 
@@ -104,7 +101,7 @@
 		</div>
 
 		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
-			{#each internalLinks as { href, label, icon } (href)}
+			{#each internalLinks.filter(({ disabled }) => !disabled) as { href, label, icon } (href)}
 				<li>
 					<a
 						{href}

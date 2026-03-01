@@ -276,7 +276,13 @@
 		</a>
 	</th>
 
-	<th class="relative w-[3ch] min-w-[3ch] text-xs text-current/50" style:--team-bg={bg}>
+	<th
+		class={cn('relative w-[3ch] min-w-[3ch] text-xs text-current/50', {
+			'dark:text-dark/50': isDarkOnLightTeam(team),
+			'dark:text-light/50': isLightOnDarkTeam(team),
+		})}
+		style:--team-bg={bg}
+	>
 		{position?.abbreviation}
 	</th>
 

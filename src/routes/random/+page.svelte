@@ -1,6 +1,7 @@
 <script lang="ts">
 	import GameSlide from '$ui/doom-scroll/game-slide.svelte'
-	import Slide from '$ui/doom-scroll/slide.svelte'
+	import PlayerSlide from '$ui/doom-scroll/player-slide.svelte'
+	import TeamSlide from '$ui/doom-scroll/team-slide.svelte'
 	import Loading from '$ui/loading.svelte'
 	import { tick, untrack } from 'svelte'
 	import type { PageProps } from './$types'
@@ -57,58 +58,9 @@
 
 	{#each items as entity, index (entity.type === 'game' ? `game-${entity.gamePk}` : `${entity.type}-${entity.id}`)}
 		{#if entity.type === 'team'}
-			<Slide
-				{entity}
-				title={entity.name}
-				{index}
-				total={items.length}
-				{fetchBackward}
-				{fetchForward}
-			>
-				{#snippet content()}
-					<p>
-						{[
-							entity.franchiseName,
-							entity.franchiseName !== entity.locationName && entity.locationName,
-						]
-							.filter(Boolean)
-							.join(', ')}
-					</p>
-					{#if !entity.active}<p>(Inactive)</p>{/if}
-				{/snippet}
-			</Slide>
+			<TeamSlide {entity} {index} total={items.length} {fetchBackward} {fetchForward} />
 		{:else if entity.type === 'player'}
-			<Slide
-				{entity}
-				title={entity.fullName}
-				{index}
-				total={items.length}
-				{fetchBackward}
-				{fetchForward}
-			>
-				<img
-					class="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-600"
-					src="https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:action:hero:current.jpg/w_1600,q_auto:best/v1/people/{entity.id}/action/hero/current"
-					width={1600}
-					height={533}
-					alt=""
-					draggable="false"
-					loading="eager"
-					fetchpriority="high"
-					onload={(e) => {
-						e.currentTarget.classList.remove('opacity-0')
-						e.currentTarget.classList.add('opacity-50')
-					}}
-				/>
-
-				{#snippet content()}
-					{#if entity.primaryPosition?.abbreviation}<p>
-							{entity.primaryPosition.abbreviation}
-						</p>{/if}
-					{#if entity.currentTeam?.name}<p>{entity.currentTeam.name}</p>{/if}
-					{#if !entity.active}<p>(Inactive)</p>{/if}
-				{/snippet}
-			</Slide>
+			<PlayerSlide {entity} {index} total={items.length} {fetchBackward} {fetchForward} />
 		{:else if entity.type === 'game'}
 			<GameSlide {entity} {index} total={items.length} {fetchBackward} {fetchForward} />
 		{/if}
