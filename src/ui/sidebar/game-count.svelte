@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { fetchMLB } from '$lib/fetch'
+	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { formatDate, getToday } from '$lib/temporal'
 
 	const date = formatDate(getToday(), { locale: 'en-CA' })
 
-	async function fetchGameCount() {
-		return await fetchMLB<MLB.ScheduleResponse>('/api/v1/schedule', {
-			sportId: '1',
-			date,
-			fields: ['totalGames,dates,games,status,abstractGameState'],
-			hydrate: 'teams,flags,linescore',
-		})
-	}
+	const schedule = fetchLiveMLB<MLB.ScheduleResponse>('/api/v1/schedule', {
+		sportId: '1',
+		date,
+		fields: ['totalGames,dates,games,status,abstractGameState'],
+		hydrate: 'teams,flags,linescore',
+	})
 </script>
 
-{#await fetchGameCount() then { totalGames, dates }}
+{#if schedule.data}
+	{@const { totalGames, dates } = schedule.data}
 	{@const liveGames =
 		dates[0]?.games.filter((g) => g.status.abstractGameState === 'Live').length ?? 0}
 
@@ -30,4 +29,4 @@
 			<span class="text-current/50">{totalGames}</span>
 		</small>
 	{/if}
-{/await}
+{/if}
