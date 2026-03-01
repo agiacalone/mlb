@@ -15,10 +15,11 @@
 	const { first, second, third } = $derived(linescore?.offense ?? {})
 
 	const runners = $derived(
-		runnerIndex
+		runnerIndex.length
 			? Array.from({ length: 3 }, (_, i) => runnerIndex.includes(i + 1) || undefined)
 			: [first, second, third].map((r) => r?.fullName),
 	)
+
 	const isTopOrBottom = $derived(['Top', 'Bottom'].includes(linescore?.inningState ?? ''))
 </script>
 
