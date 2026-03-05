@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { fetchMLB } from '$lib/fetch'
 	import { formatDate, getToday } from '$lib/temporal'
-	import Banner from '$ui/banner.svelte'
+	import Awards from '$ui/banner/awards.svelte'
+	import WBC from '$ui/banner/wbc.svelte'
 	import Baseball from '$ui/baseball.svelte'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ChevronRightIcon, StarEmptyIcon } from '$ui/icons'
@@ -50,9 +51,9 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 />
 
 <div
-	class="flex min-h-[calc(100dvh-1ch)] flex-col justify-center gap-[2lh] pb-[max(2lh,env(safe-area-inset-bottom))]"
+	class="flex min-h-[calc(100dvh-1ch)] flex-col justify-center gap-[2lh] pt-[2lh] pb-[max(2lh,env(safe-area-inset-bottom))]"
 >
-	<Banner />
+	<WBC />
 
 	<div class="my-auto flex flex-col gap-[inherit] px-ch">
 		<header class="space-y-ch">
@@ -112,6 +113,8 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 			</section>
 		</div>
 	</div>
+
+	<Awards />
 </div>
 
 {#snippet link({ href, label }: { href: string; label: string })}

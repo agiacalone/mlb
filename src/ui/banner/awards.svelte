@@ -3,7 +3,7 @@
 </script>
 
 <aside
-	class="group/banner relative isolate mt-[1.5lh] flex flex-wrap items-center justify-center gap-x-lh gap-y-ch p-ch text-center leading-tight text-balance text-yellow-700 before:bg-amber-300/25 dark:text-amber-300"
+	class="group/banner relative isolate flex flex-wrap items-center justify-center gap-x-lh gap-y-ch p-ch text-center leading-tight text-balance text-yellow-700 before:bg-amber-300/25 dark:text-amber-300"
 >
 	<p>
 		<em>CSS Design Awards</em> —

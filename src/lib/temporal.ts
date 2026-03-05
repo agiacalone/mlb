@@ -1,4 +1,4 @@
-export function getToday(timeZone?: 'America/Los_Angeles') {
+export function getToday(timeZone: string = 'America/Los_Angeles') {
 	const dateStr = new Intl.DateTimeFormat('en-CA', { timeZone }).format(new Date())
 	return new Date(dateStr.replace(/-/g, '/'))
 }
