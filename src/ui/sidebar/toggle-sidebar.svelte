@@ -3,7 +3,7 @@
 	import { afterNavigate } from '$app/navigation'
 	import { SidebarIcon } from '$ui/icons'
 
-	let checked = $derived(browser ? localStorage.getItem('sidebar-open') === 'true' : false)
+	let checked = $derived(browser ? localStorage.getItem('sidebar-open') === 'true' : true)
 	let isMobile = $state(false)
 
 	function handleIconClick(e: MouseEvent) {
@@ -44,7 +44,7 @@
 	}}
 	onresize={() => {
 		isMobile = window.matchMedia('(width < 40rem)').matches
-		if (isMobile) checked = false
+		checked = !isMobile
 	}}
 />
 
