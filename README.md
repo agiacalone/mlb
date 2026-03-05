@@ -15,10 +15,8 @@ $$ | \_/ $$ |$$$$$$$$\ $$$$$$$  |
 
 ## Screenshots
 
-- https://mlb.theohtani.com/schedule
-
-Weekly schedule view:
-![Weekly schedule view](/static/screenshots/week.png)
+Schedule view (with live data):
+![game view](/static/screenshots/schedule.png)
 
 Game details view:
 ![Game details view](/static/screenshots/game.png)
