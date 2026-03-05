@@ -30,7 +30,7 @@
 	let lastPointerY = 0
 	let lastPointerTime = 0
 
-	let asciiFrame = $state('')
+	let asciiFrame = $state<{ char: string; isSeam: boolean }[][]>([])
 	let charVectors: { char: string; vec: number[] }[] = []
 	let quantCache = new Map<number, string>()
 
@@ -136,7 +136,7 @@
 
 	// --- Single ray → lightness ---
 
-	function computeLightness(u: number, v: number): number {
+	function computeLightness(u: number, v: number): { lightness: number; isSeam: boolean } {
 		const RADIUS = 0.9
 		const lightDir: Vec3 = normalize([0.15, 0.25, -1])
 		const viewDir: Vec3 = [0, 0, -1]
@@ -145,7 +145,7 @@
 		const c = u * u + v * v + rayOz * rayOz - RADIUS * RADIUS
 		const disc = rayOz * rayOz - c
 
-		if (disc < 0) return 0
+		if (disc < 0) return { lightness: 0, isSeam: false }
 
 		const t = -rayOz - Math.sqrt(disc)
 		const hit: Vec3 = [u, v, rayOz + t]
@@ -169,11 +169,13 @@
 		// Seam
 		const sd = seamDistance(rp)
 		const seamW = 0.16
+		const seamColorW = isDark ? 0.08 : seamW
+		const isSeam = sd < seamColorW
 		const seamBase = isDark ? 0.1 : 0.3
-		const seamFactor = sd < seamW ? seamBase + (1 - seamBase) * (sd / seamW) : 1.0
+		const seamFactor = isSeam ? seamBase + (1 - seamBase) * (sd / seamW) : 1.0
 
 		const lightness = Math.min(1, (0.4 + diffuse * 0.5 + spec + rim) * seamFactor)
-		return isDark ? lightness * 0.5 : 1 - lightness
+		return { lightness: isDark ? lightness * 0.5 : 1 - lightness, isSeam }
 	}
 
 	// --- Pre-compute character shape vectors ---
@@ -271,8 +273,8 @@
 
 	// --- Render a full frame ---
 
-	function renderFrame(): string {
-		if (cols <= 0 || rows <= 0) return ''
+	function renderFrame(): { char: string; isSeam: boolean }[][] {
+		if (cols <= 0 || rows <= 0) return []
 
 		const subOffsets: [number, number][] = [
 			[-0.25, -0.3],
@@ -283,23 +285,25 @@
 			[0.25, 0.3],
 		]
 
-		const lines: string[] = []
+		const lines: { char: string; isSeam: boolean }[][] = []
 
 		for (let row = 0; row < rows; row++) {
-			let line = ''
+			const line: { char: string; isSeam: boolean }[] = []
 			for (let col = 0; col < cols; col++) {
-				const cellVec = subOffsets.map(([du, dv]) => {
+				const samples = subOffsets.map(([du, dv]) => {
 					const u = ((col + 0.5 + du) / cols) * 2 - 1
 					const v = -(((row + 0.5 + dv) / rows) * 2 - 1)
 					return computeLightness(u, v)
 				})
 
-				line += findChar(cellVec)
+				const cellVec = samples.map((s) => s.lightness)
+				const isSeam = samples.some((s) => s.isSeam)
+				line.push({ char: findChar(cellVec), isSeam })
 			}
 			lines.push(line)
 		}
 
-		return lines.join('\n')
+		return lines
 	}
 
 	// --- Lifecycle ---
@@ -403,5 +407,9 @@
 		{onpointermove}
 		{onpointerup}
 		role="img"
-		aria-label="Interactive 3D baseball rendered in ASCII art">{asciiFrame}</pre>
+		aria-label="Interactive 3D baseball rendered in ASCII art"><span
+			>{#each asciiFrame as line, i}{#each line as { char, isSeam }}{#if isSeam}<span
+							class="text-red-700 dark:text-red-300">{char}</span
+						>{:else}{char}{/if}{/each}{#if i < asciiFrame.length - 1}{'\n'}{/if}{/each}</span
+		></pre>
 </figure>
