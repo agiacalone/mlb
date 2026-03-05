@@ -4,13 +4,9 @@ export function isDarkOnLightTeam(team?: MLB.Team) {
 	return (
 		[
 			'Asheville Tourists',
-			'Miami Marlins',
 			'Minnesota Golden Gophers',
-			'San Diego Padres',
-			'San Francisco Giants',
 			'Sugar Land Space Cowboys',
 			'Sultanes de Monterrey',
-			'Tampa Bay Rays',
 		].includes(team.name) ||
 		[16, 17, 22, 23, 51].includes((team as MLB.TeamDetailed).sport?.id ?? 1)
 	)

@@ -106,9 +106,7 @@
 			position: absolute;
 			inset: 0;
 			z-index: -1;
-			background-image: var(--team-bg);
-			background-size: 1500% 1500%;
-			background-position: 50% 5%;
+			background: var(--team-bg) 50% 5% / 1000% 4500% no-repeat;
 		}
 
 		@apply not-dark:before:opacity-10;

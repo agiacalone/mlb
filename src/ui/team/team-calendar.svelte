@@ -23,6 +23,7 @@
 				'dates,date',
 				'games,gamePk,gameDate',
 				'teams,home,away,team,id,name,clubName,teamName,abbreviation',
+				'sport',
 			],
 			hydrate: 'team',
 		})
