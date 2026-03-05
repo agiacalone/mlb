@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
+	import Logo from '$ui/team/logo.svelte'
 	import BaseRunners from './base-runners.svelte'
 	import Outs from './outs.svelte'
 
 	let {
+		awayTeam,
+		homeTeam,
+		status,
 		plays,
 		winProbability,
 		onPlayHover,
 	}: {
+		awayTeam?: MLB.Team
+		homeTeam?: MLB.Team
+		status?: MLB.GameStatus
 		plays?: MLB.Plays
 		winProbability?: MLB.PlayWinProbability[]
 		onPlayHover?: (atBatIndex: number | null) => void
@@ -73,12 +80,17 @@
 >
 	<fieldset class="flex flex-wrap gap-x-ch border-b border-stroke px-ch py-[.5ch]">
 		<label>
-			<input name="plays" type="radio" checked />
+			<input name="plays" type="radio" checked={status?.abstractGameState === 'Live'} />
 			All plays
 		</label>
 
 		<label>
-			<input name="plays" value="scoring" type="radio" />
+			<input
+				name="plays"
+				value="scoring"
+				type="radio"
+				checked={status?.abstractGameState === 'Final'}
+			/>
 			Scoring
 		</label>
 	</fieldset>
@@ -91,9 +103,16 @@
 					class="group-has-[[value='scoring']:checked]/plays:not-data-has-scoring:hidden"
 				>
 					<div
-						class="sticky top-0 z-1 px-ch py-[.5ch] text-[10px] font-medium tracking-wide text-current/40 uppercase backdrop-blur-xs"
+						class="sticky top-0 z-1 flex gap-ch border-b border-stroke px-ch py-[.5ch] text-[10px] font-medium tracking-wide uppercase backdrop-blur-xs"
 					>
-						{group.label}
+						{#if awayTeam && homeTeam}
+							<Logo
+								class="size-lh shrink-0"
+								team={group.label.includes('Top') ? awayTeam : homeTeam}
+							/>
+						{/if}
+
+						<span class="text-current/40">{group.label}</span>
 					</div>
 
 					<ol class="px-ch">
@@ -101,7 +120,7 @@
 							{@const wp = wpByAtBatIndex.get(about.atBatIndex)}
 
 							<li
-								class="flex anim-fade items-center gap-ch border-t border-dashed border-stroke py-[.5ch] leading-tight group-has-[[value='scoring']:checked]/plays:not-data-scoring:hidden group-not-has-[[value='scoring']:checked]/plays:data-scoring:positive group-not-has-[[value='scoring']:checked]/plays:data-scoring:dark:text-accent"
+								class="flex anim-fade items-center gap-ch border-dashed border-stroke py-[.5ch] leading-tight group-has-[[value='scoring']:checked]/plays:not-data-scoring:hidden group-not-has-[[value='scoring']:checked]/plays:data-scoring:positive group-not-has-[[value='scoring']:checked]/plays:data-scoring:dark:text-accent [&+&]:border-t"
 								data-scoring={about.isScoringPlay ? '' : undefined}
 								onmouseenter={() => about.isScoringPlay && onPlayHover?.(about.atBatIndex)}
 							>

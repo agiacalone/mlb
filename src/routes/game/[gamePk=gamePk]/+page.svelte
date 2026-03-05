@@ -132,6 +132,9 @@
 
 			{#if ['Live', 'Final'].includes(game?.status?.abstractGameState)}
 				<AllPlays
+					{awayTeam}
+					{homeTeam}
+					status={game?.status}
 					plays={feedLive?.liveData?.plays}
 					{winProbability}
 					onPlayHover={(i) => (hoveredAtBatIndex = i)}
