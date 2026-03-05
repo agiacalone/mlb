@@ -69,7 +69,7 @@
 				})}
 
 				{#if formatDate(slash(date.date)) === formatDate(getToday())}
-					<small class="text-accent">Today</small>
+					<small class="not-dark:positive dark:text-accent">Today</small>
 				{/if}
 
 				<a class="ml-auto link" href={maintainSearchParams(`/schedule/day/${date.date}`)}>

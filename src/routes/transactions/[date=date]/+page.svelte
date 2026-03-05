@@ -46,7 +46,7 @@
 					{formatDate(slash(date), { weekday: 'short', month: 'short', day: 'numeric' })}
 
 					{#if formatDate(slash(date)) === formatDate(getToday())}
-						<small class="text-accent">Today</small>
+						<small class="not-dark:positive dark:text-accent">Today</small>
 					{/if}
 				</summary>
 
