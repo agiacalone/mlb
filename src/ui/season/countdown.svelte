@@ -32,7 +32,7 @@
 </script>
 
 {#if timeDiff > 0}
-	<article class="text-center">
+	<article class="relative text-center">
 		<div class="flex grow items-baseline justify-center text-3xl">
 			{#each ['days', 'hr', 'min', 'sec'] as part, i}
 				{@const value = duration[i]}
@@ -68,7 +68,9 @@
 
 		{#if until}
 			<p>
-				until <a class="hover-link" href={href || `/schedule/day/${date}`}>{until}</a>
+				until <a class="hover-link" href={href || `/schedule/day/${date}`}
+					>{until} <span class="absolute inset-0"></span></a
+				>
 			</p>
 		{/if}
 	</article>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatDate, getToday, slash } from '$lib/temporal'
 	import { cn } from '$lib/utils'
+	import { ChevronRightIcon } from '$ui/icons'
 
 	let { season, bordered }: { season: MLB.SeasonDateInfo; bordered?: boolean } = $props()
 </script>
@@ -13,9 +14,12 @@
 			<dl class="mx-auto description-list max-w-max tabular-nums">
 				{#if season.seasonId === getToday().getFullYear().toString()}
 					<dt>Today's games</dt>
-					<dd class="*:positive *:link *:dark:text-accent">
+					<dd class="inline-flex max-w-max items-center gap-[.5ch] positive link dark:text-accent">
 						{@render linkedDate(formatDate(getToday(), { locale: 'en-CA' }), 'day')}
+						<ChevronRightIcon class="size-[.8lh]" />
 					</dd>
+
+					<hr class="col-span-full my-ch border-dashed border-stroke" />
 				{/if}
 
 				<dt>Spring Training</dt>

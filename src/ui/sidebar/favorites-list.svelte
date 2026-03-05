@@ -56,6 +56,14 @@
 			{/each}
 		</ul>
 	{:else}
-		<div class="text-center text-current/40">No favorites</div>
+		<div
+			class="relative border border-dashed border-stroke p-ch text-center text-xs whitespace-normal text-current/40"
+		>
+			<p>No favorites.</p>
+			<p>
+				<a class="link" href="/teams">Favorite a team <span class="absolute inset-0"></span></a>
+				to get started.
+			</p>
+		</div>
 	{/if}
 </details>

@@ -4,7 +4,7 @@
 	import Banner from '$ui/banner.svelte'
 	import Baseball from '$ui/baseball.svelte'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
-	import { ChevronRightIcon } from '$ui/icons'
+	import { ChevronRightIcon, StarEmptyIcon } from '$ui/icons'
 	import Metadata from '$ui/metadata.svelte'
 	import Calendar from '$ui/schedule/calendar.svelte'
 	import CountdownList from '$ui/season/countdown-list.svelte'
@@ -63,8 +63,9 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 				<p class="ml-auto">.TheOhtani.com</p>
 			</h1>
 
-			<p class="text-center text-balance italic">
-				Track MLB games, explore stats, and query the Stats API, all in one app.
+			<p class="text-center text-balance italic [&_a]:decoration-dashed [&_a:hover]:underline">
+				<a href="/schedule/day">Track MLB games</a>, <a href="/stats">explore stats</a>, and
+				<a href="/api/v1">query the Stats API</a>, all in one app.
 			</p>
 
 			<Baseball class="mx-auto my-[-5lh] mb-[-8lh] w-[300px] text-[8px]" />
@@ -91,6 +92,14 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 				{:else}
 					<h2 class="text-center h1">Calendar</h2>
 					<Calendar class="border-t border-stroke" />
+					<div
+						class="flex items-center justify-center gap-[.5ch] text-center text-sm text-current/50"
+					>
+						<StarEmptyIcon class="size-lh shrink-0" />
+						<p class="text-left">
+							<a class="link" href="/teams"> Favorite a team </a> to view their schedule.
+						</p>
+					</div>
 				{/if}
 			</section>
 
