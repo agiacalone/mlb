@@ -4,7 +4,7 @@
 	import { ENABLED_BASEBALL_STATS } from '$lib/stats'
 	import { formatDate, getToday } from '$lib/temporal'
 	import { compareStore } from '$ui/compare/store.svelte'
-	import SeasonPicker from '$ui/stats/season-picker.svelte'
+	import SelectSeason from '$ui/stats/select-season.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
 
 	// MLB API inconsistency: `name` from /baseballStats doesn't always match the actual JSON key
@@ -126,7 +126,8 @@
 										class="shrink-0"
 										name="stats"
 										type="checkbox"
-										value={STAT_KEY[name] ?? (isCounting ? name || lookupParam : lookupParam || name)}
+										value={STAT_KEY[name] ??
+											(isCounting ? name || lookupParam : lookupParam || name)}
 									/>
 
 									<span>
@@ -164,7 +165,7 @@
 					<legend>{displayName}</legend>
 
 					{#if displayName === 'season'}
-						<SeasonPicker
+						<SelectSeason
 							class="justify-start"
 							name={displayName}
 							onchange={() => form?.requestSubmit()}

@@ -9,7 +9,7 @@
 	import Game from '$ui/game/game.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import DatePicker from '$ui/schedule/date-picker.svelte'
+	import SelectDate from '$ui/schedule/select-date.svelte'
 	import SeasonInfo from '$ui/season/season-info.svelte'
 	import SeasonProgress from '$ui/season/season-progress.svelte'
 	import SelectSport from '$ui/select-sport.svelte'
@@ -74,7 +74,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
 			<SelectSport class="button text-center" />
-			<DatePicker date={currentDate} onchange={onDateChange} class="mx-auto" />
+			<SelectDate date={currentDate} onchange={onDateChange} class="mx-auto" />
 		</div>
 	{/snippet}
 </Header>

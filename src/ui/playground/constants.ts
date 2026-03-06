@@ -3,7 +3,7 @@ import { getToday } from '$lib/temporal'
 export const HOST = 'https://statsapi.mlb.com'
 
 const today = getToday()
-const offset = Number(today.getMonth() <= 2) // after March
+const offset = Number(today.getMonth() <= 1) // after February
 const currentYear = today.getFullYear() - offset
 const past_N_years = (n = 5) => Array.from({ length: n }, (_, i) => currentYear - n + i + 1)
 
@@ -46,6 +46,7 @@ export const PRESETS = {
 	season: [
 		{ value: currentYear.toString(), label: currentYear.toString() },
 		{ value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
+		{ value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
 	],
 	seasons: [
 		{ value: currentYear.toString(), label: currentYear.toString() },
@@ -67,6 +68,7 @@ export const PRESETS = {
 	year: [
 		{ value: currentYear.toString(), label: currentYear.toString() },
 		{ value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
+		{ value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
 	],
 	date: [
 		{ value: today.toISOString().split('T')[0], label: 'Today' },

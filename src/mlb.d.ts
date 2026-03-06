@@ -1700,6 +1700,13 @@ declare global {
 		// League/Division/Sport Types
 
 		/**
+		 * Leagues response
+		 */
+		interface LeaguesResponse extends ApiResponse<League[]> {
+			leagues: League[]
+		}
+
+		/**
 		 * League information
 		 */
 		interface League {

@@ -17,9 +17,10 @@
 				year: 'numeric',
 			})}
 			({formatDate(game.gameDate, {
-				weekday: 'long',
+				weekday: 'short',
 			})})
 		</a>
+		@ {formatDate(game.gameDate, { hour: 'numeric', minute: '2-digit' })}
 	</dd>
 
 	{#if game.description}

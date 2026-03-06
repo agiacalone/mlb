@@ -3,7 +3,7 @@
 	import { cn } from '$lib/utils'
 	import type { Snippet } from 'svelte'
 	import type { HTMLAttributes, HTMLInputAttributes } from 'svelte/elements'
-	import MonthPickerWithYear from './month-picker-with-year.svelte'
+	import SelectMonthWithYear from './select-month-with-year.svelte'
 
 	let {
 		class: className,
@@ -43,7 +43,7 @@
 </script>
 
 <div class={className}>
-	<MonthPickerWithYear bind:value={selected} {buttons} {onchange} {...inputProps} />
+	<SelectMonthWithYear bind:value={selected} {buttons} {onchange} {...inputProps} />
 
 	<table class="w-full table-fixed text-center">
 		<thead class="text-sm">

@@ -10,7 +10,7 @@
 	import Game from '$ui/game/game.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import WeekPicker from '$ui/schedule/week-picker.svelte'
+	import SelectWeek from '$ui/schedule/select-week.svelte'
 	import SeasonInfo from '$ui/season/season-info.svelte'
 	import SelectSport from '$ui/select-sport.svelte'
 	import ToggleAllDetails from '$ui/toggle-all-details.svelte'
@@ -52,7 +52,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
 			<SelectSport class="button text-center" />
-			<WeekPicker date={currentDate} onchange={onDateChange} />
+			<SelectWeek date={currentDate} onchange={onDateChange} />
 			<ToggleAllDetails />
 		</div>
 	{/snippet}
@@ -69,7 +69,7 @@
 				})}
 
 				{#if formatDate(slash(date.date)) === formatDate(getToday())}
-					<small class="not-dark:positive dark:text-accent">Today</small>
+					<small class="dark:text-accent not-dark:positive">Today</small>
 				{/if}
 
 				<a class="ml-auto link" href={maintainSearchParams(`/schedule/day/${date.date}`)}>

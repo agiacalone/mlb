@@ -4,7 +4,7 @@
 	import Empty from '$ui/empty.svelte'
 	import Loading from '$ui/loading.svelte'
 	import HotColdZones from '$ui/stats/hot-cold-zones.svelte'
-	import SeasonPicker from '$ui/stats/season-picker.svelte'
+	import SelectSeason from '$ui/stats/select-season.svelte'
 
 	let { person, baseballStats }: { person: MLB.Person; baseballStats: MLB.BaseballStat[] } =
 		$props()
@@ -32,7 +32,7 @@
 	}
 </script>
 
-<SeasonPicker
+<SelectSeason
 	name="season"
 	onchange={(e) => {
 		season = e.currentTarget.value

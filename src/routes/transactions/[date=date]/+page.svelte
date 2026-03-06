@@ -6,7 +6,7 @@
 	import Empty from '$ui/empty.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
-	import WeekPicker from '$ui/schedule/week-picker.svelte'
+	import SelectWeek from '$ui/schedule/select-week.svelte'
 	import SelectTeam from '$ui/select-team.svelte'
 	import ToggleAllDetails from '$ui/toggle-all-details.svelte'
 	import TransactionList from '$ui/transactions/transaction-list.svelte'
@@ -32,7 +32,7 @@
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center justify-center gap-ch text-center">
 			<SelectTeam class="button grow" />
-			<WeekPicker class="grow" date={currentDate} onchange={onDateChange} href="/transactions" />
+			<SelectWeek class="grow" date={currentDate} onchange={onDateChange} href="/transactions" />
 			<ToggleAllDetails />
 		</div>
 	{/snippet}
@@ -46,7 +46,7 @@
 					{formatDate(slash(date), { weekday: 'short', month: 'short', day: 'numeric' })}
 
 					{#if formatDate(slash(date)) === formatDate(getToday())}
-						<small class="not-dark:positive dark:text-accent">Today</small>
+						<small class="dark:text-accent not-dark:positive">Today</small>
 					{/if}
 				</summary>
 

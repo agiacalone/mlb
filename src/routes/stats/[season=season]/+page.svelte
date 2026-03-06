@@ -4,11 +4,11 @@
 	import { isDarkOnLightTeam, isLightOnDarkTeam } from '$lib/colors'
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
-	import GameTypePicker from '$ui/game-type-picker.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
-	import SeasonPicker from '$ui/stats/season-picker.svelte'
+	import SelectGameType from '$ui/select-game-type.svelte'
+	import SelectSeason from '$ui/stats/select-season.svelte'
 	import type { PageProps } from './$types'
 
 	let { data }: PageProps = $props()
@@ -87,8 +87,8 @@
 >
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
-			<GameTypePicker class="button text-center" />
-			<SeasonPicker
+			<SelectGameType class="button text-center" />
+			<SelectSeason
 				onchange={(e) =>
 					goto(`/stats/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
 			/>
