@@ -3,12 +3,14 @@
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { StarEmptyIcon, StarIcon } from '$ui/icons'
 	import posthog from 'posthog-js'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
 		target,
+		class: className,
 	}: {
 		target: App.Favorite
-	} = $props()
+	} & HTMLAttributes<HTMLInputElement> = $props()
 
 	let checked = $derived(favoritesStore.has(target.href))
 
@@ -22,7 +24,7 @@
 </script>
 
 <label
-	class="group/fav text-current/50 transition-colors *:size-lh has-checked:text-accent"
+	class="group/fav text-current/50 transition-colors *:size-lh has-checked:text-accent {className}"
 	title="Toggle favorite"
 >
 	<input class="sr-only" type="checkbox" value={target.href} {checked} onchange={toggle} />

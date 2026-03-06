@@ -3,12 +3,14 @@
 	import { EyeIcon, EyeOffIcon } from '$ui/icons'
 	import { spoilerPreventionStore } from '$ui/spoiler-prevention/store.svelte'
 	import posthog from 'posthog-js'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
 		team,
+		class: className,
 	}: {
 		team: App.SpoilerPrevention
-	} = $props()
+	} & HTMLAttributes<HTMLInputElement> = $props()
 
 	let checked = $derived(spoilerPreventionStore.has(team.id))
 
@@ -22,7 +24,7 @@
 </script>
 
 <label
-	class="group/spoiler text-current/50 transition-colors *:size-lh has-checked:text-accent"
+	class="group/spoiler text-current/50 transition-colors *:size-lh has-checked:text-accent {className}"
 	title="Toggle spoiler prevention"
 >
 	<input class="sr-only" type="checkbox" value={team.id} {checked} onchange={toggle} />

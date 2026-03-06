@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
+	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import SelectSport from '$ui/select-sport.svelte'
+	import ToggleSpoilerPrevention from '$ui/spoiler-prevention/toggle-spoiler-prevention.svelte'
 	import Logo from '$ui/team/logo.svelte'
 	import ToggleAllDetails from '$ui/toggle-all-details.svelte'
 	import type { PageProps } from './$types'
@@ -69,8 +71,8 @@
 						{/if}
 
 						{#each divisionTeams?.sort( (a, b) => a.name.localeCompare(b.name), ) ?? [] as team (team.id)}
-							<dd class="[&:has(+dt)]:mb-ch">
-								<a class="group/team flex items-center gap-ch" href="/teams/{team.id}">
+							<dd class="flex items-center gap-ch [&:has(+dt)]:mb-ch">
+								<a class="group/team flex grow items-center gap-ch" href="/teams/{team.id}">
 									<Logo class="size-lh" {team} />
 
 									<span
@@ -79,6 +81,15 @@
 										{team.name}
 									</span>
 								</a>
+
+								<ToggleSpoilerPrevention
+									class="shrink-0"
+									team={{ id: team.id, abbreviation: team.abbreviation! }}
+								/>
+								<ToggleFavorite
+									class="shrink-0"
+									target={{ href: `/teams/${team.id}`, label: team.abbreviation! }}
+								/>
 							</dd>
 						{/each}
 					{/each}
