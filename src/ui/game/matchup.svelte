@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
-	import { BallIcon, BatIcon } from '$ui/icons'
 	import Headshot from '$ui/player/headshot.svelte'
 	import CurrentPitch from './current-pitch.svelte'
 
@@ -33,10 +32,10 @@
 		{#if !isMiddleOrEnd}
 			<div>
 				{@render player(
-					{ type: 'pitcher', person: pitcher, side: pitchHand },
+					{ person: pitcher, side: pitchHand },
 					`P:${pitching?.numberOfPitches ?? 0}`,
 				)}
-				{@render player({ type: 'batter', person: batter, side: batSide }, batting?.summary)}
+				{@render player({ person: batter, side: batSide }, batting?.summary)}
 				<CurrentPitch {liveGame} />
 			</div>
 		{/if}
@@ -44,9 +43,9 @@
 		{#each lineups as { batter: nextUp, onDeck, inHole }}
 			<div>
 				{#if nextUp && onDeck && inHole}
-					{@render player({ type: 'batter', person: nextUp }, 'Next up')}
-					{@render player({ type: 'batter', person: onDeck }, 'On deck')}
-					{@render player({ type: 'batter', person: inHole }, 'In the hole')}
+					{@render player({ person: nextUp }, 'Next up')}
+					{@render player({ person: onDeck }, 'On deck')}
+					{@render player({ person: inHole }, 'In the hole')}
 				{/if}
 			</div>
 		{/each}
@@ -55,11 +54,9 @@
 
 {#snippet player(
 	{
-		type,
 		person,
 		side,
 	}: {
-		type: 'pitcher' | 'batter'
 		person: MLB.Person
 		side?: MLB.PitchHand | MLB.BatSide
 	},
@@ -73,18 +70,14 @@
 				<Headshot {person} class="size-lh" />
 
 				{#if side?.code}
-					<span
-						class={cn('absolute bottom-0 drop-shadow-sm drop-shadow-background *:size-[.4lh]', {
-							'right-0': side?.code === 'L',
-							'left-0': side?.code === 'R',
-						})}
+					<small
+						class={cn(
+							'absolute bottom-0 grid aspect-square w-lh place-content-center rounded-full bg-foreground text-[6px] font-bold text-background',
+							side?.code === 'L' ? 'right-0' : 'left-0',
+						)}
 					>
-						{#if type === 'pitcher'}
-							<BallIcon />
-						{:else if type === 'batter'}
-							<BatIcon />
-						{/if}
-					</span>
+						{side.code}
+					</small>
 				{/if}
 			</span>
 
