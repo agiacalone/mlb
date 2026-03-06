@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
+	import { isDarkOnLightTeam, isLightOnDarkTeam } from '$lib/colors'
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
 	import GameTypePicker from '$ui/game-type-picker.svelte'
@@ -59,7 +60,10 @@
 <Header title="Standings" crumbs={[{ name: 'Standings' }]}>
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
-			<GameTypePicker class="button text-center" />
+			<GameTypePicker
+				class="button text-center"
+				options={[{ value: 'wbc', label: 'World Baseball Classic' }]}
+			/>
 			<SeasonPicker
 				onchange={(e) =>
 					goto(`/standings/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
@@ -74,8 +78,8 @@
 			<h2 class="px-ch text-sm text-current/50">{name}</h2>
 			<div
 				class={cn('grid items-start gap-[2lh]', {
-					'sm:grid-cols-2 lg:grid-cols-3': records.length > 2,
-					'sm:grid-cols-2': records.length === 2,
+					'sm:grid-cols-2 lg:grid-cols-3': records.length > 4 || records.length === 3,
+					'sm:grid-cols-2': records.length === 4 || records.length === 2,
 				})}
 			>
 				{#each records.sort(sortOrder) as { division, teamRecords }, i (division?.id ?? i)}
@@ -95,7 +99,12 @@
 						<tbody>
 							{#each teamRecords as { team, wins, losses, winningPercentage, sportGamesBack, streak, leagueRank } (team.id)}
 								<tr class="hover:[&>td]:bg-foreground/10">
-									<td class="sticky left-0 min-w-lh @min-[8ch]:min-w-[3.5ch]">
+									<td
+										class={cn('sticky left-0 min-w-lh @min-[8ch]:min-w-[3.5ch]', {
+											'dark:text-dark': isDarkOnLightTeam(team),
+											'dark:text-light': isLightOnDarkTeam(team),
+										})}
+									>
 										<StyledTeam class="text-left" {team} linked />
 									</td>
 									<td class="flex justify-center tabular-nums">

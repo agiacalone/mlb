@@ -4,14 +4,17 @@
 
 	let {
 		class: className,
+		options = [],
 	}: {
 		class?: string
+		options?: { value: string; label: string }[]
 	} = $props()
 
-	const GAME_TYPES = [
+	const GAME_TYPES = $derived([
 		{ value: 'R', label: 'Regular Season' },
 		{ value: 'S', label: 'Spring Training' },
-	]
+		...options,
+	])
 
 	let gameType = $derived(page.url.searchParams.get('gameType') ?? 'R')
 </script>
