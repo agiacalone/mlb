@@ -92,7 +92,22 @@
 <Drawer>
 	<div class="flex h-full flex-col gap-ch">
 		<div class="sm:sidebar-closed-hidden">
-			<a href="/"><strong>MLB</strong>.TheOhtani.com</a>
+			<a class="flex items-center gap-ch" href="/">
+				<figure class="relative size-4">
+					<img
+						class="absolute top-1/2 left-1/2 size-lh min-w-max -translate-1/2 rounded object-cover"
+						src="/favicons/favicon-48x48.png"
+						alt=""
+						width={48}
+						height={48}
+						loading="eager"
+						draggable="false"
+					/>
+				</figure>
+				<div>
+					<strong>MLB</strong><small>.TheOhtani.com</small>
+				</div>
+			</a>
 		</div>
 
 		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
