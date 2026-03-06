@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { formatDate, slash } from '$lib/temporal'
-	import { compareStore } from '$ui/compare/store.svelte'
-	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
 
 	let { person }: { person: MLB.Person } = $props()
 </script>
@@ -31,7 +29,7 @@
 			})}
 
 			<small class="inline-block text-current/50">
-				({person.currentAge} years old)
+				(Age: {person.currentAge})
 			</small>
 		</dd>
 	{/if}
@@ -40,6 +38,19 @@
 		<dt>Birth City</dt>
 		<dd>
 			{person.birthCity}, {person.birthCountry}
+		</dd>
+	{/if}
+
+	{#if person.mlbDebutDate}
+		<dt>MLB Debut</dt>
+		<dd>
+			<a class="link" href="/schedule/day/{person.mlbDebutDate}">
+				{formatDate(slash(person.mlbDebutDate), {
+					month: 'long',
+					day: 'numeric',
+					year: 'numeric',
+				})}
+			</a>
 		</dd>
 	{/if}
 </dl>

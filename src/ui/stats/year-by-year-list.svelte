@@ -87,7 +87,7 @@
 			{/each}
 		{/if}
 	{:else}
-		<Empty data-empty>No year-by-year data</Empty>
+		<Empty data-empty>No year-by-year stats</Empty>
 	{/each}
 </div>
 

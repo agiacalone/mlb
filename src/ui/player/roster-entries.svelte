@@ -2,8 +2,14 @@
 	import { formatDate, slash } from '$lib/temporal'
 	import ChevronRight from '$ui/icons/chevron-right.svelte'
 	import Logo from '$ui/team/logo.svelte'
+	import type { HTMLAttributes } from 'svelte/elements'
 
-	let { rosterEntries }: { rosterEntries: MLB.Roster[] } = $props()
+	let {
+		rosterEntries,
+		class: className,
+	}: {
+		rosterEntries: MLB.Roster[]
+	} & HTMLAttributes<HTMLOListElement> = $props()
 
 	function format(date: string) {
 		return [
@@ -13,7 +19,7 @@
 	}
 </script>
 
-<ol class="mx-auto flex max-w-max gap-ch overflow-x-auto px-ch pt-[.5lh]">
+<ol class="flex gap-ch {className}">
 	{#each rosterEntries.filter((entry) => !entry.team.parentOrgId) as { jerseyNumber, team, isActive, startDate, endDate } (team.id)}
 		{@const src = `https://midfield.mlbstatic.com/v1/team/${team.id}/spots`}
 		{@const startDateFormatted = startDate ? format(startDate) : undefined}

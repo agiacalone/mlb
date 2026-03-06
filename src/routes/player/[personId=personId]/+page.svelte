@@ -3,6 +3,7 @@
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
+	import Draft from '$ui/player/draft.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
 	import HotColdZonesList from '$ui/player/hot-cold-zones-list.svelte'
 	import PlayerInfo from '$ui/player/player-info.svelte'
@@ -18,6 +19,7 @@
 			preferredTeam?: { team: MLB.Team }
 			stats: MLB.PlayerStats[]
 			rosterEntries: MLB.Roster[]
+			drafts: MLB.DraftPick[]
 		},
 	)
 
@@ -105,8 +107,11 @@
 	</section>
 
 	{#if person.rosterEntries}
-		<section>
-			<RosterEntries rosterEntries={person.rosterEntries} />
+		<section
+			class="flex items-start gap-ch overflow-x-auto px-ch pt-[.5lh] before:m-auto after:m-auto"
+		>
+			<RosterEntries class="contents!" rosterEntries={person.rosterEntries} />
+			<Draft {person} />
 		</section>
 	{/if}
 
