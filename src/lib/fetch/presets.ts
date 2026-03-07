@@ -70,7 +70,7 @@ export const fetchfeedLive = createFetcher<[gamePk: string | number], MLB.LiveGa
 				'linescore,currentInning,scheduledInnings,innings,num,runs,hits,errors,leftOnBase',
 				'boxscore,position,abbreviation,topPerformers,type,player,boxscoreName,stats,batting,pitching,summary',
 				'decisions,winner,loser,save,id',
-				'plays,allPlays,result,description,about,inning,isTopInning,atBatIndex,isScoringPlay,runnerIndex,count,outs,awayScore,homeScore',
+				'plays,allPlays,result,description,about,inning,isTopInning,atBatIndex,isScoringPlay,runnerIndex,count,balls,strikes,outs,awayScore,homeScore',
 			],
 		},
 	}),

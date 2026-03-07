@@ -134,6 +134,7 @@
 				<AllPlays
 					{awayTeam}
 					{homeTeam}
+					{linescore}
 					status={game?.status}
 					plays={feedLive?.liveData?.plays}
 					onPlayHover={(i) => (hoveredAtBatIndex = i)}

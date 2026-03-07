@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { cn, count } from '$lib/utils'
+	import { cn } from '$lib/utils'
 
 	let {
+		count,
 		linescore,
 		className,
+		hideLabels = false,
 	}: {
+		count: MLB.Count
 		linescore?: MLB.Linescore
 		className?: string
+		hideLabels?: boolean
 	} = $props()
 
 	const isMiddleOrEnd = $derived(['Middle', 'End'].includes(linescore?.inningState ?? ''))
@@ -16,6 +20,7 @@
 	class={cn(
 		'mx-auto mb-auto grid grid-cols-[auto_1fr] gap-[.25ch] leading-none',
 		isMiddleOrEnd && '[&_dt]:opacity-40',
+		hideLabels && '[&_abbr]:hidden',
 		className,
 	)}
 	class:opacity-25={isMiddleOrEnd}
@@ -32,7 +37,11 @@
 </dl>
 
 {#snippet indicators(key: string, max: number, color: string = 'var(--color-accent)')}
-	{@const value = isMiddleOrEnd ? 0 : ((linescore?.[key as keyof MLB.Linescore] ?? 0) as number)}
+	{@const value = isMiddleOrEnd
+		? 0
+		: (count?.[key as keyof MLB.Count] ??
+			((linescore?.[key as keyof MLB.Linescore] ?? 0) as number))}
+
 	<dd class="flex items-center gap-[inherit]">
 		{#each Array.from({ length: max }) as _, i (`${value} ${i}`)}
 			<span

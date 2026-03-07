@@ -3,17 +3,20 @@
 	import Empty from '$ui/empty.svelte'
 	import Logo from '$ui/team/logo.svelte'
 	import BaseRunners from './base-runners.svelte'
+	import BSO from './bso.svelte'
 	import Outs from './outs.svelte'
 
 	let {
 		awayTeam,
 		homeTeam,
+		linescore,
 		status,
 		plays,
 		onPlayHover,
 	}: {
 		awayTeam?: MLB.Team
 		homeTeam?: MLB.Team
+		linescore?: MLB.Linescore
 		status?: MLB.GameStatus
 		plays?: MLB.Plays
 		onPlayHover?: (atBatIndex: number | null) => void
@@ -118,7 +121,7 @@
 							>
 								<div class="shrink-0 py-[.5ch] text-[5px]">
 									<BaseRunners {runnerIndex} />
-									<Outs {count} class="-mt-px" />
+									<BSO {count} hideLabels />
 								</div>
 
 								<p class="grow">{result.description}</p>
