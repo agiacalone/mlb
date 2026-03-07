@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment'
 	import { page } from '$app/state'
+	import { formatDate, getToday } from '$lib/temporal'
 	import { version } from '$pkg'
 	import {
 		ArrowsDiffIcon,
@@ -13,6 +14,7 @@
 		JerseyIcon,
 		JsonIcon,
 		RankIcon,
+		WBCIcon,
 	} from '$ui/icons'
 	import type { Component } from 'svelte'
 	import CompareList from './compare-list.svelte'
@@ -111,26 +113,15 @@
 		</div>
 
 		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
-			{#each internalLinks.filter(({ disabled }) => !disabled) as { href, label, icon: Icon } (href)}
-				<li>
-					<a
-						{href}
-						class="group/link relative flex items-center gap-ch py-px"
-						class:active={page.route.id?.startsWith(href)}
-					>
-						<Icon />
+			{@render navLink({
+				class: '[&_img]:size-4 positive',
+				href: `/schedule/day/${formatDate(getToday(), { locale: 'en-CA' })}?sportId=51`,
+				label: 'WBC Schedule',
+				icon: WBCIcon,
+			})}
 
-						<span
-							class="grow decoration-dashed group-hover/link:underline sm:sidebar-closed-hidden"
-						>
-							{label}
-						</span>
-
-						{#if href === '/schedule/day'}
-							<GameCount />
-						{/if}
-					</a>
-				</li>
+			{#each internalLinks.filter(({ disabled }) => !disabled) as link (link.href)}
+				{@render navLink(link)}
 			{/each}
 		</ul>
 
@@ -157,6 +148,33 @@
 		</small>
 	</div>
 </Drawer>
+
+{#snippet navLink({
+	class: className,
+	href,
+	label,
+	icon: Icon,
+}: (typeof internalLinks)[number] & { class?: string })}
+	<li class={className}>
+		<a
+			{href}
+			class="group/link relative flex items-center gap-ch py-px"
+			class:active={page.route.id?.startsWith(href)}
+		>
+			<Icon />
+
+			<span class="grow decoration-dashed group-hover/link:underline sm:sidebar-closed-hidden">
+				{label}
+			</span>
+
+			{#if href === '/schedule/day'}
+				<GameCount />
+			{:else if label.includes('WBC')}
+				<GameCount sportId="51" />
+			{/if}
+		</a>
+	</li>
+{/snippet}
 
 <style>
 	div :global(svg) {

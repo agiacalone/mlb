@@ -2,14 +2,18 @@
 	import { fetchLiveMLB } from '$lib/fetch/live.svelte'
 	import { formatDate, getToday } from '$lib/temporal'
 
+	let { sportId = '1' }: { sportId?: string } = $props()
+
 	const date = formatDate(getToday(), { locale: 'en-CA' })
 
-	const schedule = fetchLiveMLB<MLB.ScheduleResponse>('/api/v1/schedule', {
-		sportId: '1',
-		date,
-		fields: ['totalGames,dates,games,status,abstractGameState'],
-		hydrate: 'teams,flags,linescore',
-	})
+	const schedule = $derived(
+		fetchLiveMLB<MLB.ScheduleResponse>('/api/v1/schedule', {
+			sportId,
+			date,
+			fields: ['totalGames,dates,games,status,abstractGameState'],
+			hydrate: 'teams,linescore',
+		}),
+	)
 </script>
 
 {#if schedule.data}
