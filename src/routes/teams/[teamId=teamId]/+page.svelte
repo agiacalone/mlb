@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
+	import Divider from '$ui/divider.svelte'
 	import Empty from '$ui/empty.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
@@ -66,14 +67,14 @@
 	{/snippet}
 </Header>
 
-<section class="grid gap-[2lh] pt-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
-	<div class="space-y-ch px-ch">
-		<h2 class="h2">Schedule</h2>
+<section class="grid gap-lh pt-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
+	<div class="px-ch">
 		<TeamCalendar {team} />
 	</div>
 
 	<div class="space-y-ch">
-		<h2 class="px-rch h2">Roster</h2>
+		<Divider>Roster</Divider>
+
 		{#if data.roster.roster}
 			<div class="grid gap-y-ch md:grid-cols-[repeat(auto-fill,minmax(var(--container-xs),1fr))]">
 				<Roster roster={data.roster.roster} coaches={data.coaches.roster} />

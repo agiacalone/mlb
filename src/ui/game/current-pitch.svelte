@@ -9,24 +9,33 @@
 </script>
 
 {#key pitch?.index}
-	<div class="min-h-rlh border-dashed border-stroke text-xs" class:border-t={!!pitch}>
-		{#if pitch}
+	<div class="min-h-rlh border-dashed border-stroke text-[x-small]" class:border-t={!!pitch}>
+		{#if pitch?.details}
+			{@const { type, isBall, isStrike, isInPlay, description, call } = pitch.details}
 			<p class="flex h-rlh anim-fade-to-r items-center justify-center gap-x-ch">
 				<span
 					class={cn(
 						'inline-grid size-lh shrink-0 place-items-center rounded-full bg-foreground text-[10px] text-background',
 						{
-							'bg-accent text-dark': pitch.details?.isBall,
-							'bg-yellow-300 text-dark': pitch.details?.isStrike,
-							'bg-blue-500 text-light': pitch.details?.isInPlay,
+							'bg-accent text-dark': isBall,
+							'bg-yellow-300 text-dark': isStrike,
+							'bg-blue-500 text-light': isInPlay,
 						},
 					)}
 				>
 					{(pitch.index ?? 0) + 1}
 				</span>
 
-				{#if pitch.details?.type?.description}
-					<span class="line-clamp-1 break-all">{pitch.details?.type?.description}</span>
+				{#if type?.description}
+					<span class="line-clamp-1 break-all">
+						{#if type.description === 'Four-Seam Fastball'}
+							4-Seam Fastball
+						{:else if type.description === 'Two-Seam Fastball'}
+							2-Seam Fastball
+						{:else}
+							{type.description}
+						{/if}
+					</span>
 				{/if}
 
 				{#if pitch.pitchData?.startSpeed}
@@ -37,14 +46,15 @@
 				{/if}
 
 				<span
-					class={cn('line-clamp-1 break-all', {
-						positive: pitch.details?.isBall,
-						'text-yellow-500 dark:text-yellow-200': pitch.details?.isStrike,
-						'text-blue-500 dark:text-blue-300': pitch.details?.isInPlay,
-						'text-red-500 dark:text-red-300':
-							pitch.details?.isInPlay && pitch.details?.description.includes('out'),
-					})}>{pitch.details?.call?.description}</span
+					class={cn('shrink-0', {
+						positive: isBall,
+						'text-yellow-500 dark:text-yellow-200': isStrike,
+						'text-blue-500 dark:text-blue-300': isInPlay,
+						'text-red-500 dark:text-red-300': isInPlay && !description.includes('no out'),
+					})}
 				>
+					{call?.description}
+				</span>
 			</p>
 		{/if}
 	</div>

@@ -3,16 +3,18 @@
 	import { CollapseHorizontalIcon, ExpandHorizontalIcon } from '$ui/icons'
 	import Video from '$ui/video.svelte'
 	import { untrack } from 'svelte'
+	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
 		game: _game,
 		content,
 		theater = true,
+		class: className,
 	}: {
 		game: MLB.Game
 		content: MLB.GameContent
 		theater?: boolean
-	} = $props()
+	} & HTMLAttributes<HTMLDivElement> = $props()
 
 	let highlights = $derived(content.highlights.highlights?.items.filter((h) => h.type === 'video'))
 
@@ -53,7 +55,7 @@
 	}}
 />
 
-<article class="relative grid gap-ch text-center sm:px-ch">
+<article class="relative grid gap-ch text-center sm:px-ch {className}">
 	{#if highlights?.length}
 		<div class="flex items-center gap-ch">
 			<select
@@ -81,7 +83,6 @@
 			{#if theater}
 				<label
 					class="group/theater grid h-lh shrink-0 place-content-center not-hover:text-current/50 not-hover:transition-colors max-md:hidden"
-					hidden={!content?.media?.epgAlternate}
 					title="Theater mode (t)"
 				>
 					<input class="sr-only" id="theater-mode" type="checkbox" bind:checked={theaterMode} />

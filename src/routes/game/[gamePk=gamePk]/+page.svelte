@@ -6,6 +6,8 @@
 		fetchWinProbability,
 	} from '$lib/fetch/presets'
 	import { formatDate } from '$lib/temporal'
+	import { cn } from '$lib/utils'
+	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import AllPlays from '$ui/game/all-plays.svelte'
 	import Boxscore from '$ui/game/boxscore.svelte'
 	import Decision from '$ui/game/decision.svelte'
@@ -22,7 +24,9 @@
 	let { data, params }: PageProps = $props()
 
 	const game = $derived(data.game)
+
 	const isLive = $derived(data.game?.status?.abstractGameState === 'Live')
+	const isFinal = $derived(data.game?.status?.abstractGameState === 'Final')
 
 	const [{ data: feedLive }, { data: linescore }, { data: boxscore }, { data: winProbability }] =
 		$derived(
@@ -108,21 +112,9 @@
 	{/if}
 </Header>
 
-<section class="space-y-[2lh] py-lh">
-	{#if !isSpoilerPrevented}
-		{#if hasTopPerformers || hasDecisions}
-			<div class="flex flex-wrap items-start gap-ch px-ch *:grow">
-				{#if hasTopPerformers && feedLive}
-					<TopPerformers {feedLive} />
-				{/if}
-
-				{#if hasDecisions && feedLive}
-					<Decision {feedLive} />
-				{/if}
-			</div>
-		{/if}
-
-		<article class="grid gap-y-lh md:grid-cols-[2fr_1fr]">
+<section class="group/game-page grid gap-[2lh] py-lh md:grid-cols-2">
+	{#if !isSpoilerPrevented && Array.isArray(winProbability) && (isLive || isFinal)}
+		<article class="col-span-full grid gap-y-lh md:grid-cols-[2fr_1fr]">
 			{#if Array.isArray(winProbability)}
 				<div class="grow space-y-ch">
 					<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
@@ -130,7 +122,7 @@
 				</div>
 			{/if}
 
-			{#if ['Live', 'Final'].includes(game?.status?.abstractGameState)}
+			{#if isLive || isFinal}
 				<AllPlays
 					{awayTeam}
 					{homeTeam}
@@ -143,21 +135,63 @@
 		</article>
 	{/if}
 
-	<article
-		class="group/details grid items-center gap-y-[2lh] md:has-[#theater-mode:not(:checked)]:grid-cols-2"
-	>
-		{#if ['Live', 'Final'].includes(data.game?.status?.abstractGameState) && !isSpoilerPrevented}
-			<Highlights {game} content={data.content} />
-		{/if}
+	{#if (isLive || isFinal) && !isSpoilerPrevented}
+		<Highlights
+			class={cn(
+				'md:group-has-[#theater-mode:checked]/game-page:col-span-full',
+				isFinal && 'order-first',
+			)}
+			{game}
+			content={data.content}
+		/>
+	{/if}
 
-		{#if hasBattingOrder}
-			<Boxscore {boxscore} {isSpoilerPrevented} />
-		{/if}
-
-		{#if game && feedLive}
+	{#if game && feedLive}
+		<div
+			class={cn(
+				'm-auto px-ch md:group-not-has-[#theater-mode]/game-page:col-span-full md:group-has-[#theater-mode:checked]/game-page:col-span-full',
+				isFinal && 'order-first',
+			)}
+		>
 			<GameData {game} {feedLive} />
-		{/if}
-	</article>
+
+			<hr class="my-ch border-dashed border-stroke" />
+
+			<menu class="flex items-center justify-center gap-ch">
+				<li>
+					<ToggleFavorite
+						target={{
+							href: `/game/${game.gamePk}`,
+							label: [
+								feedLive.gameData.teams.away.abbreviation,
+								feedLive.gameData.teams.home.abbreviation,
+							].join(' @ '),
+						}}
+					>
+						Favorite
+					</ToggleFavorite>
+				</li>
+			</menu>
+		</div>
+	{/if}
+
+	{#if !isSpoilerPrevented && feedLive && (hasTopPerformers || hasDecisions)}
+		<div
+			class="col-span-full flex flex-wrap items-start gap-lh px-[2ch] *:grow *:only:mx-auto *:only:max-w-max"
+		>
+			{#if hasTopPerformers}
+				<TopPerformers {feedLive} />
+			{/if}
+
+			{#if hasDecisions}
+				<Decision {feedLive} />
+			{/if}
+		</div>
+	{/if}
+
+	{#if hasBattingOrder}
+		<Boxscore class="col-span-full" {boxscore} {isSpoilerPrevented} />
+	{/if}
 </section>
 
 <style>

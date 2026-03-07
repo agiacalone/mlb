@@ -1,13 +1,20 @@
 <script lang="ts">
 	import { formatDate } from '$lib/temporal'
-	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
+	import type { HTMLAttributes } from 'svelte/elements'
 
-	let { game, feedLive }: { game: MLB.Game; feedLive: MLB.LiveGameFeed } = $props()
+	let {
+		game,
+		feedLive,
+		class: className,
+	}: {
+		game: MLB.Game
+		feedLive: MLB.LiveGameFeed
+	} & HTMLAttributes<HTMLDListElement> = $props()
 
 	const { gameInfo, weather } = $derived(feedLive.gameData)
 </script>
 
-<dl class="mx-auto description-list max-w-max px-ch">
+<dl class="description-list max-w-max {className}">
 	<dt>Date</dt>
 	<dd>
 		<a class="link" href="/schedule/day/{formatDate(game.gameDate, { locale: 'en-CA' })}">
@@ -41,6 +48,11 @@
 		<dd>{gameInfo?.attendance?.toLocaleString()}</dd>
 	{/if}
 
+	{#if gameInfo?.firstPitch}
+		<dt>First Pitch</dt>
+		<dd>{formatDate(gameInfo?.firstPitch, { hour: 'numeric', minute: '2-digit' })}</dd>
+	{/if}
+
 	{#if gameInfo?.gameDurationMinutes}
 		{@const duration = gameInfo?.gameDurationMinutes ?? 0}
 		{@const hours = Math.floor(duration / 60)}
@@ -56,17 +68,4 @@
 			{[condition, temp && `${temp}°F`, wind && `Wind: ${wind} mph`].filter(Boolean).join(' / ')}
 		</dd>
 	{/if}
-
-	<dt>Favorite</dt>
-	<dd>
-		<ToggleFavorite
-			target={{
-				href: `/game/${game.gamePk}`,
-				label: [
-					feedLive.gameData.teams.away.abbreviation,
-					feedLive.gameData.teams.home.abbreviation,
-				].join(' @ '),
-			}}
-		/>
-	</dd>
 </dl>

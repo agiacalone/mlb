@@ -7,7 +7,7 @@
 		className,
 		hideLabels = false,
 	}: {
-		count: MLB.Count
+		count?: MLB.Count
 		linescore?: MLB.Linescore
 		className?: string
 		hideLabels?: boolean
