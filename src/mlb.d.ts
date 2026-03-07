@@ -504,6 +504,18 @@ declare global {
 			value: string
 		}
 
+		/**
+		 * Relative information
+		 */
+		interface Relative {
+			id: number
+			fullName: string
+			nameFirstLast: string
+			firstLastName: string
+			relation: sring
+			hasStats: boolean
+		}
+
 		// Game Types
 
 		/**

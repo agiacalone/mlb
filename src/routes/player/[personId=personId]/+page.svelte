@@ -21,12 +21,11 @@
 			stats: MLB.PlayerStats[]
 			rosterEntries: MLB.Roster[]
 			drafts: MLB.DraftPick[]
+			relatives: MLB.Relative[]
 		},
 	)
 
 	const team = $derived(person.active ? person.currentTeam : person.preferredTeam?.team)
-
-	const isPitcher = $derived(person.primaryPosition?.abbreviation === 'P')
 </script>
 
 <svelte:head>

@@ -16,6 +16,8 @@
 		currency: 'USD',
 		notation: 'compact',
 	})
+
+	const team = $derived(draft?.team as MLB.Team)
 </script>
 
 {#if draft}
@@ -24,7 +26,9 @@
 			Draft
 		</small>
 
-		<Logo class="size-[2lh] object-contain" team={draft.team as MLB.Team} />
+		<a href="/teams/{team.id}" class="shrink-0" aria-label={team.name}>
+			<Logo class="size-[2lh] object-contain" team={team as MLB.Team} />
+		</a>
 
 		<span>
 			<abbr class="text-xs" title="Round">Rd.</abbr>

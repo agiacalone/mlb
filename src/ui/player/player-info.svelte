@@ -1,21 +1,27 @@
 <script lang="ts">
 	import { formatDate, slash } from '$lib/temporal'
 
-	let { person }: { person: MLB.Person } = $props()
+	let {
+		person,
+	}: {
+		person: MLB.Person & {
+			relatives?: MLB.Relative[]
+		}
+	} = $props()
 </script>
 
 <dl class="mx-auto description-list max-w-max px-ch">
-	{#if person.primaryNumber}
-		<dt>Jersey Number</dt>
-		<dd>
-			#{person.primaryNumber}
-		</dd>
-	{/if}
-
 	{#if person.primaryPosition}
 		<dt>Position</dt>
 		<dd>
 			{person.primaryPosition.abbreviation}
+		</dd>
+	{/if}
+
+	{#if person.primaryNumber}
+		<dt>Jersey Number</dt>
+		<dd>
+			#{person.primaryNumber}
 		</dd>
 	{/if}
 
@@ -52,5 +58,19 @@
 				})}
 			</a>
 		</dd>
+	{/if}
+
+	{#if person.relatives}
+		<div class="contents">
+			<dt>Relatives</dt>
+			<dd class="flex flex-col items-start">
+				{#each person.relatives as { id, fullName, relation } (id)}
+					<a class="group/relative" href="/player/{id}">
+						<small class="text-current/50">{relation}</small>
+						<span class="underline group-not-hover/relative:decoration-dashed">{fullName}</span>
+					</a>
+				{/each}
+			</dd>
+		</div>
 	{/if}
 </dl>
