@@ -37,7 +37,7 @@
 
 <main
 	class="
-		isolate max-h-dvh overflow-x-clip overflow-y-auto bg-background transition-[margin,border-radius,max-height]
+		isolate no-scrollbar max-h-dvh overflow-x-clip overflow-y-auto bg-background transition-[margin,border-radius,max-height]
 		sm:sidebar-open:m-[.5ch] sm:sidebar-open:ml-0 sm:sidebar-open:max-h-[calc(100dvh-1ch)] sm:sidebar-open:rounded-md
 	"
 >

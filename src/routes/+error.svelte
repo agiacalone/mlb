@@ -14,10 +14,10 @@
 		{/if}
 
 		<div class="flex items-center justify-center gap-ch text-foreground">
-			<a class="link" href="/" data-sveltekit-reload>Return home</a>
+			<a class="link" href="/">Return home</a>
 
 			{#if page.status !== 404}
-				<a class="link" href={page.url.toString()} data-sveltekit-reload>Try again</a>
+				<a class="link" href={page.url.toString()}>Try again</a>
 			{/if}
 		</div>
 	</Empty>
