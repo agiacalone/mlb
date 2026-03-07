@@ -10,20 +10,14 @@
 		homeTeam,
 		status,
 		plays,
-		winProbability,
 		onPlayHover,
 	}: {
 		awayTeam?: MLB.Team
 		homeTeam?: MLB.Team
 		status?: MLB.GameStatus
 		plays?: MLB.Plays
-		winProbability?: MLB.PlayWinProbability[]
 		onPlayHover?: (atBatIndex: number | null) => void
 	} = $props()
-
-	const wpByAtBatIndex = $derived(
-		new Map((winProbability ?? []).map((wp) => [wp.about.atBatIndex, wp])),
-	)
 
 	function ordinal(n: number) {
 		const s = ['th', 'st', 'nd', 'rd']
@@ -112,13 +106,11 @@
 							/>
 						{/if}
 
-						<span class="text-current/40">{group.label}</span>
+						<span>{group.label}</span>
 					</div>
 
 					<ol class="px-ch">
 						{#each group.plays as { about, result, runnerIndex, count } (about.atBatIndex)}
-							{@const wp = wpByAtBatIndex.get(about.atBatIndex)}
-
 							<li
 								class="flex anim-fade items-center gap-ch border-dashed border-stroke py-[.5ch] leading-tight group-has-[[value='scoring']:checked]/plays:not-data-scoring:hidden group-not-has-[[value='scoring']:checked]/plays:data-scoring:positive group-not-has-[[value='scoring']:checked]/plays:data-scoring:dark:text-accent [&+&]:border-t"
 								data-scoring={about.isScoringPlay ? '' : undefined}
@@ -131,18 +123,31 @@
 
 								<p class="grow">{result.description}</p>
 
-								{#if about.isScoringPlay && wp}
-									{@const added = wp.homeTeamWinProbabilityAdded}
-									<span
-										class={cn(
-											'ml-1 inline-block shrink-0 px-[.5ch] text-xs font-medium tabular-nums',
-											added >= 0
-												? 'bg-accent/15 positive dark:bg-accent/25'
-												: 'bg-red-500/15 negative dark:bg-red-500/25',
-										)}
+								{#if about.isScoringPlay && awayTeam && homeTeam}
+									<div
+										class="flex shrink-0 items-center justify-center gap-x-px text-center text-xs leading-none tabular-nums *:pb-[.5ch]"
 									>
-										{added >= 0 ? '+' : ''}{added.toFixed(1)}%
-									</span>
+										<div
+											class={cn(
+												group.label.includes('Top')
+													? 'bg-accent/15 font-bold positive dark:text-accent'
+													: 'text-foreground',
+											)}
+										>
+											<Logo class="size-rlh" team={awayTeam} />
+											<div>{result.awayScore}</div>
+										</div>
+										<div
+											class={cn(
+												!group.label.includes('Top')
+													? 'bg-accent/15 font-bold positive dark:text-accent'
+													: 'text-foreground',
+											)}
+										>
+											<Logo class="size-rlh" team={homeTeam} />
+											<div>{result.homeScore}</div>
+										</div>
+									</div>
 								{/if}
 							</li>
 						{/each}

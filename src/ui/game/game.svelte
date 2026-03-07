@@ -46,7 +46,7 @@
 						'balls,strikes,outs',
 						'currentInning,currentInningOrdinal,inningHalf,inningState',
 						'plays,currentPlay,result,description,eventType,rbi,about,isScoringPlay',
-						'playEvents,isPitch,index,details,type,isBall,isStrike,isInPlay,call,pitchData,endSpeed',
+						'playEvents,isPitch,index,details,type,isBall,isStrike,isInPlay,call,pitchData,startSpeed',
 						'matchup,pitcher,batter,id,lastInitName,pitchHand,batSide,code,onDeck,inHole',
 					],
 					hydrate: 'flags,linescore',

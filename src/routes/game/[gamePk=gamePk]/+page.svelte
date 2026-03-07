@@ -136,7 +136,6 @@
 					{homeTeam}
 					status={game?.status}
 					plays={feedLive?.liveData?.plays}
-					{winProbability}
 					onPlayHover={(i) => (hoveredAtBatIndex = i)}
 				/>
 			{/if}

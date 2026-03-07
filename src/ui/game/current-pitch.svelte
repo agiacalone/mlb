@@ -29,9 +29,9 @@
 					<span class="line-clamp-1 break-all">{pitch.details?.type?.description}</span>
 				{/if}
 
-				{#if pitch.pitchData?.endSpeed}
+				{#if pitch.pitchData?.startSpeed}
 					<span class="relative leading-none">
-						{pitch.pitchData?.endSpeed}
+						{pitch.pitchData?.startSpeed}
 						<small class="absolute top-full left-1/2 -translate-x-1/2 text-[7px]">mph</small>
 					</span>
 				{/if}
