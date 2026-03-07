@@ -53,7 +53,7 @@
 <nav
 	id="drawer"
 	class={cn(
-		'relative z-1 h-dvh p-ch whitespace-nowrap backdrop-blur-xs transition-colors [grid-area:nav]',
+		'relative z-1 h-dvh whitespace-nowrap backdrop-blur-xs transition-colors [grid-area:nav]',
 		'max-sm:bg-neutral-200/50 max-sm:dark:bg-neutral-800/50',
 		'sm:w-[calc(2ch+1rem)] sm:overflow-clip sm:transition-[width] sm:sidebar-open:overflow-y-auto',
 		'max-sm:absolute max-sm:inset-y-0 max-sm:left-0 max-sm:transition-transform max-sm:sidebar-open:translate-x-(--swipe-x) max-sm:sidebar-not-open:-translate-x-full',
@@ -69,8 +69,7 @@
 	nav {
 		--drawer-width: 20ch;
 
-		padding-left: max(1ch, env(safe-area-inset-left));
-		padding-bottom: max(1ch, env(safe-area-inset-bottom));
+		padding-block: 1ch max(1lh, env(safe-area-inset-bottom));
 
 		:global(body:has(#sidebar-open:checked)) & {
 			width: calc(var(--drawer-width) + env(safe-area-inset-right));

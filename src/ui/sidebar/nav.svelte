@@ -183,10 +183,15 @@
 		height: 1em;
 	}
 
+	a,
+	li > :global(*) {
+		padding-inline: max(1ch, env(safe-area-inset-left)) 1ch;
+	}
+
 	.active::before {
 		content: '';
 		position: absolute;
-		inset: 50% auto auto -1ch;
+		inset: 50% auto auto 0;
 		translate: -50% -50%;
 		width: 0.5ch;
 		aspect-ratio: 1;
