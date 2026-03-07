@@ -6,29 +6,26 @@
 	import HotColdZones from '$ui/stats/hot-cold-zones.svelte'
 	import SelectSeason from '$ui/stats/select-season.svelte'
 
-	let { person, baseballStats }: { person: MLB.Person; baseballStats: MLB.BaseballStat[] } =
-		$props()
+	let {
+		group,
+		person,
+		baseballStats,
+	}: {
+		group: 'hitting' | 'pitching'
+		person: MLB.Person
+		baseballStats: MLB.BaseballStat[]
+	} = $props()
 
 	let season = $derived(getToday().getFullYear().toString())
 
 	async function fetchHotColdZones() {
-		const [hittingStats, pitchingStats] = await Promise.all([
-			fetchMLB<MLB.PlayerStatsResponse>(`/api/v1/people/${person.id}/stats`, {
-				stats: 'hotColdZones',
-				group: 'hitting',
-				season,
-			}),
-			fetchMLB<MLB.PlayerStatsResponse>(`/api/v1/people/${person.id}/stats`, {
-				stats: 'hotColdZones',
-				group: 'pitching',
-				season,
-			}),
-		])
+		const { stats } = await fetchMLB<MLB.PlayerStatsResponse>(`/api/v1/people/${person.id}/stats`, {
+			stats: 'hotColdZones',
+			group,
+			season,
+		})
 
-		return {
-			hittingHotColdZones: hittingStats.stats?.[0],
-			pitchingHotColdZones: pitchingStats.stats?.[0],
-		}
+		return stats?.[0]
 	}
 </script>
 
@@ -42,15 +39,10 @@
 
 {#await fetchHotColdZones()}
 	<Loading class="justify-center">Loading hot/cold zones...</Loading>
-{:then { hittingHotColdZones, pitchingHotColdZones }}
-	{#if hittingHotColdZones}
-		<HotColdZones hotColdZones={hittingHotColdZones} {baseballStats} data-group="hitting" />
-	{/if}
-	{#if pitchingHotColdZones}
-		<HotColdZones hotColdZones={pitchingHotColdZones} {baseballStats} data-group="pitching" />
-	{/if}
-
-	{#if !hittingHotColdZones && !pitchingHotColdZones}
+{:then hotColdZones}
+	{#if hotColdZones}
+		<HotColdZones {hotColdZones} {baseballStats} data-group={group} />
+	{:else}
 		<Empty>No hot/cold zones data</Empty>
 	{/if}
 {/await}

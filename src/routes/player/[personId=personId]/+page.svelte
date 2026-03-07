@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ToggleCompare from '$ui/compare/toggle-compare.svelte'
+	import Divider from '$ui/divider.svelte'
 	import ToggleFavorite from '$ui/favorites/toggle-favorite.svelte'
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
@@ -115,39 +116,19 @@
 		</section>
 	{/if}
 
-	<section class="group/stats space-y-lh px-ch">
-		<nav class="flex items-center justify-center gap-ch">
-			<label>
-				<input type="radio" name="stat-group" value="hitting" checked={!isPitcher} />
-				Hitting
-			</label>
+	{#each ['hitting', 'pitching'] as const as group}
+		<section class="group/stats space-y-lh px-ch has-data-empty:hidden">
+			<Divider class="capitalize">{group} stats</Divider>
 
-			<label>
-				<input type="radio" name="stat-group" value="pitching" checked={isPitcher} />
-				Pitching
-			</label>
-		</nav>
+			<div
+				class="grid items-start gap-[2lh] md:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
+			>
+				<YearByYearList {group} {person} />
 
-		<div
-			class="grid items-start gap-[2lh] md:grid-cols-[repeat(auto-fit,minmax(var(--container-sm),1fr))]"
-		>
-			<article class="group/yby">
-				<h2 class="text-center text-sm text-current/50 group-has-data-empty/yby:hidden">
-					Year-by-year Stats
-				</h2>
-				<YearByYearList {person} />
-			</article>
-
-			<article class="space-y-lh" data-group="pitching">
-				<HotColdZonesList {person} baseballStats={data.baseballStats} />
-			</article>
-		</div>
-	</section>
+				<article class="space-y-lh">
+					<HotColdZonesList {group} {person} baseballStats={data.baseballStats} />
+				</article>
+			</div>
+		</section>
+	{/each}
 </div>
-
-<style>
-	section:has([value='hitting']:not(:checked)) :global([data-group='hitting']),
-	section:has([value='pitching']:not(:checked)) :global([data-group='pitching']) {
-		display: none;
-	}
-</style>

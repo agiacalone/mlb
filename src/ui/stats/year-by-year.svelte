@@ -18,7 +18,7 @@
 	const statInfo = $derived(baseballStats?.find((s) => [s.name, s.lookupParam].includes(key)))
 
 	let width = $state(0)
-	const height = 120
+	const height = 150
 	const padding = { top: 16, bottom: 18, left: 20, right: 20 }
 	const chartHeight = height - padding.top - padding.bottom
 

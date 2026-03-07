@@ -4,6 +4,7 @@
 	import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
 	import { formatDate, getToday, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
+	import Divider from '$ui/divider.svelte'
 	import Empty from '$ui/empty.svelte'
 	import { sortFavorite } from '$ui/favorites/store.svelte'
 	import Game from '$ui/game/game.svelte'
@@ -104,13 +105,9 @@
 		.sort(sortFavorite)}
 
 	{#if processedGames.length}
-		<h2
-			class="relative my-lh text-center text-sm before:absolute before:inset-x-0 before:top-1/2 before:my-auto before:-translate-y-1/2 before:border-b before:border-dashed before:border-stroke"
-		>
-			<span class="relative bg-background px-ch text-current/50">
-				{state} ({processedGames.length})
-			</span>
-		</h2>
+		<Divider>
+			{state} ({processedGames.length})
+		</Divider>
 
 		<div
 			class="grid items-start gap-lh md:grid-cols-[repeat(auto-fill,minmax(var(--column-width,var(--container-xs)),1fr))] lg:[--column-width:var(--container-md)]"
