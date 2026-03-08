@@ -50,7 +50,7 @@
 						positive: isBall,
 						'text-yellow-500 dark:text-yellow-200': isStrike,
 						'text-blue-500 dark:text-blue-300': isInPlay,
-						'text-red-500 dark:text-red-300': isInPlay && !description.includes('no out'),
+						'text-red-500 dark:text-red-300': isInPlay && !description?.includes('no out'),
 					})}
 				>
 					{call?.description}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser, dev } from '$app/environment'
+	import { dev } from '$app/environment'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { StarEmptyIcon, StarIcon } from '$ui/icons'
 	import posthog from 'posthog-js'
