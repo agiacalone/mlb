@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ params, url }) => {
 
 	const standings = await fetchMLB<MLB.StandingsResponse>('/api/v1/standings', {
 		leagueId,
-		season: params.season,
+		// season: params.season,
 		standingsType,
 		hydrate: 'division,team',
 		fields: [

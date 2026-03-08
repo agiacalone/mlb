@@ -50,8 +50,9 @@
 						class={cn('shrink-0', {
 							positive: isBall,
 							'text-yellow-500 dark:text-yellow-200': isStrike,
-							'text-blue-500 dark:text-blue-300': isInPlay,
-							'text-red-500 dark:text-red-300': isInPlay && !description.includes('no out'),
+							'text-red-500 dark:text-red-300': isInPlay,
+							'text-blue-500 dark:text-blue-300':
+								isInPlay && (description.includes('no out') || description.includes('run')),
 						})}
 					>
 						{call?.description}

@@ -107,6 +107,7 @@ export const DIRECTORY: Record<string, Docs.EndpointSchema> = {
 			description: 'Get league details (American/National) including season dates and structure.',
 			queryParams: {
 				leagueIds: PRESETS.leagueId,
+				fields: [{ value: '' }],
 			},
 		},
 	},
