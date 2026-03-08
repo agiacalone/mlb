@@ -95,8 +95,8 @@
 								<th>HR</th>
 								<th>BB</th>
 								<th>K</th>
-								<th class="relative" style:anchor-name="--hbp">
-									<div class="absolute [position-anchor:--hbp] [position-area:center]">HBP</div>
+								<th class="relative">
+									<div class="absolute top-1/2 -translate-y-1/2">HBP</div>
 								</th>
 							</tr>
 						</thead>
