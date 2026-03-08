@@ -61,7 +61,7 @@
 		>
 			<p>No favorites.</p>
 			<p>
-				<a class="link" href="/teams">Favorite a team <span class="absolute inset-0"></span></a>
+				<a class="link" href="/teams">Favorite a team<span class="absolute inset-0"></span></a>
 				to get started.
 			</p>
 		</div>

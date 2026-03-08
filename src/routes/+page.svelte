@@ -98,7 +98,7 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 					>
 						<StarEmptyIcon class="size-lh shrink-0" />
 						<p class="text-left">
-							<a class="link" href="/teams"> Favorite a team </a> to view their schedule.
+							<a class="link" href="/teams">Favorite a team</a> to view their schedule.
 						</p>
 					</div>
 				{/if}
