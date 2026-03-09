@@ -60,7 +60,7 @@
 	</div>
 
 	{#snippet after()}
-		<div class="ml-auto flex items-center gap-ch">
+		<div class="mx-auto flex items-center justify-center gap-ch">
 			<ToggleSpoilerPrevention team={{ id: team.id, abbreviation: team.abbreviation! }} />
 			<ToggleFavorite target={{ href: `/teams/${team.id}`, label: team.abbreviation! }} />
 		</div>

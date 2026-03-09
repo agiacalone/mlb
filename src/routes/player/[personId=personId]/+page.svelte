@@ -76,7 +76,7 @@
 	</div>
 
 	{#snippet after()}
-		<div class="ml-auto flex items-center gap-ch">
+		<div class="mx-auto flex items-center justify-center gap-ch">
 			<ToggleCompare class="text-current/50 [&>span]:hidden" personId={person.id} />
 			<ToggleFavorite target={{ href: `/player/${person.id}`, label: person.lastName! }} />
 		</div>

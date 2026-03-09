@@ -26,11 +26,7 @@
 	description="List of all {sport?.name || 'MLB'} teams"
 />
 
-<Header
-	class="*:flex-nowrap"
-	title={sport?.name ?? 'Teams'}
-	crumbs={[{ href: '/teams', name: 'Teams' }]}
->
+<Header title={sport?.name ?? 'Teams'} crumbs={[{ href: '/teams', name: 'Teams' }]}>
 	{#snippet after()}
 		<div class="mx-auto flex items-center gap-ch">
 			<SelectSport class="button w-full shrink text-center" />

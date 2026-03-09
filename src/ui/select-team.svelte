@@ -16,7 +16,7 @@
 	async function fetchTeams() {
 		return await fetchMLB<MLB.TeamsResponse>('/api/v1/teams', {
 			sportId: sportId ?? page.url.searchParams.get('sportId') ?? '1',
-			fields: ['teams,id,name,abbreviation'],
+			fields: ['teams,id,name'],
 		})
 	}
 </script>
@@ -41,7 +41,7 @@
 	{#await fetchTeams() then { teams }}
 		{#each teams.sort((a, b) => a.name.localeCompare(b.name)) as t (t.id)}
 			<option value={t.id} selected={t.id === Number(team)}>
-				{t.abbreviation ?? t.name}
+				{t.name}
 			</option>
 		{/each}
 	{/await}

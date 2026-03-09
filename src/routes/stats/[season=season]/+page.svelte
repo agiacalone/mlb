@@ -87,7 +87,7 @@
 	]}
 >
 	{#snippet after()}
-		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
+		<div class="mx-auto flex flex-wrap items-center justify-center gap-ch text-center">
 			<SelectSport class="button text-center" />
 			<SelectGameType class="button text-center" />
 			<SelectSeason

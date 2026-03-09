@@ -31,7 +31,7 @@
 <Header title="Transactions" crumbs={[{ name: 'Transactions', href: '/transactions' }]}>
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center justify-center gap-ch text-center">
-			<SelectTeam class="button grow" />
+			<SelectTeam class="button grow text-center" />
 			<SelectWeek class="grow" date={currentDate} onchange={onDateChange} href="/transactions" />
 			<ToggleAllDetails />
 		</div>
