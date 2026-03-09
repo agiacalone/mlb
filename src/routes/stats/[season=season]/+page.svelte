@@ -222,9 +222,9 @@
 			<tbody>
 				{#if data.pitchingLeaders?.stats?.[0]?.splits.length}
 					{#each data.pitchingLeaders.stats as { splits }}
-						{#each splits as { player, stat, ...split }}
+						{#each splits as { player, stat, sport, ...split }}
 							<tr class="hover:[&>td]:bg-foreground/10">
-								{@render p(player as MLB.Person, split as MLB.StatSplit)}
+								{@render p(player as MLB.Person, split as MLB.StatSplit, sport)}
 								<td
 									class="border-r border-current/25 tabular-nums"
 									class:positive={Number(stat.era) < 3}
