@@ -2,15 +2,24 @@ import { fetchMLB } from '$lib/fetch'
 import type { PageLoad } from './$types'
 
 export const load: PageLoad = async ({ params, url }) => {
+	const sportId = url.searchParams.get('sportId') ?? '1'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
 
-	const standingsType = gameType === 'S' ? 'springTraining' : 'regularSeason'
-	const leagueId = gameType === 'wbc' ? '160' : gameType === 'S' ? '114,115' : '103,104'
+	// const standingsType = gameType === 'S' ? 'springTraining' : 'regularSeason'
+	// const leagueId = gameType === 'wbc' ? '160' : gameType === 'S' ? '114,115' : '103,104'
 
 	const standings = await fetchMLB<MLB.StandingsResponse>('/api/v1/standings', {
-		leagueId,
-		// season: params.season,
-		standingsType,
+		leagueId:
+			sportId === '51'
+				? '160'
+				: sportId === '11'
+					? '114,115'
+					: sportId === '1'
+						? '103,104'
+						: undefined,
+		season: params.season,
+		standingsType:
+			gameType === 'S' ? 'springTraining' : gameType === 'P' ? 'postseason' : 'regularSeason',
 		hydrate: 'division,team',
 		fields: [
 			'records,sport,division,nameShort,league,springLeague,id,name',

@@ -1,4 +1,4 @@
-export function isDarkOnLightTeam(team?: MLB.Team) {
+export function isDarkOnLightTeam(team?: MLB.Team, sport?: MLB.Sport) {
 	if (!team) return false
 
 	return (
@@ -8,7 +8,7 @@ export function isDarkOnLightTeam(team?: MLB.Team) {
 			'Sugar Land Space Cowboys',
 			'Sultanes de Monterrey',
 		].includes(team.name) ||
-		[16, 17, 22, 23, 51].includes((team as MLB.TeamDetailed).sport?.id ?? 1)
+		[16, 17, 22, 23, 51].includes(sport?.id ?? (team as MLB.TeamDetailed).sport?.id ?? 1)
 	)
 }
 

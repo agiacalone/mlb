@@ -8,6 +8,7 @@
 	import Metadata from '$ui/metadata.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
 	import SelectGameType from '$ui/select-game-type.svelte'
+	import SelectSport from '$ui/select-sport.svelte'
 	import SelectSeason from '$ui/stats/select-season.svelte'
 	import type { PageProps } from './$types'
 
@@ -87,6 +88,7 @@
 >
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
+			<SelectSport class="button text-center" />
 			<SelectGameType class="button text-center" />
 			<SelectSeason
 				onchange={(e) =>
@@ -151,9 +153,9 @@
 			<tbody>
 				{#if data.hittingLeaders?.stats?.[0]?.splits.length}
 					{#each data.hittingLeaders.stats as { splits }}
-						{#each splits as { player, stat, ...split }}
+						{#each splits as { player, stat, sport, ...split }}
 							<tr class="hover:[&>td]:bg-foreground/10">
-								{@render p(player as MLB.Person, split as MLB.StatSplit)}
+								{@render p(player as MLB.Person, split as MLB.StatSplit, sport)}
 								<td class="tabular-nums" class:positive={Number(stat.avg) >= 0.3}>
 									{stat.avg}
 								</td>
@@ -252,7 +254,7 @@
 	</article>
 </section>
 
-{#snippet p(person: MLB.Person, { rank, position, league, team }: MLB.StatSplit)}
+{#snippet p(person: MLB.Person, { rank, position, league, team }: MLB.StatSplit, sport?: MLB.Sport)}
 	{@const bg = `url(https://midfield.mlbstatic.com/v1/team/${team?.id}/spots/32)`}
 
 	<td class="w-[3ch] text-center text-xs text-current/50">{rank}</td>
@@ -263,11 +265,13 @@
 
 	<th
 		class={cn('relative px-[.5ch] text-left', {
-			'dark:text-dark': isDarkOnLightTeam(team),
+			'dark:text-dark': isDarkOnLightTeam(team, sport),
 			'dark:text-light': isLightOnDarkTeam(team),
 		})}
 		style:--team-bg={bg}
 	>
+		{$inspect(team)}
+
 		<a
 			class="line-clamp-1 w-[10ch] break-all decoration-dashed hover:underline"
 			href="/player/{person.id}"
@@ -278,7 +282,7 @@
 
 	<th
 		class={cn('relative w-[3ch] min-w-[3ch] text-xs text-current/50', {
-			'dark:text-dark/50': isDarkOnLightTeam(team),
+			'dark:text-dark/50': isDarkOnLightTeam(team, sport),
 			'dark:text-light/50': isLightOnDarkTeam(team),
 		})}
 		style:--team-bg={bg}

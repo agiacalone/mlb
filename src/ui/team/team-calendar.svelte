@@ -28,13 +28,7 @@
 			hydrate: 'team',
 		})
 
-		return (schedule?.dates ?? []).reduce(
-			(acc, { date, games }) => {
-				acc[date] = games
-				return acc
-			},
-			{} as Record<string, MLB.ScheduleResponse['dates'][number]['games']>,
-		)
+		return Object.fromEntries((schedule?.dates ?? []).map(({ date, games }) => [date, games]))
 	}
 
 	async function fetchProbablePitcher(gamePk: number, teamId: number) {

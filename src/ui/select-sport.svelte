@@ -35,7 +35,7 @@
 	{#await fetchSports() then { sports }}
 		{#each sports as sportId}
 			<option value={sportId.id} selected={sportId.id === Number(sport)}>
-				{sportId.abbreviation}
+				{sportId.name}
 			</option>
 		{/each}
 	{/await}

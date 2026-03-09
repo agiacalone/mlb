@@ -5,6 +5,7 @@ export const load: PageLoad = async ({ params, url }) => {
 	const hittingSortStat = url.searchParams.get('hittingSortStat') ?? 'homeRuns'
 	const pitchingSortStat = url.searchParams.get('pitchingSortStat') ?? 'era'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
+	const sportId = url.searchParams.get('sportId') ?? '1'
 	const position = url.searchParams.get('position')
 
 	const [baseballStats, hittingLeaders, pitchingLeaders, positions] = await Promise.all([
@@ -19,9 +20,10 @@ export const load: PageLoad = async ({ params, url }) => {
 				'stats,splits,rank',
 				'player,id,lastName,position,abbreviation',
 				'stat,avg,homeRuns,rbi,hits,doubles,triples,stolenBases,obp,slg,ops',
-				'team,league,name',
+				'team,league,name,sport',
 			],
 			gameType,
+			sportId,
 			...(position ? { position } : {}),
 		}),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
@@ -34,9 +36,10 @@ export const load: PageLoad = async ({ params, url }) => {
 				'stats,splits,rank',
 				'player,id,lastName,position,abbreviation',
 				'stat,era,wins,losses,strikeOuts,saves,whip,inningsPitched',
-				'team,league,name',
+				'team,league,name,sport',
 			],
 			gameType,
+			sportId,
 			...(position ? { position } : {}),
 		}),
 		fetchMLB<MLB.PositionMeta[]>('/api/v1/positions'),

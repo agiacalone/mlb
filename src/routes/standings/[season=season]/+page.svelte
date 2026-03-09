@@ -7,6 +7,7 @@
 	import Header from '$ui/header.svelte'
 	import Metadata from '$ui/metadata.svelte'
 	import SelectGameType from '$ui/select-game-type.svelte'
+	import SelectSport from '$ui/select-sport.svelte'
 	import SelectSeason from '$ui/stats/select-season.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 	import type { PageProps } from './$types'
@@ -14,12 +15,7 @@
 	let { data }: PageProps = $props()
 
 	const leagueGroups = $derived(
-		data.standings.records.reduce((acc, record) => {
-			const id = record.league?.id ?? 0
-			if (!acc.has(id)) acc.set(id, { name: record.league?.name ?? '', records: [] })
-			acc.get(id)!.records.push(record)
-			return acc
-		}, new Map<number, { name: string; records: typeof data.standings.records }>()),
+		Object.groupBy(data.standings.records, (record) => record.league?.id ?? 0),
 	)
 
 	function sortOrder(
@@ -27,6 +23,16 @@
 		b: (typeof data.standings.records)[number],
 	) {
 		return (a.division?.sortOrder ?? 0) - (b.division?.sortOrder ?? 0)
+	}
+
+	function removeDuplicates(records: (typeof data.standings.records)[number][]) {
+		const seen = new Set<number>()
+		return records.filter((record) => {
+			const id = record.division?.id
+			if (id === undefined || seen.has(id)) return false
+			seen.add(id)
+			return true
+		})
 	}
 </script>
 
@@ -60,10 +66,8 @@
 <Header title="Standings" crumbs={[{ name: 'Standings' }]}>
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center gap-ch text-center">
-			<SelectGameType
-				class="button text-center"
-				options={[{ value: 'wbc', label: 'World Baseball Classic' }]}
-			/>
+			<SelectSport class="button text-center" />
+			<SelectGameType class="button text-center" />
 			<SelectSeason
 				onchange={(e) =>
 					goto(`/standings/${(e.currentTarget as HTMLSelectElement).value}${page.url.search}`)}
@@ -73,16 +77,18 @@
 </Header>
 
 <section class="grid gap-lh p-ch">
-	{#each [...leagueGroups.entries()] as [leagueId, { name, records }] (leagueId)}
+	{#each Object.entries(leagueGroups) as [leagueId, records] (leagueId)}
+		{@const divisions = removeDuplicates((records ?? []).sort(sortOrder))}
 		<div class="flex flex-col gap-ch">
-			<h2 class="px-ch text-sm text-current/50">{name}</h2>
+			<h2 class="px-ch text-sm text-current/50">{divisions?.[0]?.league?.name}</h2>
 			<div
 				class={cn('grid items-start gap-[2lh]', {
-					'sm:grid-cols-2 lg:grid-cols-3': records.length > 4 || records.length === 3,
-					'sm:grid-cols-2': records.length === 4 || records.length === 2,
+					'sm:grid-cols-2 lg:grid-cols-3':
+						(divisions?.length ?? 0) > 4 || (divisions?.length ?? 0) === 3,
+					'sm:grid-cols-2': (divisions?.length ?? 0) === 4 || (divisions?.length ?? 0) === 2,
 				})}
 			>
-				{#each records.sort(sortOrder) as { division, teamRecords }, i (division?.id ?? i)}
+				{#each divisions as { division, teamRecords }, i (i)}
 					<table class="w-full text-center">
 						<thead>
 							<tr class="text-sm text-current/50 *:font-normal">

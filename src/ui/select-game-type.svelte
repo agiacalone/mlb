@@ -11,8 +11,9 @@
 	} = $props()
 
 	const GAME_TYPES = $derived([
-		{ value: 'R', label: 'Regular Season' },
 		{ value: 'S', label: 'Spring Training' },
+		{ value: 'R', label: 'Regular Season' },
+		{ value: 'P', label: 'Postseason' },
 		...options,
 	])
 

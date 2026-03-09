@@ -57,6 +57,11 @@ export const PRESETS = {
 		{ value: 'R', label: 'Regular Season' },
 		{ value: 'S', label: 'Spring Training' },
 	],
+	standingsType: [
+		{ value: 'regularSeason', label: 'Regular Season' },
+		{ value: 'springTraining', label: 'Spring Training' },
+		{ value: 'postseason', label: 'Postseason' },
+	],
 	gamePk: [
 		{ value: '813024', label: "'25 World Series Game 7" },
 		{ value: '813031', label: "'25 NLCS Game 4" },
@@ -377,6 +382,7 @@ export const DIRECTORY: Record<string, Docs.EndpointSchema> = {
 			queryParams: {
 				leagueId: PRESETS.leagueId,
 				season: PRESETS.season,
+				standingsType: PRESETS.standingsType,
 				fields: [{ value: '' }],
 				hydrate: [{ value: '', placeholder: 'hydrations' }],
 			},
