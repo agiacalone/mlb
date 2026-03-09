@@ -8,7 +8,9 @@ export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params, host 
 		url.searchParams.set(key, typeof value !== 'string' ? value!?.flat().join(',') : value)
 	}
 
-	const response = await fetch(url.toString())
+	const response = await fetch(url.toString(), { signal: AbortSignal.timeout(10_000) })
+
+	if (!response.ok) throw new Error(`MLB API ${response.status}: ${url.pathname}`)
 
 	return (await response.json()) as T
 }

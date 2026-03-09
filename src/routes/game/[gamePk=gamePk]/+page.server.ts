@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit'
 import { fetchMLB } from '$lib/fetch'
 import { fetchBoxscore, fetchfeedLive, fetchWinProbability } from '$lib/fetch/presets'
 import type { PageServerLoad } from './$types'
@@ -21,7 +22,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		fetchBoxscore(params.gamePk),
 		fetchWinProbability(params.gamePk),
 		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`),
-	])
+	]).catch(() => error(503, 'Game data unavailable'))
 
 	return {
 		schedule,

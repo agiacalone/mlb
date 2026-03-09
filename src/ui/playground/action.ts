@@ -24,8 +24,14 @@ export async function playgroundAction({ request }: { request: Request }) {
 		}
 	}
 
-	const results = await fetch(fetchUrl)
-	const result = await results.json()
+	let result: unknown
+	try {
+		const results = await fetch(fetchUrl, { signal: AbortSignal.timeout(10_000) })
+		if (!results.ok) throw new Error(`${results.status}`)
+		result = await results.json()
+	} catch (e) {
+		result = { error: e instanceof Error ? e.message : String(e) }
+	}
 
 	if (!dev) {
 		getPostHogClient().capture({
