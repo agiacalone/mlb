@@ -270,8 +270,6 @@
 		})}
 		style:--team-bg={bg}
 	>
-		{$inspect(team)}
-
 		<a
 			class="line-clamp-1 w-[10ch] break-all decoration-dashed hover:underline"
 			href="/player/{person.id}"
