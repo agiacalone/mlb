@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils'
 	import { MoonIcon, SunIcon } from '$ui/icons'
 	import { colorSchemeStore } from '$ui/store.svelte'
 
@@ -22,19 +23,15 @@
 
 <button
 	id="toggle-color-scheme"
-	class="flex w-full items-center gap-ch hover-link"
+	class="flex items-center gap-[.5ch]"
 	data-color-scheme={mode}
 	onclick={() => {
 		colorSchemeStore.colorScheme = mode === 'dark' ? 'light' : 'dark'
 	}}
+	title="Toggle light/dark mode"
 >
-	{#if mode === 'dark'}
-		<MoonIcon />
-	{:else}
-		<SunIcon />
-	{/if}
-
-	<span class="sm:sidebar-closed-hidden">{mode === 'dark' ? 'Dark' : 'Light'} mode</span>
+	<SunIcon class={cn(mode === 'dark' && 'opacity-25 sidebar-not-open:hidden')} />
+	<MoonIcon class={cn(mode === 'light' && 'opacity-25 sidebar-not-open:hidden')} />
 </button>
 
 <style>

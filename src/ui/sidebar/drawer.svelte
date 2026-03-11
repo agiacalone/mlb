@@ -69,8 +69,6 @@
 	nav {
 		--drawer-width: 20ch;
 
-		padding-block: 1ch max(1lh, env(safe-area-inset-bottom));
-
 		:global(body:has(#sidebar-open:checked)) & {
 			width: calc(var(--drawer-width) + env(safe-area-inset-right));
 		}

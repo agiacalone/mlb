@@ -7,7 +7,6 @@
 		ArrowsDiffIcon,
 		CalendarIcon,
 		CalendarTodayIcon,
-		CodeIcon,
 		FlagIcon,
 		GithubIcon,
 		HelmetIcon,
@@ -72,27 +71,10 @@
 			disabled: !dev,
 		},
 	]
-
-	const externalLinks: {
-		href: string
-		label: string
-		icon: Component
-	}[] = [
-		{
-			href: 'https://github.com/nuotsu/mlb',
-			label: 'View on GitHub',
-			icon: GithubIcon,
-		},
-		{
-			href: 'https://nuotsu.dev',
-			label: 'Built by nuotsu',
-			icon: CodeIcon,
-		},
-	]
 </script>
 
 <Drawer>
-	<div class="flex h-full flex-col gap-ch">
+	<div class="flex h-full flex-col gap-ch overflow-x-clip overflow-y-auto pt-ch">
 		<div class="sm:sidebar-closed-hidden">
 			<a class="flex items-center gap-ch" href="/">
 				<figure class="relative size-4">
@@ -129,23 +111,21 @@
 			<li><CompareList /></li>
 			<li><FavoritesList /></li>
 			<li><SpoilerPreventionList /></li>
-			<li><ToggleColorScheme /></li>
-			{#each externalLinks as { href, label, icon: Icon } (href)}
-				<li class="sm:sidebar-not-open:hidden">
-					<a class="flex items-center gap-ch hover-link" {href}>
-						<Icon />
-						<span>{label}</span>
-					</a>
-				</li>
-			{/each}
 		</ul>
 
-		<small
-			class="font-semilight text-center text-[xx-small] text-current/50 sm:sidebar-not-open:hidden"
+		<div
+			class="flex items-center justify-between gap-ch border-t border-stroke/50 pt-ch pr-ch pb-[max(1ch,env(safe-area-inset-bottom))] pl-[max(1ch,env(safe-area-inset-left))]"
 		>
-			@ {new Date().getFullYear()} MLB.TheOhtani.com.
-			<span class="tabular-nums">v{version}</span>
-		</small>
+			<ToggleColorScheme />
+
+			<a
+				class="flex flex-row-reverse items-center gap-[.5ch] sidebar-not-open:hidden"
+				href="https://github.com/nuotsu/mlb"
+			>
+				<GithubIcon />
+				<small class="text-[x-small] text-current/50 tabular-nums">v{version}</small>
+			</a>
+		</div>
 	</div>
 </Drawer>
 
@@ -179,11 +159,11 @@
 <style>
 	div :global(svg) {
 		flex-shrink: 0;
-		width: 1em;
-		height: 1em;
+		width: 1rem;
+		height: 1rem;
 	}
 
-	a,
+	a:not([href*='github']),
 	li > :global(*) {
 		padding-inline: max(1ch, env(safe-area-inset-left)) 1ch;
 	}
