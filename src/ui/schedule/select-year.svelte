@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { getToday } from '$lib/temporal'
-	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import { CalendarTodayIcon, ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 
 	let {
 		class: className,
@@ -18,6 +18,8 @@
 </script>
 
 <fieldset class="flex justify-center text-center {className}">
+	<a class="button" href="/standings/{getToday().getFullYear()}"><CalendarTodayIcon /></a>
+
 	<label class="min-w-[8ch]">
 		<input
 			class="min-w-[6ch] appearance-none text-center decoration-dashed hover:underline"

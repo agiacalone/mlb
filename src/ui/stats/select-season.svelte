@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import { getToday } from '$lib/temporal'
 	import { cn } from '$lib/utils'
-	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import { CalendarTodayIcon, ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 	import type { HTMLAttributes } from 'svelte/elements'
 
 	let {
@@ -30,6 +30,23 @@
 </script>
 
 <fieldset class="flex justify-center gap-px text-center {className}">
+	{#if buttons}
+		<button
+			type="button"
+			class="button"
+			onclick={() => {
+				if (!select) return
+				season = getToday().getFullYear()
+				select.value = season.toString()
+				onchange?.({ currentTarget: select } as Event & {
+					currentTarget: HTMLSelectElement & EventTarget
+				})
+			}}
+		>
+			<CalendarTodayIcon />
+		</button>
+	{/if}
+
 	<select
 		class="button text-center"
 		id="season"
