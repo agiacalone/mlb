@@ -26,6 +26,13 @@
 
 <fieldset class="flex flex-col items-center text-center {className}">
 	<div class="flex justify-center gap-px">
+		<a
+			class="button"
+			href={maintainSearchParams(`/schedule/day/${todayStr}`)}
+		>
+			<CalendarTodayIcon value={today.getDate()} />
+		</a>
+
 		<label class="button min-w-[16ch]">
 			{formatDate(slash(date), {
 				month: 'short',
@@ -45,13 +52,6 @@
 				onchange={(e) => onchange?.(e.currentTarget.value)}
 			/>
 		</label>
-
-		<a
-			class="button"
-			href={maintainSearchParams(`/schedule/day/${todayStr}`)}
-		>
-			<CalendarTodayIcon value={today.getDate()} />
-		</a>
 
 		<a
 			class="order-first button border-b-0 border-l"
