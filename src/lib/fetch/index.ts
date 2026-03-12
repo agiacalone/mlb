@@ -8,11 +8,29 @@ export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params, host 
 		url.searchParams.set(key, typeof value !== 'string' ? value!?.flat().join(',') : value)
 	}
 
-	const response = await fetch(url.toString(), { signal: AbortSignal.timeout(10_000) })
+	try {
+		const response = await fetch(url.toString(), { signal: AbortSignal.timeout(10_000) })
 
-	if (!response.ok) throw new Error(`MLB API ${response.status}: ${url.pathname}`)
+		if (!response.ok) {
+			const body = await response.text().catch(() => '(unreadable body)')
+			const error = new Error(`MLB API ${response.status}: ${url.pathname}`)
+			console.error('[fetchMLB] HTTP error', {
+				status: response.status,
+				url: url.toString(),
+				body,
+			})
+			throw error
+		}
 
-	return (await response.json()) as T
+		return (await response.json()) as T
+	} catch (error) {
+		if (error instanceof Error && error.message.startsWith('MLB API')) throw error
+		console.error('[fetchMLB] Unexpected error', {
+			url: url.toString(),
+			error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
+		})
+		throw error
+	}
 }
 
 export function createPreset<TArgs extends unknown[], T>(
