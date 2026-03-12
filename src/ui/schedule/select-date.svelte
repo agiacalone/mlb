@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate, getToday, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
-	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import { CalendarTodayIcon, ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 
 	let {
 		date,
@@ -12,6 +12,9 @@
 		onchange?: (date: string) => void
 		class?: string
 	} = $props()
+
+	const today = getToday()
+	const todayStr = formatDate(today, { locale: 'en-CA' })
 
 	function addDay(days: number = 1) {
 		return formatDate(
@@ -42,6 +45,13 @@
 				onchange={(e) => onchange?.(e.currentTarget.value)}
 			/>
 		</label>
+
+		<a
+			class="button"
+			href={maintainSearchParams(`/schedule/day/${todayStr}`)}
+		>
+			<CalendarTodayIcon value={today.getDate()} />
+		</a>
 
 		<a
 			class="order-first button border-b-0 border-l"
