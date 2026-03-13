@@ -1,4 +1,5 @@
 <script lang="ts">
+	import 'ios-vibrator-pro-max'
 	import { cn } from '$lib/utils'
 	import { MoonIcon, SunIcon } from '$ui/icons'
 	import { colorSchemeStore } from '$ui/store.svelte'
@@ -27,6 +28,7 @@
 	data-color-scheme={mode}
 	onclick={() => {
 		colorSchemeStore.colorScheme = mode === 'dark' ? 'light' : 'dark'
+		navigator.vibrate(10)
 	}}
 	title="Toggle light/dark mode"
 >
