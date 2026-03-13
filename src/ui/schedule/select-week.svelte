@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate, formatWeekRange, getToday, slash } from '$lib/temporal'
 	import { maintainSearchParams } from '$lib/url.svelte'
-	import { ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
+	import { CalendarTodayIcon, ChevronLeftIcon, ChevronRightIcon } from '$ui/icons'
 
 	let {
 		date,
@@ -15,6 +15,9 @@
 		class?: string
 	} = $props()
 
+	const today = getToday()
+	const todayStr = formatDate(today, { locale: 'en-CA' })
+
 	function addWeek(weeks: number = 1) {
 		return formatDate(
 			new Date(new Date(slash(date)).setDate(new Date(slash(date)).getDate() + weeks * 7)),
@@ -24,6 +27,13 @@
 </script>
 
 <fieldset class="flex justify-center gap-px {className}">
+	<a
+		class="button"
+		href={maintainSearchParams(`${href}/${todayStr}`)}
+	>
+		<CalendarTodayIcon value={today.getDate()} />
+	</a>
+
 	<label class="button min-w-[14ch] grow">
 		{formatWeekRange(date)}
 
