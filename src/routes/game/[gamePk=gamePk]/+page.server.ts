@@ -17,12 +17,13 @@ export const load: PageServerLoad = async ({ params }) => {
 	})
 	const game = schedule?.dates?.[0].games.find((game) => game.gamePk === Number(params.gamePk))!
 
-	const [feedLive, boxscore, winProbability, content] = await Promise.all([
+	const [feedLive, boxscore, content] = await Promise.all([
 		fetchfeedLive(params.gamePk),
 		fetchBoxscore(params.gamePk),
-		fetchWinProbability(params.gamePk),
 		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`),
 	]).catch(() => error(503, 'Game data unavailable'))
+
+	const winProbability = await fetchWinProbability(params.gamePk).catch(() => null)
 
 	return {
 		schedule,
