@@ -43,7 +43,7 @@
 				})
 			}}
 		>
-			<CalendarTodayIcon />
+			<CalendarTodayIcon value={getToday().getFullYear() % 100} />
 		</button>
 	{/if}
 

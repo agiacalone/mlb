@@ -18,7 +18,9 @@
 </script>
 
 <fieldset class="flex justify-center text-center {className}">
-	<a class="button" href="/standings/{getToday().getFullYear()}"><CalendarTodayIcon value={getToday().getFullYear() % 100} /></a>
+	<a class="button" href="/standings/{getToday().getFullYear()}">
+		<CalendarTodayIcon value={getToday().getFullYear() % 100} />
+	</a>
 
 	<label class="min-w-[8ch]">
 		<input
