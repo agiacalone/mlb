@@ -128,6 +128,44 @@
 						</tbody>
 					</table>
 				</div>
+			{:else if team.bench?.length || team.bullpen?.length}
+				{#if team.bench?.length}
+					<div class="overflow-x-auto">
+						<table class="table-fixed text-center">
+							<tbody>
+								{#each team.bench as playerId}
+									{@const player = team.players[`ID${playerId}`]}
+									{#if player}
+										<tr class="hover:*:bg-foreground/10">
+											{@render p(player)}
+										</tr>
+									{/if}
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				{/if}
+
+				{#if team.bench?.length && team.bullpen?.length}
+					<hr class="my-[.5ch] border-dashed border-current/25" />
+				{/if}
+
+				{#if team.bullpen?.length}
+					<div class="overflow-x-auto">
+						<table class="table-fixed text-center">
+							<tbody>
+								{#each team.bullpen as playerId}
+									{@const player = team.players[`ID${playerId}`]}
+									{#if player}
+										<tr class="hover:*:bg-foreground/10">
+											{@render p(player)}
+										</tr>
+									{/if}
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				{/if}
 			{:else}
 				<Empty>No boxscore data</Empty>
 			{/if}

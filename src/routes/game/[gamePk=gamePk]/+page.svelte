@@ -55,6 +55,9 @@
 	const hasBattingOrder = $derived(
 		boxscore?.teams.away.battingOrder?.length || boxscore?.teams.home.battingOrder?.length,
 	)
+	const hasBench = $derived(
+		boxscore?.teams.away.bench?.length || boxscore?.teams.home.bench?.length,
+	)
 
 	const isSpoilerPrevented = $derived(
 		spoilerPreventionStore.has(away?.id!) || spoilerPreventionStore.has(home?.id!),
@@ -189,7 +192,7 @@
 		</div>
 	{/if}
 
-	{#if hasBattingOrder}
+	{#if hasBattingOrder || hasBench}
 		<Boxscore class="col-span-full" {boxscore} {isSpoilerPrevented} />
 	{/if}
 </section>
