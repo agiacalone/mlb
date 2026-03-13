@@ -21,7 +21,7 @@
 		type="checkbox"
 		{checked}
 		onchange={toggle}
-		onclick={() => navigator.vibrate(10)}
+		onclick={() => navigator.vibrate?.(10)}
 	/>
 
 	<SplitIcon class="size-lh group-has-checked/compare:hidden" />

@@ -34,7 +34,7 @@
 		value={team.id}
 		{checked}
 		onchange={toggle}
-		onclick={() => navigator.vibrate(10)}
+		onclick={() => navigator.vibrate?.(10)}
 	/>
 
 	<EyeIcon class=" group-has-checked/spoiler:hidden" />

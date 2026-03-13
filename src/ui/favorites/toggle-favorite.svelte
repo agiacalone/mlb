@@ -35,7 +35,7 @@
 		value={target.href}
 		{checked}
 		onchange={toggle}
-		onclick={() => navigator.vibrate(10)}
+		onclick={() => navigator.vibrate?.(10)}
 	/>
 
 	<StarEmptyIcon class="group-has-checked/fav:hidden" />
