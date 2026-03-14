@@ -1,7 +1,11 @@
 import { HOST } from '$ui/playground/constants'
 import { fetchLiveMLB } from './live.svelte'
 
-export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params, host = HOST) {
+export async function fetchMLB<T>(
+	endpoint: string,
+	params?: Fetch.Params,
+	{ host }: { host: string } = { host: HOST },
+) {
 	const url = new URL(endpoint, host)
 
 	for (const [key, value] of Object.entries(params ?? {})) {

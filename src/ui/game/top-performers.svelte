@@ -22,10 +22,6 @@
 					| MLB.PitchingStats
 					| MLB.FieldingStats) ?? {}}
 
-			{#if !['hitter', 'twoWayStarter', 'starter', 'reliever'].includes(type)}
-				{console.warn(`Unhandled type: ${type}`)}
-			{/if}
-
 			<div class="group/player relative flex max-w-max items-center gap-ch">
 				<dt class="flex shrink-0 items-center gap-ch self-start">
 					<Headshot person={player.person} class="size-lh" />

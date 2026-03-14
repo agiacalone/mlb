@@ -29,7 +29,8 @@
 		const seen = new Set<number>()
 		return records.filter((record) => {
 			const id = record.division?.id
-			if (id === undefined || seen.has(id)) return false
+			if (id === undefined) return true
+			if (seen.has(id)) return false
 			seen.add(id)
 			return true
 		})
