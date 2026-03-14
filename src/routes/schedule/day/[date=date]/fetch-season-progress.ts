@@ -4,12 +4,13 @@ export async function fetchSeasonProgress(
 	sportId: string = '1',
 	year: string,
 	schedule: MLB.ScheduleResponse,
+	fetch: typeof globalThis.fetch = globalThis.fetch,
 ) {
 	const regularSeason = await fetchMLB<MLB.SeasonResponse>(`/api/v1/seasons`, {
 		sportId,
 		season: year,
 		fields: ['seasons,regularSeasonStartDate,regularSeasonEndDate'],
-	})
+	}, { fetch })
 
 	const games = schedule.dates?.[0]?.games ?? []
 
@@ -35,7 +36,7 @@ export async function fetchSeasonProgress(
 				season: year,
 				gameType: 'R',
 				fields: ['totalGames'],
-			})
+			}, { fetch })
 		: { totalGames: 0 }
 
 	return {

@@ -1,7 +1,7 @@
 import { fetchMLB } from '$lib/fetch'
 import type { PageLoad } from './$types'
 
-export const load: PageLoad = async ({ url }) => {
+export const load: PageLoad = async ({ url, fetch }) => {
 	const searchParams = Object.fromEntries(url.searchParams.entries())
 
 	const teams = await fetchMLB<MLB.TeamsResponse>('/api/v1/teams', {
@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ url }) => {
 		],
 		hydrate: 'sport,division',
 		...searchParams,
-	})
+	}, { fetch })
 
 	return {
 		teams,

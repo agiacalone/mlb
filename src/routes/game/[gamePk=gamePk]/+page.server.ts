@@ -3,7 +3,7 @@ import { fetchMLB } from '$lib/fetch'
 import { fetchBoxscore, fetchfeedLive, fetchWinProbability } from '$lib/fetch/presets'
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const schedule = await fetchMLB<MLB.ScheduleResponse>(`/api/v1/schedule`, {
 		gamePk: params.gamePk,
 		fields: [
@@ -14,13 +14,13 @@ export const load: PageServerLoad = async ({ params }) => {
 			'teams,away,home,team,id,name,leagueRecord,wins,losses,score',
 		],
 		hydrate: 'flags',
-	})
+	}, { fetch })
 	const game = schedule?.dates?.[0].games.find((game) => game.gamePk === Number(params.gamePk))!
 
 	const [feedLive, boxscore, content] = await Promise.all([
 		fetchfeedLive(params.gamePk),
 		fetchBoxscore(params.gamePk),
-		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`),
+		fetchMLB<MLB.GameContent>(`/api/v1/game/${params.gamePk}/content`, undefined, { fetch }),
 	]).catch(() => error(503, 'Game data unavailable'))
 
 	const winProbability = await fetchWinProbability(params.gamePk).catch(() => null)

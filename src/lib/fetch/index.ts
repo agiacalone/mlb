@@ -4,7 +4,7 @@ import { fetchLiveMLB } from './live.svelte'
 export async function fetchMLB<T>(
 	endpoint: string,
 	params?: Fetch.Params,
-	{ host }: { host: string } = { host: HOST },
+	{ host = HOST, fetch: _fetch = fetch }: { host?: string; fetch?: typeof fetch } = {},
 ) {
 	const url = new URL(endpoint, host)
 
@@ -13,7 +13,7 @@ export async function fetchMLB<T>(
 	}
 
 	try {
-		const response = await fetch(url.toString(), { signal: AbortSignal.timeout(10_000) })
+		const response = await _fetch(url.toString(), { signal: AbortSignal.timeout(10_000) })
 
 		if (!response.ok) {
 			const body = await response.text().catch(() => '(unreadable body)')

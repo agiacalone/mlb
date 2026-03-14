@@ -2,7 +2,7 @@ import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
 import { getToday, slash } from '$lib/temporal'
 import { fetchSeasonProgress } from './fetch-season-progress'
 
-export const load = async ({ params, url, depends }) => {
+export const load = async ({ params, url, depends, fetch }) => {
 	depends('schedule:day')
 
 	const sportId = url.searchParams.get('sportId') || '1'
@@ -13,7 +13,7 @@ export const load = async ({ params, url, depends }) => {
 		fetchSeason(year),
 	])
 
-	const seasonProgress = await fetchSeasonProgress(sportId, year, schedule)
+	const seasonProgress = await fetchSeasonProgress(sportId, year, schedule, fetch)
 
 	return {
 		schedule,

@@ -2,7 +2,7 @@ import { fetchMLB } from '$lib/fetch'
 import type { Actions } from './$types'
 
 export const actions = {
-	default: async ({ request, url }) => {
+	default: async ({ request, url, fetch }) => {
 		const formData = await request.formData()
 		const personIds = formData.get('ids') as string
 
@@ -26,7 +26,7 @@ export const actions = {
 			personIds,
 			fields: ['people,id,fullName', 'stats,group,displayName,splits,season,stat', allStats],
 			hydrate: `stats(${statsHydration})`,
-		})
+		}, { fetch })
 
 		return {
 			entries: {

@@ -3,7 +3,7 @@ import { fetchSeason } from '$lib/fetch/presets'
 import { formatDate, getToday } from '$lib/temporal'
 import type { PageLoad } from './$types'
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ fetch }) => {
 	const year = getToday().getFullYear().toString()
 
 	const [season, transactions] = await Promise.all([
@@ -12,7 +12,7 @@ export const load: PageLoad = async () => {
 			sportId: '1',
 			date: formatDate(getToday(), { locale: 'en-CA' }),
 			fields: ['transactions,date,description,typeDesc,toTeam,fromTeam,id,name,fullName,person'],
-		}),
+		}, { fetch }),
 	])
 
 	return {

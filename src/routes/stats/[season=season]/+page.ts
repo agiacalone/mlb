@@ -1,7 +1,7 @@
 import { fetchMLB } from '$lib/fetch'
 import type { PageLoad } from './$types'
 
-export const load: PageLoad = async ({ params, url }) => {
+export const load: PageLoad = async ({ params, url, fetch }) => {
 	const hittingSortStat = url.searchParams.get('hittingSortStat') ?? 'homeRuns'
 	const pitchingSortStat = url.searchParams.get('pitchingSortStat') ?? 'era'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ params, url }) => {
 	const position = url.searchParams.get('position')
 
 	const [baseballStats, hittingLeaders, pitchingLeaders, positions] = await Promise.all([
-		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats'),
+		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats', undefined, { fetch }),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
 			stats: 'season',
 			group: 'hitting',
@@ -25,7 +25,7 @@ export const load: PageLoad = async ({ params, url }) => {
 			gameType,
 			sportId,
 			...(position ? { position } : {}),
-		}),
+		}, { fetch }),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
 			stats: 'season',
 			group: 'pitching',
@@ -41,8 +41,8 @@ export const load: PageLoad = async ({ params, url }) => {
 			gameType,
 			sportId,
 			...(position ? { position } : {}),
-		}),
-		fetchMLB<MLB.PositionMeta[]>('/api/v1/positions'),
+		}, { fetch }),
+		fetchMLB<MLB.PositionMeta[]>('/api/v1/positions', undefined, { fetch }),
 	])
 
 	return {

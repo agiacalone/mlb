@@ -1,7 +1,7 @@
 import { fetchMLB } from '$lib/fetch'
 import type { PageLoad } from './$types'
 
-export const load: PageLoad = async ({ params, url }) => {
+export const load: PageLoad = async ({ params, url, fetch }) => {
 	const personId = params.personId
 
 	const [person, baseballStats] = await Promise.all([
@@ -23,8 +23,8 @@ export const load: PageLoad = async ({ params, url }) => {
 				'team,currentTeam,preferredTeam,rosterEntries,draft,relatives',
 				'stats(group=[pitching,hitting],type=[yearByYear])',
 			],
-		}),
-		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats'),
+		}, { fetch }),
+		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats', undefined, { fetch }),
 	])
 
 	return {
