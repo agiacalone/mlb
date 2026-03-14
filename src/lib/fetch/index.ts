@@ -16,7 +16,7 @@ export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params, host 
 			const error = new Error(`MLB API ${response.status}: ${url.pathname}`)
 			console.error('[fetchMLB] HTTP error', {
 				status: response.status,
-				url: url.toString(),
+				url: decodeURIComponent(url.toString()),
 				body,
 			})
 			throw error
@@ -26,7 +26,7 @@ export async function fetchMLB<T>(endpoint: string, params?: Fetch.Params, host 
 	} catch (error) {
 		if (error instanceof Error && error.message.startsWith('MLB API')) throw error
 		console.error('[fetchMLB] Unexpected error', {
-			url: url.toString(),
+			url: decodeURIComponent(url.toString()),
 			error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
 		})
 		throw error

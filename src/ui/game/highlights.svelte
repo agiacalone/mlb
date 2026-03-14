@@ -55,8 +55,8 @@
 	}}
 />
 
-<article class="relative grid gap-ch text-center sm:px-ch {className}">
-	{#if highlights?.length}
+{#if highlights?.length}
+	<article class="relative grid gap-ch text-center sm:px-ch {className}">
 		<div class="flex items-center gap-ch">
 			<select
 				class="order-first button w-full"
@@ -106,7 +106,5 @@
 				</figure>
 			{/if}
 		{/each}
-	{:else}
-		<Empty class="grow">No highlights</Empty>
-	{/if}
-</article>
+	</article>
+{/if}

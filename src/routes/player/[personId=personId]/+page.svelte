@@ -108,7 +108,7 @@
 
 	{#if person.rosterEntries}
 		<section
-			class="flex items-start gap-ch overflow-x-auto px-ch pt-[.5lh] before:m-auto after:m-auto"
+			class="flex items-start gap-ch overflow-x-auto overflow-y-clip px-ch pt-[.5lh] before:m-auto after:m-auto"
 		>
 			<RosterEntries class="contents!" rosterEntries={person.rosterEntries} />
 			<Draft {person} />

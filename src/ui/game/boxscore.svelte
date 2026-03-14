@@ -56,7 +56,7 @@
 								{@const { stats, ...player } = team.players[`ID${playerId}`]}
 								{@const substituted = !isSpoilerPrevented && !team.battingOrder.includes(playerId)}
 
-								{#if player.position.abbreviation !== 'P'}
+								{#if player?.position?.abbreviation !== 'P'}
 									<tr
 										class="hover:*:bg-foreground/10"
 										data-substituted={substituted ? '' : undefined}
@@ -103,7 +103,7 @@
 						<tbody>
 							{#each team.pitchers.slice(0, isSpoilerPrevented ? 1 : team.pitchers.length) as playerId (playerId)}
 								{@const { stats, ...player } = team.players[`ID${playerId}`]}
-								{#if player.position.abbreviation === 'P'}
+								{#if player?.position?.abbreviation === 'P'}
 									<tr class="hover:*:bg-foreground/10">
 										{@render p(player)}
 
@@ -183,7 +183,7 @@
 			</span>
 
 			<small class="w-[3ch] shrink-0 text-center text-xs text-current/40 no-underline">
-				{position.abbreviation}
+				{position?.abbreviation}
 			</small>
 
 			<span class="absolute inset-0"></span>
