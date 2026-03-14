@@ -8,7 +8,7 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 	const sportId = url.searchParams.get('sportId') ?? '1'
 	const position = url.searchParams.get('position')
 
-	const [baseballStats, hittingLeaders, pitchingLeaders, positions] = await Promise.all([
+	const [baseballStats, hittingLeaders, pitchingLeaders, positions, { leagues }, seasonInfo] = await Promise.all([
 		fetchMLB<MLB.BaseballStat[]>('/api/v1/baseballStats', undefined, { fetch }),
 		fetchMLB<MLB.PlayerStatsResponse>('/api/v1/stats', {
 			stats: 'season',
@@ -43,7 +43,36 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 			...(position ? { position } : {}),
 		}, { fetch }),
 		fetchMLB<MLB.PositionMeta[]>('/api/v1/positions', undefined, { fetch }),
+		fetchMLB<MLB.LeaguesResponse>(
+			'/api/v1/leagues',
+			{ season: params.season, fields: 'leagues,id,divisionsInUse,sport,id' },
+			{ fetch },
+		),
+		fetchMLB<MLB.SeasonResponse>(
+			'/api/v1/seasons',
+			{
+				sportId,
+				season: params.season,
+				fields: 'seasons,springStartDate,regularSeasonStartDate,postSeasonStartDate',
+			},
+			{ fetch },
+		).then((r) => r.seasons?.[0]),
 	])
+
+	const availableGameTypes = [
+		seasonInfo?.springStartDate && 'S',
+		seasonInfo?.regularSeasonStartDate && 'R',
+		seasonInfo?.postSeasonStartDate && 'P',
+	].filter(Boolean) as string[]
+
+	const availableSportIds = [
+		...new Set(
+			leagues
+				.filter((l) => (gameType === 'S' ? !l.divisionsInUse : l.divisionsInUse))
+				.map((l) => l.sport?.id)
+				.filter(Boolean),
+		),
+	] as number[]
 
 	return {
 		baseballStats,
@@ -56,5 +85,7 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 			...pitchingLeaders,
 		},
 		positions,
+		availableSportIds,
+		availableGameTypes,
 	}
 }
