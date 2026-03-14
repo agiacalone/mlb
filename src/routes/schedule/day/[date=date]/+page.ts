@@ -1,4 +1,5 @@
 import { fetchDaySchedule, fetchSeason } from '$lib/fetch/presets'
+import { fetchMLB } from '$lib/fetch'
 import { getToday, slash } from '$lib/temporal'
 import { fetchSeasonProgress } from './fetch-season-progress'
 
@@ -8,16 +9,23 @@ export const load = async ({ params, url, depends, fetch }) => {
 	const sportId = url.searchParams.get('sportId') || '1'
 	const year = (new Date(slash(params.date)).getFullYear() ?? getToday().getFullYear()).toString()
 
-	const [schedule, season] = await Promise.all([
+	const [schedule, season, { leagues }] = await Promise.all([
 		fetchDaySchedule(params.date, sportId),
 		fetchSeason(year),
+		fetchMLB<MLB.LeaguesResponse>(
+			'/api/v1/leagues',
+			{ season: year, fields: 'leagues,id,sport,id' },
+			{ fetch },
+		),
 	])
 
+	const availableSportIds = [...new Set(leagues.map((l) => l.sport?.id).filter(Boolean))] as number[]
 	const seasonProgress = await fetchSeasonProgress(sportId, year, schedule, fetch)
 
 	return {
 		schedule,
 		seasonProgress,
 		season,
+		availableSportIds,
 	}
 }
