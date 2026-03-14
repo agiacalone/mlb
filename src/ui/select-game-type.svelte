@@ -5,9 +5,11 @@
 	let {
 		class: className,
 		options = [],
+		available,
 	}: {
 		class?: string
 		options?: { value: string; label: string }[]
+		available?: string[]
 	} = $props()
 
 	const GAME_TYPES = $derived([
@@ -37,6 +39,6 @@
 	}}
 >
 	{#each GAME_TYPES as { value, label } (value)}
-		<option {value} selected={value === gameType}>{label}</option>
+		<option {value} selected={value === gameType} disabled={available && !available.includes(value)}>{label}</option>
 	{/each}
 </select>

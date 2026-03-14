@@ -5,8 +5,10 @@
 
 	let {
 		class: className,
+		available,
 	}: {
 		class?: string
+		available?: number[]
 	} = $props()
 
 	let sport = $derived(page.url.searchParams.get('sportId') ?? '1')
@@ -34,7 +36,7 @@
 >
 	{#await fetchSports() then { sports }}
 		{#each sports as sportId}
-			<option value={sportId.id} selected={sportId.id === Number(sport)}>
+			<option value={sportId.id} selected={sportId.id === Number(sport)} disabled={available && !available.includes(sportId.id)}>
 				{sportId.name}
 			</option>
 		{/each}

@@ -5,16 +5,39 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 	const sportId = url.searchParams.get('sportId') ?? '1'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
 
-	const { leagues } = await fetchMLB<MLB.LeaguesResponse>(
-		'/api/v1/leagues',
-		{ sportId, season: params.season, fields: 'leagues,id,divisionsInUse' },
-		{ fetch },
-	)
+	const [{ leagues: allLeagues }, seasonInfo] = await Promise.all([
+		fetchMLB<MLB.LeaguesResponse>(
+			'/api/v1/leagues',
+			{ season: params.season, fields: 'leagues,id,divisionsInUse,sport,id' },
+			{ fetch },
+		),
+		fetchMLB<MLB.SeasonResponse>(
+			'/api/v1/seasons',
+			{
+				sportId,
+				season: params.season,
+				fields: 'seasons,springStartDate,regularSeasonStartDate,postSeasonStartDate',
+			},
+			{ fetch },
+		).then((r) => r.seasons?.[0]),
+	])
 
-	const leagueId = leagues
-		.filter((l) => (gameType === 'S' ? !l.divisionsInUse : l.divisionsInUse))
+	const availableGameTypes = [
+		seasonInfo?.springStartDate && 'S',
+		seasonInfo?.regularSeasonStartDate && 'R',
+		seasonInfo?.postSeasonStartDate && 'P',
+	].filter(Boolean) as string[]
+
+	const matchesGameType = (l: MLB.League) => (gameType === 'S' ? !l.divisionsInUse : l.divisionsInUse)
+
+	const leagueId = allLeagues
+		.filter((l) => l.sport?.id === Number(sportId) && matchesGameType(l))
 		.map((l) => l.id)
 		.join(',')
+
+	const availableSportIds = [
+		...new Set(allLeagues.filter(matchesGameType).map((l) => l.sport?.id).filter(Boolean)),
+	] as number[]
 
 	const standings = await fetchMLB<MLB.StandingsResponse>(
 		'/api/v1/standings',
@@ -35,5 +58,7 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 
 	return {
 		standings,
+		availableGameTypes,
+		availableSportIds,
 	}
 }
