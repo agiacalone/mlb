@@ -3,7 +3,7 @@ import { fetchMLB } from '$lib/fetch'
 import { getToday, slash } from '$lib/temporal'
 import { fetchSeasonProgress } from './fetch-season-progress'
 
-export const load = async ({ params, url, depends, fetch }) => {
+export const load = async ({ params, url, depends }) => {
 	depends('schedule:day')
 
 	const sportId = url.searchParams.get('sportId') || '1'
@@ -15,12 +15,11 @@ export const load = async ({ params, url, depends, fetch }) => {
 		fetchMLB<MLB.LeaguesResponse>(
 			'/api/v1/leagues',
 			{ season: year, fields: 'leagues,id,sport,id' },
-			{ fetch },
 		),
 	])
 
 	const availableSportIds = [...new Set(leagues.map((l) => l.sport?.id).filter(Boolean))] as number[]
-	const seasonProgress = await fetchSeasonProgress(sportId, year, schedule, fetch)
+	const seasonProgress = await fetchSeasonProgress(sportId, year, schedule)
 
 	return {
 		schedule,

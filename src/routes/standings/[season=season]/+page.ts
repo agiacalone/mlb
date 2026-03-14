@@ -1,7 +1,7 @@
 import { fetchMLB } from '$lib/fetch'
 import type { PageLoad } from './$types'
 
-export const load: PageLoad = async ({ params, url, fetch }) => {
+export const load: PageLoad = async ({ params, url }) => {
 	const sportId = url.searchParams.get('sportId') ?? '1'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
 
@@ -9,7 +9,6 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 		fetchMLB<MLB.LeaguesResponse>(
 			'/api/v1/leagues',
 			{ season: params.season, fields: 'leagues,id,divisionsInUse,sport,id' },
-			{ fetch },
 		),
 		fetchMLB<MLB.SeasonResponse>(
 			'/api/v1/seasons',
@@ -18,7 +17,6 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 				season: params.season,
 				fields: 'seasons,springStartDate,regularSeasonStartDate,postSeasonStartDate',
 			},
-			{ fetch },
 		).then((r) => r.seasons?.[0]),
 	])
 
@@ -53,7 +51,6 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 				'team,id,name,clubName,teamName,abbreviation',
 			],
 		},
-		{ fetch },
 	)
 
 	return {
