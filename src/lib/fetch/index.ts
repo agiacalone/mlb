@@ -9,7 +9,8 @@ export async function fetchMLB<T>(
 	const url = new URL(endpoint, host)
 
 	for (const [key, value] of Object.entries(params ?? {})) {
-		url.searchParams.set(key, typeof value !== 'string' ? value!?.flat().join(',') : value)
+		if (value == null) continue
+		url.searchParams.set(key, typeof value !== 'string' ? value.flat().join(',') : value)
 	}
 
 	try {

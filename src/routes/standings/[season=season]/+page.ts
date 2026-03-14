@@ -5,17 +5,21 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 	const sportId = url.searchParams.get('sportId') ?? '1'
 	const gameType = url.searchParams.get('gameType') ?? 'R'
 
+	const { leagues } = await fetchMLB<MLB.LeaguesResponse>(
+		'/api/v1/leagues',
+		{ sportId, season: params.season, fields: 'leagues,id,divisionsInUse' },
+		{ fetch },
+	)
+
+	const leagueId = leagues
+		.filter((l) => (gameType === 'S' ? !l.divisionsInUse : l.divisionsInUse))
+		.map((l) => l.id)
+		.join(',')
+
 	const standings = await fetchMLB<MLB.StandingsResponse>(
 		'/api/v1/standings',
 		{
-			leagueId:
-				sportId === '51'
-					? '160'
-					: sportId === '1' && gameType === 'S'
-						? '114,115'
-						: sportId === '1' && gameType === 'R'
-							? '103,104'
-							: '103,104',
+			leagueId,
 			season: params.season,
 			standingsType:
 				gameType === 'S' ? 'springTraining' : gameType === 'P' ? 'postseason' : 'regularSeason',
