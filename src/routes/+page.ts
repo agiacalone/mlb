@@ -6,7 +6,7 @@ import type { PageLoad } from './$types'
 export const load: PageLoad = async ({ fetch }) => {
 	const year = getToday().getFullYear().toString()
 
-	const [season, transactions] = await Promise.all([
+	const [seasonResult, transactionsResult] = await Promise.allSettled([
 		fetchSeason(year),
 		fetchMLB<MLB.TransactionsResponse>('/api/v1/transactions', {
 			sportId: '1',
@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch }) => {
 	])
 
 	return {
-		season,
-		transactions,
+		season: seasonResult.status === 'fulfilled' ? seasonResult.value : null,
+		transactions: transactionsResult.status === 'fulfilled' ? transactionsResult.value : null,
 	}
 }

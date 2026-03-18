@@ -74,12 +74,16 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 
 		<hr class="border-dashed border-stroke" />
 
+	{#if season}
 		<CountdownList {season} />
+	{/if}
 
 		<div
 			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
 		>
-			<SeasonInfo {season} bordered />
+			{#if season}
+				<SeasonInfo {season} bordered />
+			{/if}
 
 			<section class="space-y-ch">
 				{#if favoriteTeam}
@@ -106,7 +110,7 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 
 			<section class="space-y-ch [&_ul_p]:text-sm">
 				<h2 class="text-center h1">Today's Transactions</h2>
-				<TransactionByTeam transactions={data.transactions.transactions} />
+				<TransactionByTeam transactions={data.transactions?.transactions ?? []} />
 				<div class="text-center text-sm">
 					{@render link({ href: '/transactions', label: 'View all transactions' })}
 				</div>
