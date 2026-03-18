@@ -27,7 +27,17 @@ export async function fetchMLB<T>(
 			throw error
 		}
 
-		return (await response.json()) as T
+		const json = await response.json()
+		if (typeof json?.messageNumber === 'number') {
+			const err = new Error(`MLB API error: ${json.message ?? 'unknown'} (${url.pathname})`)
+			console.error('[fetchMLB] Error body on 200', {
+				messageNumber: json.messageNumber,
+				message: json.message,
+				url: decodeURIComponent(url.toString()),
+			})
+			throw err
+		}
+		return json as T
 	} catch (error) {
 		if (error instanceof Error && error.message.startsWith('MLB API')) throw error
 		console.error('[fetchMLB] Unexpected error', {
