@@ -2,7 +2,6 @@
 	import { fetchMLB } from '$lib/fetch'
 	import { formatDate, getToday } from '$lib/temporal'
 	import Awards from '$ui/banner/awards.svelte'
-	import WBC from '$ui/banner/wbc.svelte'
 	import Baseball from '$ui/baseball.svelte'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ChevronRightIcon, StarEmptyIcon } from '$ui/icons'
@@ -53,8 +52,6 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 <div
 	class="flex min-h-[calc(100dvh-1ch)] flex-col justify-center gap-[2lh] pt-[2lh] pb-[max(2lh,env(safe-area-inset-bottom))]"
 >
-	<WBC />
-
 	<div class="my-auto flex flex-col gap-[inherit] px-ch">
 		<header class="space-y-ch">
 			<h1 class="mx-auto flex max-w-max flex-col text-xl" aria-label="Welcome to MLB.TheOhtani.com">
@@ -74,9 +71,9 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 
 		<hr class="border-dashed border-stroke" />
 
-	{#if season}
-		<CountdownList {season} />
-	{/if}
+		{#if season}
+			<CountdownList {season} />
+		{/if}
 
 		<div
 			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"

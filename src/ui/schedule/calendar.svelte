@@ -58,18 +58,21 @@
 				<tr>
 					{#each week as day, di (di)}
 						{@const date = `${year}-${String(month).padStart(2, '0')}-${day?.toString().padStart(2, '0')}`}
+						{@const isToday = formatDate(getToday(), { locale: 'en-CA' }) === date}
 
 						<td
 							class={cn(
 								'border border-transparent align-top',
 								!day && 'opacity-0',
-								formatDate(getToday(), { locale: 'en-CA' }) === date &&
-									'bg-accent/15 positive dark:text-accent',
+								isToday && 'bg-accent/15 positive dark:text-accent',
 							)}
 						>
 							{#if day}
 								<a
-									class={cn('block hover-link', cells && 'not-has-[+*]:text-current/40')}
+									class={cn(
+										'block hover-link',
+										cells && !isToday && 'not-has-[+*]:text-current/40',
+									)}
 									href="/schedule/day/{date}"
 								>
 									{day}

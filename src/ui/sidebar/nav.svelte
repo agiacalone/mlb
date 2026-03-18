@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { dev } from '$app/environment'
 	import { page } from '$app/state'
-	import { formatDate, getToday } from '$lib/temporal'
 	import { version } from '$pkg'
 	import {
 		ArrowsDiffIcon,
@@ -13,7 +12,6 @@
 		JerseyIcon,
 		JsonIcon,
 		RankIcon,
-		WBCIcon,
 	} from '$ui/icons'
 	import type { Component } from 'svelte'
 	import CompareList from './compare-list.svelte'
@@ -95,13 +93,6 @@
 		</div>
 
 		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
-			{@render navLink({
-				class: '[&_img]:size-4 positive',
-				href: `/schedule/day/${formatDate(getToday(), { locale: 'en-CA' })}?sportId=51`,
-				label: 'WBC Schedule',
-				icon: WBCIcon,
-			})}
-
 			{#each internalLinks.filter(({ disabled }) => !disabled) as link (link.href)}
 				{@render navLink(link)}
 			{/each}
