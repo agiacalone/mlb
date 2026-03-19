@@ -85,10 +85,10 @@
 
 <div class="space-y-lh pb-[max(1lh,env(safe-area-inset-bottom))]">
 	<section class="space-y-lh">
-		<header class="grid items-center gap-y-ch md:grid-cols-2">
+		<header class="grid gap-y-ch md:grid-cols-2">
 			<figure class="max-md:mask-b-from-25% md:mask-r-from-50%">
 				<img
-					class="w-full opacity-0 transition-opacity duration-600"
+					class="size-full object-cover opacity-0 transition-opacity duration-600"
 					src="https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:action:hero:current.jpg/w_1200,q_auto:best/v1/people/{person.id}/action/hero/current"
 					width={1200}
 					height={400}

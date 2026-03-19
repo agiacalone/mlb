@@ -265,6 +265,7 @@ export const DIRECTORY: Record<string, Docs.EndpointSchema> = {
 			queryParams: {
 				sportId: PRESETS.sportId,
 				season: PRESETS.season,
+				fields: [{ value: '', placeholder: 'teams,id,name' }],
 				hydrate: [{ value: '', placeholder: 'hydrations' }],
 			},
 		},

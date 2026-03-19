@@ -10,7 +10,7 @@
 	} = $props()
 </script>
 
-<dl class="mx-auto description-list max-w-max px-ch">
+<dl class="m-auto description-list max-w-max p-ch">
 	{#if person.primaryPosition}
 		<dt>Position</dt>
 		<dd>
