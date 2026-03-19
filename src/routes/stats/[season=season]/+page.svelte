@@ -260,7 +260,7 @@
 	<td class="w-[3ch] text-center text-xs text-current/50">{rank}</td>
 
 	<th class="sticky left-0 z-1 w-lh min-w-lh" style:--team-bg={bg}>
-		<Headshot {person} class="size-lh" />
+		<Headshot {person} class="size-lh" type="silo" />
 	</th>
 
 	<th
