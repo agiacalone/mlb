@@ -21,59 +21,67 @@
 	import SpoilerPreventionList from './spoiler-prevention-list.svelte'
 	import ToggleColorScheme from './toggle-color-scheme.svelte'
 
-	const internalLinks: {
+	type LinkItem = {
 		href: string
 		label: string
 		icon: Component
-		disabled?: boolean
-	}[] = [
-		{
-			href: '/schedule/day',
-			label: 'Daily Schedule',
-			icon: CalendarTodayIcon,
-		},
-		{
-			href: '/schedule/week',
-			label: 'Weekly Schedule',
-			icon: CalendarIcon,
-		},
-		{
-			href: '/standings',
-			label: 'Standings',
-			icon: FlagIcon,
-		},
-		{
-			href: '/stats',
-			label: 'Stat Leaders',
-			icon: RankIcon,
-		},
-		{
-			href: '/teams',
-			label: 'Teams',
-			icon: JerseyIcon,
-		},
-		{
-			href: '/player',
-			label: 'Players',
-			icon: HelmetIcon,
-		},
-		{
-			href: '/transactions',
-			label: 'Transactions',
-			icon: ArrowsDiffIcon,
-		},
-		{
-			href: '/api/v1',
-			label: 'Stats API Playground',
-			icon: JsonIcon,
-			disabled: !dev,
-		},
-	]
+	}
+
+	const internalLinks: Record<string, LinkItem[]> = {
+		Schedule: [
+			{
+				href: '/schedule/day',
+				label: 'Daily Schedule',
+				icon: CalendarTodayIcon,
+			},
+			{
+				href: '/schedule/week',
+				label: 'Weekly Schedule',
+				icon: CalendarIcon,
+			},
+		],
+		League: [
+			{
+				href: '/standings',
+				label: 'Standings',
+				icon: FlagIcon,
+			},
+			{
+				href: '/stats',
+				label: 'Stat Leaders',
+				icon: RankIcon,
+			},
+		],
+		Browse: [
+			{
+				href: '/teams',
+				label: 'Teams',
+				icon: JerseyIcon,
+			},
+			{
+				href: '/player',
+				label: 'Players',
+				icon: HelmetIcon,
+			},
+			{
+				href: '/transactions',
+				label: 'Transactions',
+				icon: ArrowsDiffIcon,
+			},
+		],
+		Developer: [
+			{
+				href: '/api/v1',
+				label: 'Stats API Playground',
+				icon: JsonIcon,
+			},
+		],
+	}
 </script>
 
 <Drawer>
-	<div class="flex h-full flex-col gap-ch overflow-x-clip overflow-y-auto pt-ch">
-		<div class="sm:sidebar-closed-hidden">
+	<div class="flex h-full flex-col overflow-x-clip overflow-y-auto pt-ch sidebar-open:gap-ch">
+		<div class="mb-ch sm:sidebar-closed-hidden">
 			<a class="flex items-center gap-ch" href="/">
 				<figure class="relative size-4">
 					<img
@@ -92,11 +100,22 @@
 			</a>
 		</div>
 
-		<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
-			{#each internalLinks.filter(({ disabled }) => !disabled) as link (link.href)}
-				{@render navLink(link)}
-			{/each}
-		</ul>
+		{#each Object.entries(internalLinks) as [group, links] (group)}
+			<div class="grid gap-[.5ch]">
+				{#if links.length >= 1}
+					<h2
+						class="text-[x-small] tracking-widest text-current/60 uppercase sm:sidebar-not-open:hidden"
+					>
+						{group}
+					</h2>
+				{/if}
+				<ul class="sidebar-not-open:landscape:max-lg:overflow-clip">
+					{#each links as link (link.href)}
+						{@render navLink(link)}
+					{/each}
+				</ul>
+			</div>
+		{/each}
 
 		<ul class="mt-auto text-sm *:py-[2px] sidebar-not-open:landscape:max-lg:overflow-clip">
 			<li><CompareList /></li>
@@ -120,12 +139,7 @@
 	</div>
 </Drawer>
 
-{#snippet navLink({
-	class: className,
-	href,
-	label,
-	icon: Icon,
-}: (typeof internalLinks)[number] & { class?: string })}
+{#snippet navLink({ class: className, href, label, icon: Icon }: LinkItem & { class?: string })}
 	<li class={className}>
 		<a
 			{href}
@@ -154,6 +168,7 @@
 		height: 1rem;
 	}
 
+	h2,
 	a:not([href*='github']),
 	li > :global(*) {
 		padding-inline: max(1ch, env(safe-area-inset-left)) 1ch;
