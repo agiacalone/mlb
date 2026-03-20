@@ -284,7 +284,7 @@
 }
 
 @utility prose {
-	@apply space-y-[.7lh] leading-relaxed;
+	@apply space-y-lh leading-relaxed;
 
 	h1 {
 		@apply h1;
@@ -304,6 +304,10 @@
 	h6 {
 		@apply h6;
 	}
+}
+
+@utility full-bleed {
+	margin-inline: calc(50% - 50vw);
 }
 
 /* anims */

@@ -8,23 +8,31 @@ tags:
   - Recaps
 ---
 
+<script lang="ts">
+  import RecapImage from '$ui/blog/recap-image.svelte'
+</script>
+
 Nobody saw it coming. Not like this.
 
-[Bryce Harper](/player/547180) steps in, eighth inning, [Venezuela](/teams/944) 2, [USA](/teams/940) 0. 47,000 people in Miami are about to watch Team USA get shut out in the WBC final for the second time in three years. Then Harper—because he is _Bryce Harper_—launches a two-run shot into the night and ties it. The place loses its mind.
+Harper steps in, eighth inning, [Venezuela](/teams/944) 2, [USA](/teams/940) 0. 36,190 people in loanDepot Park are about to watch Team USA get shut out in the WBC final for the second time in three years. Then Harper—because he is [_Bryce Harper_](/player/547180)—launches a two-run shot into the night and ties it. The place loses its mind.
 
-And then Venezuela's [Eugenio Suárez](/player/553993)—who has played in this league for 12 years without anyone putting him in a sentence next to "WBC hero"—steps up in the ninth and doubles in the go-ahead run. [Daniel Palencia](/player/694037) slams the door. [Venezuela 3, USA 2](/game/788094). Final.
+And then Venezuela's [Eugenio Suárez](/player/553993)—who has played in this league for 12 years without anyone putting him in a sentence next to "WBC hero"—steps up in the ninth and doubles in the go-ahead run. [Daniel Palencia](/player/694037) slams the door. [Venezuela 3, USA 2. Final](/game/788094).
 
 [Venezuela](/teams/944) is the world champion of baseball for the first time. And nothing about this tournament went the way anyone predicted.
 
-## [Japan Went Home in the Quarterfinals](/game/788097). Let That Sink In.
+<RecapImage gamePk="788094" />
+
+## [Japan Went Home in the Quarterfinals](/game/719497). Let That Sink In.
 
 [Japan](/team/843) was the defending champion. They had the best pitcher in baseball in [Shohei Ohtani](/player/660271). They entered the tournament with more WBC wins (48) than every other country combined, more or less.
 
-And they got [bounced in the quarterfinals](/game/719497) by Venezuela.
+And they got [bounced in the quarterfinals](/game/788097) by Venezuela.
+
+<RecapImage gamePk="788097" />
 
 It was the worst finish in Japan's WBC history—and it wasn't even close. [Venezuela](/teams/944) dismantled them with a mix of relentless plate discipline and a bullpen that nobody respected heading into the tournament. Japan's pitching, which has been their identity in every previous WBC, got hit around. The lineup couldn't answer.
 
-For a country that treats the WBC like its Super Bowl, this is going to sting for four years.
+For a country that treats the WBC like its Super Bowl, this is going to sting for years to come.
 
 ## How Venezuela Actually Won This Thing
 
@@ -58,12 +66,14 @@ Here's the part that actually matters for the next six months of baseball:
 
 **Japan's MLB players have something to prove.** [Yoshinobu Yamamoto](/player/808967), [Shohei Ohtani](/player/660271), [Seiya Suzuki](/player/673548)—these are some of the best players in baseball. They're walking into their MLB seasons carrying the worst WBC result their country has ever had. That can go one of two ways. I'm betting on a chip-on-the-shoulder response.
 
-**[Italy](/teams/841) was unbelievably fun.** Before getting knocked out by Venezuela, Italy went undefeated through pool play and beat [Team USA](/teams/940). They beat [Mexico](/teams/867). For a country that isn't supposed to be a baseball powerhouse, they played with a physicality and a nastiness that made every game a problem. Several of those guys play in MLB. Keep an eye on that Italian-heritage talent pipeline.
+**[Italy](/teams/841) was unbelievably fun.** Before getting knocked out by Venezuela, Italy went undefeated through pool play and [beat Team USA](/game/788119). [They beat Mexico](/game/788121). For a country that isn't supposed to be a baseball powerhouse, they played with a physicality and a nastiness that made every game a problem. Several of those guys play in MLB. Keep an eye on that Italian-heritage talent pipeline.
+
+<RecapImage gamePk="788119" />
 
 The WBC is over. It was great. Venezuela earned it.
 
 Now Opening Night is five days [away—Yankees and Giants on March 25th](/schedule/day/2026-03-25)—and the regular season starts [March 26th](/schedule/day/2026-03-26).
 
-I built [Mitchell's Live ScoreBug](/) because I wanted a better way to watch baseball. Live scores, real Statcast data, player profiles that actually tell you something. Every player who shined in this WBC is already in there—their career stats, their Statcast numbers, their team page.
+I built [MLB (_Mitchell's Live ScoreBug_)](/) because I wanted a better way to watch baseball. Live scores, real Statcast data, player profiles that actually tell you something. Every player who shined in this WBC is already in there—their career stats, their Statcast numbers, their team page.
 
-The season is about to start. Let's go.
+The season is about to start. Let's go!

@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { fetchMLB } from '$lib/fetch'
-	import { formatDate, getToday } from '$lib/temporal'
 	import Awards from '$ui/banner/awards.svelte'
-	import Baseball from '$ui/baseball.svelte'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ChevronRightIcon, StarEmptyIcon } from '$ui/icons'
 	import Metadata from '$ui/metadata.svelte'
@@ -12,6 +10,8 @@
 	import TeamCalendar from '$ui/team/team-calendar.svelte'
 	import TransactionByTeam from '$ui/transactions/by-team.svelte'
 	import type { PageProps } from './$types'
+
+	;`import Baseball from '$ui/baseball.svelte'`
 
 	let { data }: PageProps = $props()
 	let { season } = $derived(data)
@@ -25,8 +25,6 @@ $$ |\\$  /$$ |$$ |      $$ |  $$ |
 $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 \\__|     \\__|\\________|\\_______/
 `
-
-	const today = formatDate(getToday(), { weekday: 'long', month: 'long', day: 'numeric' })
 
 	const favoriteTeam = favoritesStore.favorites
 		.find((f) => f.href.includes('team'))
