@@ -29,19 +29,20 @@
 	<link rel="preconnect" href="https://statsapi.mlb.com" />
 	<link rel="preconnect" href="https://www.mlbstatic.com" />
 	<link rel="preconnect" href="https://midfield.mlbstatic.com" />
+	<link rel="preconnect" href="https://img.mlbstatic.com" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'WebApplication',
-		'name': 'MLB.TheOhtani.com',
-		'url': 'https://mlb.theohtani.com',
-		'description': 'A custom MLB scorebug, standings, stats, and player profiles.',
-		'applicationCategory': 'SportsApplication',
-		'operatingSystem': 'Web',
-		'inLanguage': 'en',
-		'author': { '@type': 'Person', 'name': 'nuotsu', 'url': 'https://mlb.theohtani.com' }
+		name: 'MLB.TheOhtani.com',
+		url: 'https://mlb.theohtani.com',
+		description: 'A custom MLB scorebug, standings, stats, and player profiles.',
+		applicationCategory: 'SportsApplication',
+		operatingSystem: 'Web',
+		inLanguage: 'en',
+		author: { '@type': 'Person', name: 'nuotsu', url: 'https://mlb.theohtani.com' },
 	})}<\/script>`}
 </svelte:head>
 

@@ -65,6 +65,7 @@
 											<Headshot
 												{person}
 												class="order-first -ml-px size-lh shrink-0"
+												size={48}
 												type="silo"
 												title={person.fullName}
 											/>

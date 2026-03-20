@@ -27,7 +27,7 @@
 
 <figure class="grid gap-ch max-md:full-bleed">
 	{#await fetchRecapImage()}
-		<Loading class="mb-lh aspect-video justify-center bg-current/10 text-current/50">
+		<Loading class="mb-lh aspect-video justify-center bg-current/5 text-current/50">
 			Loading image...
 		</Loading>
 	{:then { slug, image, cuts }}

@@ -75,6 +75,7 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 
 		<div
 			class="grid items-start gap-x-lh gap-y-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
+			style:--height="30ch"
 		>
 			{#if season}
 				<SeasonInfo {season} bordered />
@@ -115,7 +116,8 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 				<h2 class="text-center h1">Blog</h2>
 				<Rollup
 					posts={data.posts}
-					class="h-[calc(25ch+1.5lh+3px)] overflow-y-auto border border-stroke p-ch [&_time]:text-sm"
+					class="h-[calc(var(--height)+1.5lh+3px)] overflow-y-auto border border-stroke p-ch [&_time]:text-sm"
+					limit={10}
 				/>
 				<div class="text-center text-sm">
 					{@render link({ href: `/blog`, label: 'View all posts' })}

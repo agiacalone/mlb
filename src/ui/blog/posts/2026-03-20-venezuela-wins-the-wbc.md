@@ -3,7 +3,7 @@ slug: venezuela-wins-the-wbc
 date: 2026-03-20
 title: Venezuela Wins the WBC and What It Means for MLB's 2026 Season
 description: Venezuela claimed their first WBC title in dramatic fashion, beating Team USA 3-2 on an Eugenio Suárez walk-off double. Here's what it means for the MLB season starting next week.
-image: https://img.mlbstatic.com/mlb-images/image/upload/w_1200,h_640,f_jpg,c_fill,g_auto/mlb/gzyxd6cufihbwct0bel5.jpg
+image: https://img.mlbstatic.com/mlb-images/image/upload/w_300,h_300,f_jpg,c_fill,g_auto/mlb/gzyxd6cufihbwct0bel5.jpg
 tags:
   - WBC
   - Recaps

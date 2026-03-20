@@ -29,7 +29,7 @@
 
 	{#if person}
 		<figure class="shrink-0">
-			<Headshot {person} class="size-lh" />
+			<Headshot {person} class="size-lh" size={48} />
 		</figure>
 	{/if}
 

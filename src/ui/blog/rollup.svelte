@@ -5,13 +5,15 @@
 	let {
 		posts,
 		class: className,
+		limit,
 	}: {
 		posts: Blog.Post[]
+		limit?: number
 	} & HTMLAttributes<HTMLUListElement> = $props()
 </script>
 
 <ul class="flex flex-col gap-ch leading-tight {className}">
-	{#each posts as post (post.slug)}
+	{#each posts.slice(0, limit) as post (post.slug)}
 		{@const date = formatDate(post.date, { locale: 'en-CA' })}
 		{@const href = `/blog/${date}-${post.slug}`}
 
@@ -19,9 +21,9 @@
 			class="group/post relative grid grid-cols-[auto_1fr] items-start gap-ch border-dashed border-stroke [&+&]:border-t [&+&]:pt-ch"
 		>
 			<img
-				class="aspect-square w-[4lh] object-cover transition-[filter] group-hover/post:brightness-110"
-				width={1200}
-				height={640}
+				class="aspect-square w-[3rlh] bg-current/5 object-cover text-[0px] transition-[filter] group-hover/post:brightness-110"
+				width={300}
+				height={300}
 				src={post.image}
 				alt={post.title}
 				loading="lazy"
