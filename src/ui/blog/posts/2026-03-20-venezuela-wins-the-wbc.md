@@ -3,6 +3,7 @@ slug: venezuela-wins-the-wbc
 date: 2026-03-20
 title: Venezuela Wins the WBC and What It Means for MLB's 2026 Season
 description: Venezuela claimed their first WBC title in dramatic fashion, beating Team USA 3-2 on an Eugenio Suárez walk-off double. Here's what it means for the MLB season starting next week.
+image: https://img.mlbstatic.com/mlb-images/image/upload/w_1200,h_640,f_jpg,c_fill,g_auto/mlb/gzyxd6cufihbwct0bel5.jpg
 tags:
   - WBC
   - Recaps
@@ -72,7 +73,7 @@ Here's the part that actually matters for the next six months of baseball:
 
 The WBC is over. It was great. Venezuela earned it.
 
-Now Opening Night is five days [away—Yankees and Giants on March 25th](/schedule/day/2026-03-25)—and the regular season starts [March 26th](/schedule/day/2026-03-26).
+Now Opening Day is five days [away—Yankees and Giants on March 25th](/schedule/day/2026-03-25)—and the regular season starts [March 26th](/schedule/day/2026-03-26).
 
 I built [MLB (_Mitchell's Live ScoreBug_)](/) because I wanted a better way to watch baseball. Live scores, real Statcast data, player profiles that actually tell you something. Every player who shined in this WBC is already in there—their career stats, their Statcast numbers, their team page.
 

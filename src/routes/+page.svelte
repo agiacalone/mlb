@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { fetchMLB } from '$lib/fetch'
 	import Awards from '$ui/banner/awards.svelte'
+	import Baseball from '$ui/baseball.svelte'
+	import Rollup from '$ui/blog/rollup.svelte'
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ChevronRightIcon, StarEmptyIcon } from '$ui/icons'
 	import Metadata from '$ui/metadata.svelte'
@@ -10,8 +12,6 @@
 	import TeamCalendar from '$ui/team/team-calendar.svelte'
 	import TransactionByTeam from '$ui/transactions/by-team.svelte'
 	import type { PageProps } from './$types'
-
-	;`import Baseball from '$ui/baseball.svelte'`
 
 	let { data }: PageProps = $props()
 	let { season } = $derived(data)
@@ -74,7 +74,7 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 		{/if}
 
 		<div
-			class="grid items-start gap-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
+			class="grid items-start gap-x-lh gap-y-[2lh] sm:grid-cols-[repeat(auto-fit,minmax(var(--container-xs),1fr))]"
 		>
 			{#if season}
 				<SeasonInfo {season} bordered />
@@ -108,6 +108,17 @@ $$ | \\_/ $$ |$$$$$$$$\\ $$$$$$$  |
 				<TransactionByTeam transactions={data.transactions?.transactions ?? []} />
 				<div class="text-center text-sm">
 					{@render link({ href: '/transactions', label: 'View all transactions' })}
+				</div>
+			</section>
+
+			<section class="space-y-ch">
+				<h2 class="text-center h1">Blog</h2>
+				<Rollup
+					posts={data.posts}
+					class="h-[calc(25ch+1.5lh+3px)] overflow-y-auto border border-stroke p-ch [&_time]:text-sm"
+				/>
+				<div class="text-center text-sm">
+					{@render link({ href: `/blog`, label: 'View all posts' })}
 				</div>
 			</section>
 		</div>

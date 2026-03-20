@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { dev } from '$app/environment'
 	import { page } from '$app/state'
 	import { version } from '$pkg'
 	import {
@@ -11,6 +10,7 @@
 		HelmetIcon,
 		JerseyIcon,
 		JsonIcon,
+		MegaphoneIcon,
 		RankIcon,
 	} from '$ui/icons'
 	import type { Component } from 'svelte'
@@ -67,6 +67,11 @@
 				href: '/transactions',
 				label: 'Transactions',
 				icon: ArrowsDiffIcon,
+			},
+			{
+				href: '/blog',
+				label: 'Blog',
+				icon: MegaphoneIcon,
 			},
 		],
 		Developer: [

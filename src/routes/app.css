@@ -304,6 +304,10 @@
 	h6 {
 		@apply h6;
 	}
+
+	a {
+		@apply link;
+	}
 }
 
 @utility full-bleed {

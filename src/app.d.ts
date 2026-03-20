@@ -62,6 +62,17 @@ declare global {
 			placeholder?: string
 		}
 	}
+
+	namespace Blog {
+		interface Post {
+			slug: string
+			date: string
+			title: string
+			description?: string
+			image?: string
+			tags?: string[]
+		}
+	}
 }
 
 export {}

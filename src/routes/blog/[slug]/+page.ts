@@ -1,12 +1,8 @@
+import { getPostEntry } from '$ui/blog/get-blog'
 import type { PageLoad } from './$types'
 
 export const load: PageLoad = async ({ params }) => {
-	const modules = import.meta.glob<any>('../posts/*.md', { eager: true })
-
-	const entry = Object.entries(modules).find(([path]) => {
-		const filename = path.split('/').at(-1)?.replace('.md', '')
-		return filename === params.slug
-	})
+	const entry = getPostEntry(params.slug)
 
 	if (!entry) {
 		throw new Error(`Post not found: ${params.slug}`)

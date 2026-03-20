@@ -204,9 +204,6 @@ export const DIRECTORY: Record<string, Docs.EndpointSchema> = {
 			pathParams: {
 				gamePk: PRESETS.gamePk,
 			},
-			queryParams: {
-				fields: [{ value: '' }],
-			},
 		},
 		'/api/v1/game/{gamePk}/contextMetrics': {
 			description:

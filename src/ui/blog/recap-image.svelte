@@ -11,17 +11,15 @@
 	} = $props()
 
 	async function fetchRecapImage() {
-		const data = await fetchMLB<MLB.GameContent>(`/api/v1/game/${gamePk}/content`, {
-			fields: 'editorial,recap,mlb,slug,photo,cuts,width,height,src,title,altText',
-		})
+		const data = await fetchMLB<MLB.GameContent>(`/api/v1/game/${gamePk}/content`)
 
-		const { slug, photo } = data.editorial.recap.mlb
+		const { slug, image } = data.editorial.recap.mlb
 
-		const cuts = photo?.cuts
+		const cuts = image?.cuts
 
 		return {
 			slug,
-			photo,
+			image,
 			cuts: cuts?.filter((cut) => cut.aspectRatio === '16:9'),
 		}
 	}
@@ -32,7 +30,7 @@
 		<Loading class="mb-lh aspect-video justify-center bg-current/10 text-current/50">
 			Loading image...
 		</Loading>
-	{:then { slug, photo, cuts }}
+	{:then { slug, image, cuts }}
 		<a href="/game/{gamePk}" class="transition-[filter] hover:brightness-110">
 			<picture>
 				{#each cuts as cut}
@@ -40,10 +38,11 @@
 				{/each}
 				<img
 					class="aspect-video w-full"
-					src={photo?.cuts[0].src}
-					width={photo?.cuts[0].width}
-					height={photo?.cuts[0].height}
-					alt={alt || photo?.altText || photo?.title}
+					src={image?.cuts[0].src}
+					width={image?.cuts[0].width}
+					height={image?.cuts[0].height}
+					alt={alt || image?.altText || image?.title}
+					loading="lazy"
 				/>
 			</picture>
 		</a>
