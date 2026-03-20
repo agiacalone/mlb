@@ -138,6 +138,10 @@
 	@apply leading-tight font-bold;
 }
 
+@utility h0 {
+	@apply text-2xl h-base;
+}
+
 @utility h1 {
 	@apply text-xl h-base;
 }
@@ -276,6 +280,29 @@
 
 	dt {
 		@apply text-current/50;
+	}
+}
+
+@utility prose {
+	@apply space-y-[.7lh] leading-relaxed;
+
+	h1 {
+		@apply h1;
+	}
+	h2 {
+		@apply h2;
+	}
+	h3 {
+		@apply h3;
+	}
+	h4 {
+		@apply h4;
+	}
+	h5 {
+		@apply h5;
+	}
+	h6 {
+		@apply h6;
 	}
 }
 
