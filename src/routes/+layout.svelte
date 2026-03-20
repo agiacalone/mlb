@@ -24,6 +24,7 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
 
 	<link rel="manifest" href="/manifest.json" />
+	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 	<meta name="theme-color" content="#000000" />
 
 	<link rel="preconnect" href="https://statsapi.mlb.com" />
