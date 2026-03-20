@@ -109,7 +109,7 @@
 			<div class="grid gap-[.5ch]">
 				{#if links.length >= 1}
 					<h2
-						class="text-[x-small] tracking-widest text-current/60 uppercase sm:sidebar-not-open:hidden"
+						class="text-[x-small] tracking-widest text-current/50 uppercase sm:sidebar-not-open:hidden"
 					>
 						{group}
 					</h2>

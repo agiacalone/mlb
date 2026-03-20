@@ -24,7 +24,13 @@
 </script>
 
 {#if headings.length > 0}
-	<nav class={className} aria-label="Table of contents">
+	<nav class="grid gap-ch {className}">
+		<h2
+			class="max-w-max bg-background text-xs tracking-widest text-current/50 uppercase max-md:-mt-lh max-md:px-ch"
+		>
+			Table of Contents
+		</h2>
+
 		<ul>
 			{#each headings as heading (heading.id)}
 				<li

@@ -21,7 +21,9 @@
 	<h1 class="col-span-full px-ch text-center h0! text-balance">{title}</h1>
 
 	<div class="col-[content] px-ch md:col-[3/4] md:row-[2/3]">
-		<TableOfContents class="sticky top-lh text-sm leading-tight *:space-y-ch" />
+		<TableOfContents
+			class="sticky top-lh border-dashed border-stroke text-sm leading-tight *:space-y-ch max-md:border max-md:p-ch"
+		/>
 	</div>
 
 	<div class="col-[content] prose px-ch md:row-[2/3]">
