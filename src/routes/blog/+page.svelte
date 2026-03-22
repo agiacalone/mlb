@@ -15,5 +15,5 @@
 <Header title="Blog" crumbs={[{ href: '/blog', name: 'Blog' }]} />
 
 <section class="p-ch">
-	<Rollup posts={data.posts} class="mx-auto max-w-3xl [&_a]:h2" />
+	<Rollup posts={data.posts} class="mx-auto max-w-3xl" />
 </section>

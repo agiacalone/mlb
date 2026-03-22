@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Empty from '$ui/empty.svelte'
 	import { CollapseHorizontalIcon, ExpandHorizontalIcon } from '$ui/icons'
 	import Video from '$ui/video.svelte'
 	import { untrack } from 'svelte'

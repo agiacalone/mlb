@@ -1,20 +1,23 @@
-import { error } from '@sveltejs/kit'
 import { fetchMLB } from '$lib/fetch'
 import { fetchBoxscore, fetchfeedLive, fetchWinProbability } from '$lib/fetch/presets'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-	const schedule = await fetchMLB<MLB.ScheduleResponse>(`/api/v1/schedule`, {
-		gamePk: params.gamePk,
-		fields: [
-			'dates,date,venue,description,seriesGameNumber,gamesInSeries',
-			'games,gamePk,gameType,gameDate,link',
-			'flags,noHitter,perfectGame',
-			'status,abstractGameState,detailedState,reason',
-			'teams,away,home,team,id,name,leagueRecord,wins,losses,score',
-		],
-		hydrate: 'flags',
-	}, { fetch })
+	const schedule = await fetchMLB<MLB.ScheduleResponse>(
+		`/api/v1/schedule`,
+		{
+			gamePk: params.gamePk,
+			fields: [
+				'dates,date,venue,description,seriesGameNumber,gamesInSeries',
+				'games,gamePk,gameType,gameDate,link',
+				'flags,noHitter,perfectGame',
+				'status,abstractGameState,detailedState,reason',
+				'teams,away,home,team,id,name,leagueRecord,wins,losses,score',
+			],
+			hydrate: 'flags',
+		},
+		{ fetch },
+	)
 	const game = schedule?.dates?.[0].games.find((game) => game.gamePk === Number(params.gamePk))!
 
 	const [feedLiveResult, boxscoreResult, contentResult] = await Promise.allSettled([
