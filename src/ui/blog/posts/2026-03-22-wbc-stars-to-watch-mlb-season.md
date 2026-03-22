@@ -7,11 +7,9 @@ image: https://img.mlbstatic.com/mlb-images/image/upload/w_300,h_300,f_jpg,c_fil
 tags:
   - WBC
   - Fantasy
-  - Player Profiles
 ---
 
 <script lang="ts">
-  // import RecapImage from '$ui/blog/recap-image.svelte'
   import Highlight from '$ui/blog/highlight.svelte'
 </script>
 
