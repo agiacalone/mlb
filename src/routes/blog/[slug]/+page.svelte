@@ -40,4 +40,9 @@
 			[bleed-start] 1fr [content-start] minmax(0, var(--container-2xl))
 			[content-end] 1fr [bleed-end];
 	}
+
+	.prose :global(:is(ul, ol)) {
+		list-style: revert;
+		padding-left: 1em;
+	}
 </style>
