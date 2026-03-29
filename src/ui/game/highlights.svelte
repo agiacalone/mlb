@@ -11,19 +11,14 @@
 		class: className,
 	}: {
 		game: MLB.Game
-		content: MLB.GameContent
+		content: MLB.GameContent | null
 		theater?: boolean
 	} & HTMLAttributes<HTMLDivElement> = $props()
 
-	let highlights = $derived(content.highlights.highlights?.items.filter((h) => h.type === 'video'))
+	let highlights = $derived(content?.highlights.highlights?.items.filter((h) => h.type === 'video'))
 
 	let selectedIndex = $state(
-		untrack(() =>
-			Math.max(
-				0,
-				highlights?.findIndex((h) => h.type === 'video'),
-			),
-		),
+		untrack(() => Math.max(0, highlights?.findIndex((h) => h.type === 'video') ?? 0)),
 	)
 
 	let grouped = $derived(

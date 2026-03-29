@@ -111,7 +111,7 @@
 	]}
 >
 	{#if game}
-		<Game class="w-full" {game} {boxscore} {linescore} showLiveDetails />
+		<Game class="w-full" {game} boxscore={boxscore ?? undefined} {linescore} showLiveDetails />
 	{/if}
 </Header>
 
@@ -121,7 +121,12 @@
 			{#if Array.isArray(winProbability)}
 				<div class="grow space-y-ch">
 					<h2 class="px-ch text-xs text-current/40">Win Probability</h2>
-					<WinProbability {winProbability} {boxscore} {linescore} {hoveredAtBatIndex} />
+					<WinProbability
+						{winProbability}
+						boxscore={boxscore ?? undefined}
+						{linescore}
+						{hoveredAtBatIndex}
+					/>
 				</div>
 			{/if}
 

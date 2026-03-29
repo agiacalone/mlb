@@ -11,7 +11,7 @@
 		isSpoilerPrevented,
 		class: className,
 	}: {
-		boxscore?: MLB.Boxscore
+		boxscore?: MLB.Boxscore | null
 		isSpoilerPrevented?: boolean
 	} & HTMLAttributes<HTMLDivElement> = $props()
 
@@ -36,7 +36,7 @@
 			<StyledTeam team={team.team} class="z-1" />
 
 			{#if team.batters.length}
-				<div class="overflow-x-auto">
+				<div class="overflow-x-auto mask-r-from-[calc(100%-1.5ch)]">
 					<table class="table-fixed text-center">
 						<thead class="text-xs text-current/40">
 							<tr class="*:pt-[.5ch]">
@@ -82,7 +82,7 @@
 											{@const value = seasonStats?.batting?.[stat as keyof MLB.BattingStats]}
 											<td
 												class={cn(
-													'min-w-[4ch]! text-sm',
+													'min-w-[5ch]! text-sm',
 													!isSpoilerPrevented && Number(value) === 0 && 'text-current/40',
 													stat === 'avg' && Number(value) >= 0.3 && 'positive',
 													stat === 'ops' && Number(value) >= 0.75 && 'positive',
@@ -102,7 +102,7 @@
 
 				<hr class="my-[.5ch] border-dashed border-current/25" />
 
-				<div class="overflow-x-auto">
+				<div class="overflow-x-auto mask-r-from-[calc(100%-1.5ch)]">
 					<table class="table-fixed text-center">
 						<thead class="text-xs text-current/40">
 							<tr>
@@ -116,15 +116,17 @@
 								<th>BB</th>
 								<th>K</th>
 								<th>HBP</th>
+								<th>ERA</th>
 							</tr>
 						</thead>
 						<tbody>
 							{#each team.pitchers.slice(0, isSpoilerPrevented ? 1 : team.pitchers.length) as playerId (playerId)}
-								{@const { stats, ...player } = team.players[`ID${playerId}`]}
+								{@const { stats, seasonStats, ...player } = team.players[`ID${playerId}`]}
 								{#if player?.position?.abbreviation === 'P'}
 									<tr class="hover:*:bg-foreground/10">
 										{@render p(player)}
 
+										<!-- game stats -->
 										{#each ['inningsPitched', 'numberOfPitches', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'hitBatsmen'] as stat}
 											{@const value = stats?.pitching?.[stat as keyof MLB.PitchingStats]}
 											<td
@@ -133,6 +135,21 @@
 														value !== '0.0' &&
 														Number(value) === 0 &&
 														'text-current/40',
+												)}
+											>
+												{#if !isSpoilerPrevented}
+													{value}
+												{/if}
+											</td>
+										{/each}
+
+										<!-- season stats -->
+										{#each ['era'] as stat}
+											{@const value = seasonStats?.pitching?.[stat as keyof MLB.PitchingStats]}
+											<td
+												class={cn(
+													'min-w-[5ch]! text-sm',
+													!isSpoilerPrevented && Number(value) === 0 && 'text-current/40',
 												)}
 											>
 												{#if !isSpoilerPrevented}
