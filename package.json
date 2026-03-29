@@ -2,7 +2,7 @@
 	"name": "mlb",
 	"description": "Track MLB games, explore stats, and query the Stats API, all in one app.",
 	"private": true,
-	"version": "0.4.258",
+	"version": "0.4.259",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev --host",
@@ -26,7 +26,7 @@
 		"prettier-plugin-svelte": "^3.5.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"shiki": "^4.0.2",
-		"svelte": "^5.55.0",
+		"svelte": "^5.55.1",
 		"svelte-check": "^4.4.5",
 		"tailwind-merge": "^3.5.0",
 		"tailwindcss": "^4.2.2",
