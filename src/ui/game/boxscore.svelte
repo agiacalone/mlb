@@ -49,11 +49,13 @@
 								<th>BB</th>
 								<th>K</th>
 								<th>SB</th>
+								<th>AVG</th>
+								<th>OPS</th>
 							</tr>
 						</thead>
 						<tbody>
 							{#each team.batters as playerId}
-								{@const { stats, ...player } = team.players[`ID${playerId}`]}
+								{@const { stats, seasonStats, ...player } = team.players[`ID${playerId}`]}
 								{@const substituted = !isSpoilerPrevented && !team.battingOrder.includes(playerId)}
 
 								{#if player?.position?.abbreviation !== 'P'}
@@ -63,10 +65,28 @@
 									>
 										{@render p(player, substituted)}
 
+										<!-- game stats -->
 										{#each ['atBats', 'hits', 'runs', 'rbi', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'stolenBases'] as stat}
 											{@const value = stats?.batting?.[stat as keyof MLB.BattingStats]}
 											<td
 												class={cn(!isSpoilerPrevented && Number(value) === 0 && 'text-current/40')}
+											>
+												{#if !isSpoilerPrevented}
+													{value}
+												{/if}
+											</td>
+										{/each}
+
+										<!-- season stats -->
+										{#each ['avg', 'ops'] as stat}
+											{@const value = seasonStats?.batting?.[stat as keyof MLB.BattingStats]}
+											<td
+												class={cn(
+													'min-w-[4ch]! text-sm',
+													!isSpoilerPrevented && Number(value) === 0 && 'text-current/40',
+													stat === 'avg' && Number(value) >= 0.3 && 'positive',
+													stat === 'ops' && Number(value) >= 0.75 && 'positive',
+												)}
 											>
 												{#if !isSpoilerPrevented}
 													{value}
@@ -95,9 +115,7 @@
 								<th>HR</th>
 								<th>BB</th>
 								<th>K</th>
-								<th class="relative">
-									<div class="absolute top-1/2 -translate-y-1/2">HBP</div>
-								</th>
+								<th>HBP</th>
 							</tr>
 						</thead>
 						<tbody>

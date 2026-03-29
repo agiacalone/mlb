@@ -85,7 +85,7 @@ export const fetchBoxscore = createFetcher<
 		fields: [
 			'teams,away,team,id,name,teamName,clubName,abbreviation,sport',
 			'boxscoreName',
-			'stats,batting,atBats,hits,runs,rbi,stolenBases,homeRuns,baseOnBalls,strikeOuts',
+			'stats,batting,atBats,hits,runs,rbi,stolenBases,homeRuns,baseOnBalls,strikeOuts,avg,ops',
 			'pitching,inningsPitched,numberOfPitches,earnedRuns,hitBatsmen',
 		],
 		...params,
