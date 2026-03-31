@@ -40,7 +40,7 @@
 					<table class="table-fixed text-center">
 						<thead class="text-xs text-current/40">
 							<tr class="*:pt-[.5ch]">
-								<th class="w-full"></th>
+								<th class="w-full" colspan="2"></th>
 								<th>AB</th>
 								<th>H</th>
 								<th>R</th>
@@ -60,10 +60,10 @@
 
 								{#if player?.position?.abbreviation !== 'P'}
 									<tr
-										class="hover:*:bg-foreground/10"
+										class="hover:*:not-first:bg-foreground/10"
 										data-substituted={substituted ? '' : undefined}
 									>
-										{@render p(player, substituted)}
+										{@render p(player, substituted, team.team.id)}
 
 										<!-- game stats -->
 										{#each ['atBats', 'hits', 'runs', 'rbi', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'stolenBases'] as stat}
@@ -106,7 +106,7 @@
 					<table class="table-fixed text-center">
 						<thead class="text-xs text-current/40">
 							<tr>
-								<th class="w-full"></th>
+								<th class="w-full" colspan="2"></th>
 								<th>IP</th>
 								<th>P</th>
 								<th>H</th>
@@ -124,7 +124,7 @@
 								{@const { stats, seasonStats, ...player } = team.players[`ID${playerId}`]}
 								{#if player?.position?.abbreviation === 'P'}
 									<tr class="hover:*:bg-foreground/10">
-										{@render p(player)}
+										{@render p(player, undefined, team.team.id)}
 
 										<!-- game stats -->
 										{#each ['inningsPitched', 'numberOfPitches', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'hitBatsmen'] as stat}
@@ -171,8 +171,8 @@
 								{#each team.bench as playerId}
 									{@const player = team.players[`ID${playerId}`]}
 									{#if player}
-										<tr class="hover:*:bg-foreground/10">
-											{@render p(player)}
+										<tr class="hover:*:not-first:bg-foreground/10">
+											{@render p(player, undefined, team.team.id)}
 										</tr>
 									{/if}
 								{/each}
@@ -193,7 +193,7 @@
 									{@const player = team.players[`ID${playerId}`]}
 									{#if player}
 										<tr class="hover:*:bg-foreground/10">
-											{@render p(player)}
+											{@render p(player, undefined, team.team.id)}
 										</tr>
 									{/if}
 								{/each}
@@ -208,11 +208,15 @@
 	{/if}
 {/snippet}
 
-{#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean)}
-	<th class="relative min-w-[16ch] text-left">
-		<a href="/player/{person.id}" class="group/player flex items-center gap-[.5ch]">
-			<Headshot {person} class="sticky left-0 z-1 size-lh" />
+{#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean, teamId?: number)}
+	<th class="sticky left-0 z-1 min-w-lh bg-background">
+		<a href="/player/{person.id}">
+			<Headshot {person} size={72} class="size-lh" />
+		</a>
+	</th>
 
+	<th class="relative min-w-[14ch] pl-ch text-left">
+		<a href="/player/{person.id}" class="group/player flex items-center gap-[.5ch]">
 			<span class="line-clamp-1 grow break-all decoration-dashed group-hover/player:underline">
 				{person.boxscoreName}
 			</span>
@@ -234,7 +238,7 @@
 
 <style>
 	table tr {
-		> :first-child {
+		> :first-child:not(:has(img)) {
 			padding-left: 1rch;
 		}
 		> :last-child {

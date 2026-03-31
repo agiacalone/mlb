@@ -64,7 +64,7 @@
 
 						<span class="w-[3rch] text-center text-sm">{position.abbreviation}</span>
 
-						<Headshot {person} size={36} class="size-lh shrink-0" />
+						<Headshot {person} size={72} class="size-lh shrink-0" />
 
 						<span class="line-clamp-1 break-all decoration-dashed group-hover/person:underline">
 							{(person as MLB.Person).lastInitName}

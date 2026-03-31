@@ -15,7 +15,7 @@
 	let query = $state(page.url.searchParams.get('query') ?? '')
 	let promise: Promise<any> | null = $state(null)
 
-	const debouncedSearch = debounce(search)
+	const oninput = debounce(search)
 
 	function search() {
 		const q = query?.trim() ?? ''
@@ -68,7 +68,7 @@
 				placeholder="Search for a player..."
 				pattern="\w+"
 				bind:value={query}
-				oninput={debouncedSearch}
+				{oninput}
 			/>
 		</label>
 	</form>
