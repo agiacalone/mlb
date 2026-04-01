@@ -62,17 +62,14 @@
 
 						<td
 							class={cn(
-								'border border-transparent align-top',
+								'border border-b-2 border-transparent align-top',
 								!day && 'opacity-0',
-								isToday && 'bg-accent text-dark',
+								isToday ? 'bg-accent text-dark' : 'hover:bg-accent/10 hover:text-accent',
 							)}
 						>
 							{#if day}
 								<a
-									class={cn(
-										'block hover-link',
-										cells && !isToday && 'not-has-[+*]:text-current/40',
-									)}
+									class={cn('block ', cells && !isToday && 'not-has-[+*]:text-current/40')}
 									href="/schedule/day/{date}"
 								>
 									{day}
