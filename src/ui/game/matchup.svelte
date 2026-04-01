@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
+	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
 	import CurrentPitch from './current-pitch.svelte'
 
@@ -62,7 +63,14 @@
 	},
 	after?: string,
 )}
-	<div class="group/player relative flex h-lh items-center gap-x-[.5ch]">
+	<div
+		class={cn(
+			'group/player relative flex h-lh items-center gap-x-[.5ch]',
+			person &&
+				favoritesStore.has(`/player/${person.id}`) &&
+				'bg-accent text-dark [box-shadow:-.25ch_0_0_var(--color-accent),.25ch_0_0_var(--color-accent)]',
+		)}
+	>
 		{#if person}
 			{@const player = players[`ID${person.id}`] as unknown as MLB.Person}
 
