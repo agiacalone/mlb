@@ -74,7 +74,7 @@
 >
 	{#snippet after()}
 		<div class="mx-auto flex flex-wrap items-center justify-center gap-ch text-center">
-			<SelectSport class="button text-center" available={data.availableSportIds} />
+			<SelectSport available={data.availableSportIds} />
 			<SelectDate date={currentDate} onchange={onDateChange} />
 		</div>
 	{/snippet}

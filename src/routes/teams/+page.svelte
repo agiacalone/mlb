@@ -29,7 +29,7 @@
 <Header title={sport?.name ?? 'Teams'} crumbs={[{ href: '/teams', name: 'Teams' }]}>
 	{#snippet after()}
 		<div class="mx-auto flex items-center gap-ch">
-			<SelectSport class="button w-full shrink text-center" />
+			<SelectSport class="w-full shrink" />
 			<ToggleAllDetails />
 		</div>
 	{/snippet}
