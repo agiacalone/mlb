@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { fetchMLB } from '$lib/fetch'
+	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
+	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import Loading from '$ui/loading.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
 
@@ -23,7 +25,7 @@
 	}
 </script>
 
-<article class="space-y-ch has-data-empty:hidden">
+<article class="max-w-max space-y-ch has-data-empty:hidden">
 	<h2 class="text-xs text-current/40">Decisions</h2>
 
 	<dl class="grid gap-[.5ch]">
@@ -34,7 +36,13 @@
 				{@const [decision, { id }] = Object.entries(decisions)[key]}
 				{@const player = feedLive.gameData.players[`ID${id}`] as unknown as MLB.Person}
 
-				<div class="group/decision relative flex max-w-max items-center gap-ch">
+				<div
+					class={cn(
+						'group/decision relative flex items-center gap-ch',
+						favoritesStore.has(`/player/${id}`) &&
+							'bg-accent text-dark [box-shadow:-.25ch_0_0_var(--color-accent),.25ch_0_0_var(--color-accent)]',
+					)}
+				>
 					<dt class="flex shrink-0 items-center gap-ch self-start">
 						<div class="relative flex items-center gap-ch">
 							<abbr

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cn } from '$lib/utils'
+	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import Headshot from '$ui/player/headshot.svelte'
 
 	let { feedLive }: { feedLive: MLB.LiveGameFeed } = $props()
@@ -6,7 +8,7 @@
 	const topPerformers = $derived(feedLive.liveData.boxscore.topPerformers)
 </script>
 
-<article class="space-y-ch">
+<article class="max-w-max space-y-ch">
 	<h2 class="text-xs text-current/40">Top Performers</h2>
 
 	<dl class="grid gap-[.5ch]">
@@ -22,7 +24,13 @@
 					| MLB.PitchingStats
 					| MLB.FieldingStats) ?? {}}
 
-			<div class="group/player relative flex max-w-max items-center gap-ch">
+			<div
+				class={cn(
+					'group/player relative flex items-center gap-ch',
+					favoritesStore.has(`/player/${player.person.id}`) &&
+						'bg-accent text-dark [box-shadow:-.25ch_0_0_var(--color-accent),.25ch_0_0_var(--color-accent)]',
+				)}
+			>
 				<dt class="flex shrink-0 items-center gap-ch self-start">
 					<Headshot person={player.person} class="size-lh" />
 

@@ -64,7 +64,7 @@
 							class={cn(
 								'border border-transparent align-top',
 								!day && 'opacity-0',
-								isToday && 'bg-accent/15 positive dark:text-accent',
+								isToday && 'bg-accent text-dark',
 							)}
 						>
 							{#if day}

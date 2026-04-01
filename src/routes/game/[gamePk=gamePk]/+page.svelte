@@ -185,7 +185,7 @@
 
 	{#if !isSpoilerPrevented && feedLive && (hasTopPerformers || hasDecisions)}
 		<div
-			class="col-span-full flex flex-wrap items-start gap-lh px-[2ch] *:grow *:only:mx-auto *:only:max-w-max"
+			class="col-span-full flex flex-wrap items-start justify-evenly gap-lh px-[2ch] *:grow *:only:mx-auto *:only:max-w-max"
 		>
 			{#if hasTopPerformers}
 				<TopPerformers {feedLive} />

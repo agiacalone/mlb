@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils'
 	import Empty from '$ui/empty.svelte'
+	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ArrowDownRightIcon } from '$ui/icons'
 	import Headshot from '$ui/player/headshot.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
@@ -63,7 +64,7 @@
 										class="hover:*:not-first:bg-foreground/10"
 										data-substituted={substituted ? '' : undefined}
 									>
-										{@render p(player, substituted, team.team.id)}
+										{@render p(player, substituted)}
 
 										<!-- game stats -->
 										{#each ['atBats', 'hits', 'runs', 'rbi', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'stolenBases'] as stat}
@@ -124,7 +125,7 @@
 								{@const { stats, seasonStats, ...player } = team.players[`ID${playerId}`]}
 								{#if player?.position?.abbreviation === 'P'}
 									<tr class="hover:*:bg-foreground/10">
-										{@render p(player, undefined, team.team.id)}
+										{@render p(player)}
 
 										<!-- game stats -->
 										{#each ['inningsPitched', 'numberOfPitches', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'hitBatsmen'] as stat}
@@ -172,7 +173,7 @@
 									{@const player = team.players[`ID${playerId}`]}
 									{#if player}
 										<tr class="hover:*:not-first:bg-foreground/10">
-											{@render p(player, undefined, team.team.id)}
+											{@render p(player)}
 										</tr>
 									{/if}
 								{/each}
@@ -193,7 +194,7 @@
 									{@const player = team.players[`ID${playerId}`]}
 									{#if player}
 										<tr class="hover:*:bg-foreground/10">
-											{@render p(player, undefined, team.team.id)}
+											{@render p(player)}
 										</tr>
 									{/if}
 								{/each}
@@ -208,14 +209,22 @@
 	{/if}
 {/snippet}
 
-{#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean, teamId?: number)}
-	<th class="sticky left-0 z-1 min-w-lh bg-background">
+{#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean)}
+	{@const isFavorite = favoritesStore.has(`/player/${person.id}`)}
+
+	<th class={cn('sticky left-0 z-1 min-w-lh ', isFavorite && 'bg-accent')}>
 		<a href="/player/{person.id}">
 			<Headshot {person} size={72} class="size-lh" />
 		</a>
+
+		{#if substituted}
+			<div class="absolute top-full left-0 grid size-lh place-content-center">
+				<ArrowDownRightIcon class="size-ch text-current/40" />
+			</div>
+		{/if}
 	</th>
 
-	<th class="relative min-w-[14ch] pl-ch text-left">
+	<th class={cn('relative min-w-[14ch] pl-ch text-left', isFavorite && 'bg-accent! text-dark')}>
 		<a href="/player/{person.id}" class="group/player flex items-center gap-[.5ch]">
 			<span class="line-clamp-1 grow break-all decoration-dashed group-hover/player:underline">
 				{person.boxscoreName}
@@ -226,12 +235,6 @@
 			</small>
 
 			<span class="absolute inset-0"></span>
-
-			{#if substituted}
-				<div class="absolute top-full left-ch grid size-lh place-content-center">
-					<ArrowDownRightIcon class="size-ch text-current/40" />
-				</div>
-			{/if}
 		</a>
 	</th>
 {/snippet}
@@ -255,7 +258,17 @@
 		}
 	}
 
-	[data-substituted] + tr th:first-child :global(img) {
-		margin-left: 1lh;
+	[data-substituted] + tr {
+		th:global(:has(img)) {
+			left: -1lh;
+
+			:global(img) {
+				margin-left: 1lh;
+			}
+		}
+
+		th:not(:has(img)) {
+			padding-left: calc(1lh + 1ch);
+		}
 	}
 </style>
