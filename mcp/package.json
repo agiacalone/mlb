@@ -4,13 +4,13 @@
 	"description": "MCP server for MLB Stats API",
 	"type": "module",
 	"bin": {
-		"mlb-mcp": "./dist/index.js"
+		"mlb-mcp": "./dist/mcp/src/index.js"
 	},
-	"main": "./dist/index.js",
+	"main": "./dist/mcp/src/index.js",
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"start": "node dist/index.js"
+		"start": "node dist/mcp/src/index.js"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.12.0",
