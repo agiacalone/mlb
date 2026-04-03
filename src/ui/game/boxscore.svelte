@@ -218,7 +218,7 @@
 {#snippet p({ position, person }: MLB.BoxscorePlayer, substituted?: boolean)}
 	{@const isFavorite = favoritesStore.has(`/player/${person.id}`)}
 
-	<th class={cn('sticky left-0 z-1 min-w-lh ', isFavorite && 'bg-accent')}>
+	<th class={cn('sticky left-0 z-1 min-w-lh', isFavorite && 'bg-accent')}>
 		<a href="/player/{person.id}">
 			<Headshot {person} size={72} class="size-lh" />
 		</a>
@@ -230,8 +230,13 @@
 		{/if}
 	</th>
 
-	<th class={cn('relative min-w-[14ch] pl-ch text-left', isFavorite && 'bg-accent! text-dark')}>
-		<a href="/player/{person.id}" class="group/player flex items-center gap-[.5ch]">
+	<th
+		class={cn('relative w-full min-w-[14ch] pl-ch text-left', isFavorite && 'bg-accent! text-dark')}
+	>
+		<a
+			href="/player/{person.id}"
+			class="group/player flex items-center gap-[.5ch] before:absolute before:inset-0"
+		>
 			<span class="line-clamp-1 grow break-all decoration-dashed group-hover/player:underline">
 				{person.boxscoreName}
 			</span>
@@ -239,8 +244,6 @@
 			<small class="w-[3ch] shrink-0 text-center text-xs text-current/40 no-underline">
 				{position?.abbreviation}
 			</small>
-
-			<span class="absolute inset-0"></span>
 		</a>
 	</th>
 {/snippet}
