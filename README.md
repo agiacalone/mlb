@@ -27,6 +27,36 @@ MLB Stats API Playground:
 > [!TIP]
 > Replace `https://statsapi.mlb.com/api/v1/...` with `https://mlb.theohtani.com/api/v1/...` to show results in the API Playground.
 
+## MCP
+
+An [MCP](https://modelcontextprotocol.io) server that exposes the MLB Stats API — schedule, standings, player stats, transactions, and more — to any AI client.
+
+### Setup
+
+**Claude Desktop / Cursor / other MCP clients:**
+```json
+{
+  "mcpServers": {
+    "mlb": {
+      "url": "https://mlb.theohtani.com/mcp"
+    }
+  }
+}
+```
+
+**Claude CLI:**
+```sh
+claude mcp add --transport http mlb https://mlb.theohtani.com/mcp
+```
+
+For local use, clone the repo and run `node mcp/dist/mcp/src/index.js` via stdio transport.
+
+### Example prompts
+
+> "Compare the last 7 days of transactions for contending teams — who made the most aggressive moves and what does it signal about their roster?"
+
+> "Who are the top OPS hitters playing today, and how do their stats split between home and away games this season?"
+
 ## Credits & References
 
 - https://github.com/toddrob99/MLB-StatsAPI/wiki/Endpoints

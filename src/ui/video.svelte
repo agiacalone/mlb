@@ -21,18 +21,16 @@
 	$effect(() => {
 		if (!video) return
 
-		if (hls) {
-			if (video.canPlayType('application/vnd.apple.mpegurl')) {
-				// Native HLS (Safari, iOS)
-				video.src = hls
-			} else if (Hls.isSupported()) {
-				// hls.js (Chrome/Firefox/Edge)
-				const player = new Hls()
-				player.loadSource(hls)
-				player.attachMedia(video)
-				player.subtitleTrack = -1
-				return () => player.destroy()
-			}
+		if (hls && video.canPlayType('application/vnd.apple.mpegurl')) {
+			// Native HLS (Safari, iOS)
+			video.src = hls
+		} else if (hls && Hls.isSupported()) {
+			// hls.js (Chrome/Firefox/Edge)
+			const player = new Hls()
+			player.loadSource(hls)
+			player.attachMedia(video)
+			player.subtitleTrack = -1
+			return () => player.destroy()
 		} else if (mp4) {
 			video.src = mp4
 		}
