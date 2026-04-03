@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte'
 	import { dev } from '$app/environment'
 	import { page } from '$app/state'
 	import { fetchMLB } from '$lib/fetch'
@@ -35,7 +36,8 @@
 	}
 
 	$effect(() => {
-		if (page) search()
+		page.url.searchParams.get('query')
+		untrack(search)
 	})
 </script>
 

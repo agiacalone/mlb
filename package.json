@@ -2,7 +2,7 @@
 	"name": "mlb",
 	"description": "Track MLB games, explore stats, and query the Stats API, all in one app.",
 	"private": true,
-	"version": "0.4.274",
+	"version": "0.4.275",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev --host",
@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.1",
 		"@sveltejs/adapter-vercel": "^6.3.3",
-		"@sveltejs/kit": "^2.55.0",
+		"@sveltejs/kit": "^2.56.1",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@tailwindcss/vite": "^4.2.2",
 		"clsx": "^2.1.1",
@@ -35,10 +35,10 @@
 	},
 	"dependencies": {
 		"@google/model-viewer": "^4.2.0",
-		"@modelcontextprotocol/sdk": "^1.12.0",
+		"@modelcontextprotocol/sdk": "^1.29.0",
 		"hls.js": "^1.6.15",
 		"ios-vibrator-pro-max": "^2.0.2",
-		"posthog-js": "1.364.6",
+		"posthog-js": "1.364.7",
 		"posthog-node": "5.28.11",
 		"rehype-autolink-headings": "^7.1.0",
 		"rehype-slug": "^6.0.0"
