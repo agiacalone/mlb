@@ -23,6 +23,7 @@
 				const summary = details.querySelector<HTMLElement>('summary')
 
 				if (!checked) {
+					details.open = false
 					summary?.addEventListener('click', handleIconClick)
 				} else {
 					summary?.removeEventListener('click', handleIconClick)
