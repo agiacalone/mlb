@@ -2,7 +2,7 @@
 	"name": "mlb",
 	"description": "Track MLB games, explore stats, and query the Stats API, all in one app.",
 	"private": true,
-	"version": "0.4.265",
+	"version": "0.4.266",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev --host",
@@ -35,10 +35,11 @@
 	},
 	"dependencies": {
 		"@google/model-viewer": "^4.2.0",
+		"@modelcontextprotocol/sdk": "^1.12.0",
 		"hls.js": "^1.6.15",
 		"ios-vibrator-pro-max": "^2.0.2",
-		"posthog-js": "1.364.4",
-		"posthog-node": "5.28.9",
+		"posthog-js": "1.364.6",
+		"posthog-node": "5.28.11",
 		"rehype-autolink-headings": "^7.1.0",
 		"rehype-slug": "^6.0.0"
 	}
