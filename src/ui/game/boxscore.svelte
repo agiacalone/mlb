@@ -4,6 +4,7 @@
 	import { favoritesStore } from '$ui/favorites/store.svelte'
 	import { ArrowDownRightIcon } from '$ui/icons'
 	import Headshot from '$ui/player/headshot.svelte'
+	import ToggleSpoilerPrevention from '$ui/spoiler-prevention/toggle-spoiler-prevention.svelte'
 	import StyledTeam from '$ui/team/styled-team.svelte'
 	import type { HTMLAttributes } from 'svelte/elements'
 
@@ -34,7 +35,12 @@
 {#snippet team(team?: MLB.TeamBoxscore)}
 	{#if team}
 		<article class="snap-center bg-background">
-			<StyledTeam team={team.team} class="z-1" />
+			<StyledTeam team={team.team} class="z-1 pr-ch">
+				<ToggleSpoilerPrevention
+					class="ml-auto shrink-0 text-current! transition-opacity not-hover:opacity-50"
+					team={{ id: team.team.id, abbreviation: team.team.abbreviation! }}
+				/>
+			</StyledTeam>
 
 			{#if team.batters.length}
 				<div class="overflow-x-auto mask-r-from-[calc(100%-1.5ch)]">
