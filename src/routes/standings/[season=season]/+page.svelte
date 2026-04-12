@@ -106,7 +106,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{#each teamRecords as { team, wins, losses, winningPercentage, sportGamesBack, streak, leagueRank } (team.id)}
+							{#each teamRecords as { team, wins, losses, winningPercentage, gamesBack, streak, leagueRank } (team.id)}
 								<tr class="hover:[&>td]:bg-foreground/10">
 									<td
 										class={cn('sticky left-0 min-w-lh @min-[8ch]:min-w-[3.5ch]', {
@@ -129,8 +129,8 @@
 									>
 										{winningPercentage}
 									</td>
-									<td class={cn('tabular-nums', sportGamesBack === '-' && 'text-current/50')}>
-										{sportGamesBack}
+									<td class={cn('tabular-nums', gamesBack === '0' && 'text-current/50')}>
+										{gamesBack === '0' ? '-' : gamesBack}
 									</td>
 									<td
 										class="tabular-nums"
