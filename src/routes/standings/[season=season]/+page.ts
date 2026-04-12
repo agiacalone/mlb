@@ -47,7 +47,7 @@ export const load: PageLoad = async ({ params, url }) => {
 			hydrate: 'division,team',
 			fields: [
 				'records,sport,division,nameShort,league,springLeague,id,name',
-				'teamRecords,wins,losses,winningPercentage,sportGamesBack,magicNumber,streak,streakCode,leagueRank',
+				'teamRecords,wins,losses,winningPercentage,gamesBack,magicNumber,streak,streakCode,leagueRank',
 				'team,id,name,clubName,teamName,abbreviation',
 			],
 		},
