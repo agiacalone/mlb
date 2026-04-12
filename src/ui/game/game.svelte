@@ -152,7 +152,7 @@
 				<Linescore linescore={data} {game} />
 			{/await}
 		{/if}
-	{:else if game.status.abstractGameState === 'Preview'}
+	{:else if game.status.abstractGameState === 'Preview' || isSpoilerPrevented}
 		<ProbablePitchers {game} />
 	{/if}
 
