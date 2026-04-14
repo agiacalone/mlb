@@ -194,8 +194,8 @@
 											'order-first @max-[10ch]/team:text-[xx-small]',
 											isDarkOnLightTeam(opponent) && 'dark:text-dark',
 											isLightOnDarkTeam(opponent) && 'dark:text-light',
-											didWin === true && 'text-green-600 dark:text-green-400',
-											didWin === false && 'text-red-600 dark:text-red-400',
+											didWin === true && 'positive!',
+											didWin === false && 'negative!',
 										)}
 									>
 										{isHome ? 'vs' : '@'}
