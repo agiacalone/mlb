@@ -72,19 +72,26 @@
 			.flatMap(({ games }) => games)
 			.sort((a, b) => a.gameDate.localeCompare(b.gameDate))
 
-		// Fetch pitchers for the last 7 completed games to establish the rotation
+		// Fetch pitchers for the last 7 completed games (rotation) + next 10 upcoming
+		// games (to sync confirmed pitchers into the rotation before predicting)
 		const pastGames = allGames.filter((g) => g.status.abstractGameState === 'Final').slice(-7)
+		const upcomingGames = allGames.filter((g) => g.status.abstractGameState === 'Preview').slice(0, 10)
 
-		const pastResults = await Promise.all(
-			pastGames.map(async (g) => [g.gamePk, await fetchProbablePitcher(g.gamePk)] as const),
+		const fetchResults = await Promise.all(
+			[...pastGames, ...upcomingGames].map(
+				async (g) => [g.gamePk, await fetchProbablePitcher(g.gamePk)] as const,
+			),
+		)
+		const fetched = new Map<number, MLB.Person>(
+			fetchResults.filter((r): r is [number, MLB.Person] => r[1] !== null),
 		)
 
 		const confirmedPast = new Map<number, MLB.Person>(
-			pastResults.filter((r): r is [number, MLB.Person] => r[1] !== null),
+			pastGames.filter((g) => fetched.has(g.gamePk)).map((g) => [g.gamePk, fetched.get(g.gamePk)!]),
 		)
 
 		// Build the rotation from confirmed past pitchers in order
-		const pastPitcherList = pastGames.map((g) => confirmedPast.get(g.gamePk)).filter((p): p is MLB.Person => !!p)
+		const pastPitcherList = pastGames.map((g) => fetched.get(g.gamePk)).filter((p): p is MLB.Person => !!p)
 		const rotation = extractRotation(pastPitcherList)
 		const lastConfirmed = pastPitcherList.at(-1)
 		let rotationPos =
@@ -92,13 +99,21 @@
 				? rotation.findIndex((p) => p.id === lastConfirmed.id)
 				: -1
 
-		// Pre-assign predicted pitchers for all upcoming Preview games (in order)
+		// Walk through all Preview games in order. When a confirmed pitcher is found
+		// (from the pre-fetched upcoming window), sync rotationPos to their slot so
+		// that subsequent predictions continue from the right place.
 		const predictions = new Map<number, MLB.Person>()
 		if (rotationPos !== -1 && rotation.length >= 2) {
 			for (const g of allGames) {
 				if (g.status.abstractGameState !== 'Preview') continue
-				rotationPos = (rotationPos + 1) % rotation.length
-				predictions.set(g.gamePk, rotation[rotationPos])
+				const confirmed = fetched.get(g.gamePk)
+				if (confirmed) {
+					const pos = rotation.findIndex((p) => p.id === confirmed.id)
+					if (pos !== -1) rotationPos = pos
+				} else {
+					rotationPos = (rotationPos + 1) % rotation.length
+					predictions.set(g.gamePk, rotation[rotationPos])
+				}
 			}
 		}
 
