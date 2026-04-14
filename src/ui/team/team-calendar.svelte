@@ -137,9 +137,10 @@
 				<ul class="grid gap-px">
 					{#each gamesByDate[date] as game (game.gamePk)}
 						{@const { gamePk, teams } = game}
-						{@const opponent =
-							teams.home.team.id === team.id ? teams.away.team : teams.home.team}
+						{@const isHome = teams.home.team.id === team.id}
+						{@const opponent = isHome ? teams.away.team : teams.home.team}
 						{@const isPreview = game.status.abstractGameState === 'Preview'}
+						{@const didWin = isHome ? teams.home.isWinner : teams.away.isWinner}
 
 						<li>
 							<a href="/game/{gamePk}">
@@ -193,9 +194,11 @@
 											'order-first @max-[10ch]/team:text-[xx-small]',
 											isDarkOnLightTeam(opponent) && 'dark:text-dark',
 											isLightOnDarkTeam(opponent) && 'dark:text-light',
+											didWin === true && 'text-green-600 dark:text-green-400',
+											didWin === false && 'text-red-600 dark:text-red-400',
 										)}
 									>
-										{teams.home.team.id === team.id ? 'vs' : '@'}
+										{isHome ? 'vs' : '@'}
 									</small>
 								</StyledTeam>
 							</a>
