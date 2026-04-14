@@ -158,6 +158,19 @@
 												/>
 											{/if}
 										{/await}
+									{:else}
+										<!-- Older completed games — fetch on demand -->
+										{#await fetchProbablePitcher(gamePk) then person}
+											{#if person}
+												<Headshot
+													{person}
+													class="order-first -ml-px size-lh shrink-0"
+													size={48}
+													type="silo"
+													title={person.fullName}
+												/>
+											{/if}
+										{/await}
 									{/if}
 
 									<small
