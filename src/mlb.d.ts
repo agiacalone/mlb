@@ -547,6 +547,10 @@ declare global {
 				home: GameTeam
 			}
 			venue: Venue
+			probablePitchers?: {
+				away?: Person
+				home?: Person
+			}
 			content?: {
 				link: string
 			}
