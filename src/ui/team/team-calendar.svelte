@@ -44,12 +44,12 @@
 			fields: [
 				'dates,date',
 				'games,gamePk,gameDate',
-				'games,status,abstractGameState',
-				'games,probablePitchers,away,home,id,fullName',
+				'status,abstractGameState',
+				'probablePitchers,away,home,id,fullName',
 				'teams,home,away,team,id,name,clubName,teamName,abbreviation',
 				'sport',
 			],
-			hydrate: 'team,probablePitchers',
+			hydrate: 'team',
 		})
 
 		// Flatten all games, preserving their schedule date
