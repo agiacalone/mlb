@@ -57,7 +57,7 @@
 				'dates,date',
 				'games,gamePk,gameDate',
 				'status,abstractGameState',
-				'teams,home,away,team,id,name,clubName,teamName,abbreviation',
+				'teams,home,away,team,id,name,clubName,teamName,abbreviation,isWinner',
 				'sport',
 			],
 			hydrate: 'team',
